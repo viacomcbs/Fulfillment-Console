@@ -1,0 +1,177 @@
+<!--DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd"-->
+<suite name="Fulfillment Console" parallel="false" preserve-order="true">
+
+    <!-- RUNTIME CONFIG -->
+    <parameter name="RunAsFactory" value="false"/> <!-- true, false -->
+    <parameter name="Environment" value="UAT"/> <!-- TestRig,ComedyCentral, MultiplePlayers -->
+    <parameter name="Browser" value="Chrome"/> <!-- Firefox, Safari,	Chrome, etc -->
+    <parameter name="OS" value="Windows"/> <!-- Mac, Windows, iOS, Android -->
+    <parameter name="OSVersion" value="11"/>
+    <parameter name="DeviceCategory" value="Desktop"/>
+    <parameter name="DeviceName" value=""/>
+    <parameter name="Version" value=""/>
+    <parameter name="TestType" value="Regression"/>
+    <parameter name="GuiType" value="Web"/>
+    <parameter name="RunOnSauce" value="false"/>
+    <parameter name="Region" value=""/>
+    <parameter name="EventsArcstage" value=""/>
+    <parameter name="AkamaiCacheClear" value="false"/>
+    <parameter name="JiraTicketID" value=""/>
+    <parameter name="FWUrl" value=""/>
+    <parameter name="FWUsername" value=""/>
+    <parameter name="FWPassword" value=""/>
+    <parameter name="PathToSauceConnect" value="/src/test/resources/"/>
+    <parameter name="ReportingUrl" value=""/>
+    <parameter name="MegaBeaconUrl" value=""/>
+    <parameter name="DTEChatWebHookUrl" value=""/>
+    <parameter name="ServerCommandTimeout" value="300"/>
+    <parameter name="ReleaseName" value="Latest"/>
+    <parameter name="NetworkBandwidth" value="0"/> <!-- Bytes Per Second i.e. 1048576 (1 Meg) or 0 for no throttling -->
+    <parameter name="NetworkLatency" value="0"/> <!-- Latency in	Milliseconds or 0 for no latency -->
+    <parameter name="BuildNumber" value="Latest"/>
+    <parameter name="ReRunOnFailure" value="false"/>
+    <parameter name="ReRunOnFailureCount" value="0"/>
+    <parameter name="ThreadCount" value="10"/>
+    <parameter name="SendReportAutoEmails" value="true"/>
+    <parameter name="SendReportEmailAddress"
+               value="Akilandeswari.Sundararajan@paramount.com"/>
+    <!--<parameter name="SendReportEmailAddress"
+               value="Tejaswini.Shinde@paramount.com,Vishnupriya.Arumugam@paramount.com,qa_automation_status_-aaaagmcoe366b6jbhgse77jupu@viacomcbs.org.slack.com"/>
+-->   <parameter name="ProxyHost" value="localhost"/>
+    <parameter name="ProxyDebugPort" value="9099"/> <!--//8089-->
+    <parameter name="ProxyPort" value="9097"/>
+
+    <parameter name="SendChatReport" value="true"/>
+    <parameter name="SendSplunkData" value="false"/>
+    <parameter name="SetHueLights" value="false"/>
+
+    <!-- DEFAULT ENV CONFIG-->
+    <parameter name="Application" value="Fulfillment Console"/>
+    <parameter name="TestEnvironment" value="PROD"/>
+
+    <parameter name="TestRailProjectId" value="223"/>
+    <parameter name="PostDataToTestRail" value="false"/> <!-- value to be set true or false -->
+
+	<parameter name="LabUrl" value="https://www.synergyserver.tech"/>
+    <parameter name="UserKey" value="af27f06e-2e7e-4c8d-9312-2320423e4641"/>
+
+
+    <!-- Update here to execute script on local or server-->
+    <parameter name="LocalURL" value="http://localhost:39445/synergy"/>
+    <parameter name="LocalExecution" value="false"/>
+    <parameter name="ClientID" value="5CG23257SH"/>
+
+    <parameter name="ApplicationTitle" value="Fulfillment Console"/>
+    <parameter name="TargetUrlDEV" value="https://dev-operationsconsole.paramountmsc.com/fulfillment/"/>
+    <parameter name="TargetUrlUAT" value="https://uat-operationsconsole.paramountmsc.com/fulfillment/"/>
+    <parameter name="TargetUrlPROD" value="https://operationsconsole.paramountmsc.com/fulfillment/"/>
+    <parameter name="TargetUrlPR" value="https://pr.paramountmsc.com/pr/Fulfillment/11423"/>
+
+
+
+    <parameter name="Username" value="mscbsdqasvc@msc.cbs.net"/>
+    <parameter name="Password" value="dtZHl)5C?;?Z;8R=YDm84$YV"/>
+    <!--<parameter name="Username" value="Akilandeswari.Sundararajan@paramount.com"/>
+    <parameter name="Password" value="Powerautomate@1103"/>-->
+
+    <!-- APP CONFIG-->
+    <parameter name="ApplicationTitle" value="Fulfillment Console"/>
+    <parameter name="PathToElements" value="/src/test/resources/elements/"/>
+    <parameter name="PathToAppDataConfig" value="/src/test/resources/AppDataConfig.json"/>
+    <parameter name="PathToPartnerOptionsJson" value="/src/test/resources/testdata/PartnerOptions_PROD.json"/>
+
+    <!-- SAUCE CONFIG -->
+    <parameter name="SauceUsername" value=""/>
+    <parameter name="SauceKey" value=""/>
+
+    <!-- SPLUNK CONFIG -->
+    <parameter name="SplunkUsername" value=""/>
+    <parameter name="SplunkPassword" value=""/>
+    <parameter name="SplunkIndex" value="MIC"/>
+
+    <!-- REPORT CONFIG -->
+    <parameter name="EmailRelayHost" value="imailrelay.viacom.com"/>
+    <parameter name="EmailRelayPort" value="25"/>
+    <parameter name="EmailSenderAddress" value="NOREPLY@dteqa.com"/>
+    <parameter name="PathToReports" value="/test-output/reports/"/>
+    <parameter name="PathToScreenshots" value="/test-output/screenshots/"/>
+    <parameter name="PathToAllureResults" value="/Testreports/"/>
+    <parameter name="UploadReportToJenkins" value="false"/>
+    <parameter name="S3BucketName" value="Greenroom-Web"/>
+    <parameter name="HueBridgeIP" value=""/>
+    <parameter name="HueUserId" value=""/>
+    <parameter name="HueWebLightId" value=""/>
+
+    <!-- CHAT CONFIG
+    <parameter name="DTEChatWebHookUrl"
+    value="https://vmndigital.hipchat.com/v2/room/2095232/notification?auth_token=K9tEbKt506J0gSMsxFqY6aExGsCh4y8EvtuqiyBv"></parameter>
+    -->
+    <!-- WEBDRIVER CONFIG 4443-->
+    <parameter name="WebDriverWebHubPort" value="4443"/>
+
+    <parameter name="WebDriverHubIP" value="localhost"/>
+    <parameter name="WaitForWaitTime" value="30"/> <!-- Seconds -->
+    <parameter name="VideoPlayingWaitTime" value="80"/> <!-- Seconds -->
+    <parameter name="VideoImageWaitTime" value="20"/> <!-- Seconds -->
+    <parameter name="PageLoadWaitTime" value="120"/> <!-- Seconds -->
+    <parameter name="PollingTime" value="500"/> <!-- Milliseconds -->
+    <parameter name="VideoCompareRetryCount" value="2"/>
+
+    <!-- CONFIG FOR EMAILING EXECUTION REPORT -->
+    <parameter name="sendExecutionReport" value="true"/>
+    <parameter name="authenticationReqd" value="true"/>
+    <!-- Provide comma separated values for recipient Address -->
+    <parameter name="recipientAddress" value="Akilandeswari.Sundararajan@paramount.com"/>
+    <parameter name="senderAddress"
+               value="mqe.automation@viacomcontractor.com"/> <!-- Only viacom email address accepted -->
+
+    <!-- REERUN FAILED TESTS -->
+    <!-- If value is true, code will search for re-run excel which will have
+    results of previous execution. Only failed TC would be executed. -->
+    <parameter name="reRunFlg" value="false"/> <!-- Value to be set to true or	false -->
+
+    <!-- Upload PDF to Server Flag -->
+    <parameter name="UploadPDF" value="true"/>
+    <parameter name="FailureVideoRecording" value="false"/>
+    <parameter name="PostSplunkData" value="false"/>
+
+    <!-- EXECUTE FAILED TESTS -->
+    <!-- If value is true, code will search for re-run excel which will have
+    results of previous execution. Only failed & skipped TC would be executed. -->
+    <parameter name="executeOnlyFailedAndSkippedTests" value="false"/> <!--Value to be set to true or false -->
+
+    <!-- LISTENERS -->
+    <listeners>
+        <listener class-name="com.paramount.test.ff.common.listeners.AllureListeners"/>
+        <listener class-name="com.paramount.test.ff.common.listeners.SuiteListeners"/>
+
+         <!--<listener class-name="com.paramount.test.mip.common.listeners.SuiteListeners"/>
+        <listener class-name="com.paramount.test.mip.common.listeners.TestAnnotationTransformer"/>-->
+    </listeners>
+
+    <!-- TEST EXECUTION QUEUE -->
+
+    <test verbose="1" name="Fulfillment" annotations="JDK" preserve-order="true">
+        <!--     -->
+
+        <classes>
+<!--            <class name="com.paramount.test.ff.uitests.tests.ValidateHomePage"/>-->
+<!--            <class name="com.paramount.test.ff.uitests.tests.TC_003_ValidateStandardViewModeManageColumn_OrderTab"/>-->
+            <class name="com.paramount.test.ff.uitests.tests.duplicatefilteroptionscheck.orders.DFOC_O_Partner_ValidateNoDuplicateFilterOptionsOnSearch"/>
+<!--            <class name="com.paramount.test.ff.uitests.tests.TC_002_ValidateOpenManageColumn_Ordertab"/>-->
+<!--            <class name="com.paramount.test.ff.uitests.tests.TC_003_ValidateStandardViewModeManageColumn_OrderTab"/>-->
+<!--            <class name="com.paramount.test.ff.uitests.tests.TC_004_ValidateCreateNewTableView_Ordertab"/>-->
+<!--            <class name="com.paramount.test.ff.uitests.tests.TC_005_ValidatingNewCreatedTableViewSelectedbydefault"/>-->
+
+            <!--<class name="com.paramount.test.ff.uitests.tests.FilterPanelTests"/>-->
+            <!--<methods>
+
+                <include name="validateGlobalSearch"/>
+            </methods>-->
+        </classes>
+
+         <!--<packages>
+            <package name="com.paramount.test.ff.uitests.tests" />
+        </packages>-->
+    </test>
+</suite>

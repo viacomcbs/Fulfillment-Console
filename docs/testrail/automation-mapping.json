@@ -1,0 +1,51 @@
+[
+  {
+    "manualId": "FF_PTS_001",
+    "title": "Orders: PTS Packaging ID available in Table View",
+    "testRailCaseId": "C_TODO_001",
+    "automationId": "com.paramount.test.ff.uitests.tests.tablevalidation.orders.FF_PTS_O_001_ValidateColumnAvailableInTableView#validateColumnAvailableInTableView",
+    "sourceFile": "src/test/java/com/paramount/test/ff/uitests/tests/tablevalidation/orders/FF_PTS_O_001_ValidateColumnAvailableInTableView.java"
+  },
+  {
+    "manualId": "FF_PTS_002",
+    "title": "Orders: PTS Packaging ID visible in grid",
+    "testRailCaseId": "C_TODO_002",
+    "automationId": "com.paramount.test.ff.uitests.tests.tablevalidation.orders.FF_PTS_O_002_ValidateColumnVisibleInGrid#validateColumnVisibleInGrid",
+    "sourceFile": "src/test/java/com/paramount/test/ff/uitests/tests/tablevalidation/orders/FF_PTS_O_002_ValidateColumnVisibleInGrid.java"
+  },
+  {
+    "manualId": "FF_PTS_011",
+    "title": "Orders: Column sort",
+    "testRailCaseId": "C_TODO_011",
+    "automationId": "com.paramount.test.ff.uitests.tests.tablevalidation.orders.FF_PTS_O_011_ValidateColumnSort#validateColumnSort",
+    "sourceFile": "src/test/java/com/paramount/test/ff/uitests/tests/tablevalidation/orders/FF_PTS_O_011_ValidateColumnSort.java"
+  },
+  {
+    "manualId": "FF_PTS_009",
+    "title": "Orders: Column search",
+    "testRailCaseId": "C_TODO_009",
+    "automationId": "com.paramount.test.ff.uitests.tests.tablevalidation.orders.FF_PTS_O_009_ValidateColumnSearch#validateColumnSearch",
+    "sourceFile": "src/test/java/com/paramount/test/ff/uitests/tests/tablevalidation/orders/FF_PTS_O_009_ValidateColumnSearch.java"
+  },
+  {
+    "manualId": "FF_PTS_015",
+    "title": "Orders: Table matches Details",
+    "testRailCaseId": "C_TODO_015",
+    "automationId": "com.paramount.test.ff.uitests.tests.tablevalidation.orders.FF_PTS_O_015_ValidateTableMatchesDetails#validateTableMatchesDetails",
+    "sourceFile": "src/test/java/com/paramount/test/ff/uitests/tests/tablevalidation/orders/FF_PTS_O_015_ValidateTableMatchesDetails.java"
+  },
+  {
+    "manualId": "FF_PTS_013",
+    "title": "Orders: Excel export",
+    "testRailCaseId": "C_TODO_013",
+    "automationId": "com.paramount.test.ff.uitests.tests.tablevalidation.orders.FF_PTS_O_013_ValidateColumnInExcelExport#validateColumnInExcelExport",
+    "sourceFile": "src/test/java/com/paramount/test/ff/uitests/tests/tablevalidation/orders/FF_PTS_O_013_ValidateColumnInExcelExport.java"
+  },
+  {
+    "manualId": "FF_PTS_017",
+    "title": "Orders: Deselect column + export excludes",
+    "testRailCaseId": "C_TODO_017",
+    "automationId": "com.paramount.test.ff.uitests.tests.tablevalidation.orders.FF_PTS_O_017_ValidateColumnHiddenWhenUnselectedAndExportExcludes#validateColumnHiddenWhenUnselectedAndExportExcludes",
+    "sourceFile": "src/test/java/com/paramount/test/ff/uitests/tests/tablevalidation/orders/FF_PTS_O_017_ValidateColumnHiddenWhenUnselectedAndExportExcludes.java"
+  }
+]

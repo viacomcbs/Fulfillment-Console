@@ -1,0 +1,23 @@
+# Case-insensitive duplicate groups (different strings, same label when ignoring case)
+Amazon LATAM | Amazon Latam
+AMAZON SD FSP | Amazon SD FSP
+DIRECTV SD MTV2 FSP | DirecTV SD MTV2 FSP
+e.TV | e.tv
+Indemand | iNDemand
+Internal ProRes NFR FSP | Internal Prores NFR FSP
+MPD ANUVU | MPD Anuvu
+MPD Bein Media Qatar | MPD beIN Media Qatar
+MPD PLUTO INC NORDIC | MPD Pluto INC Nordic
+MPD PREMIERE DIGITAL SERVICES | MPD Premiere Digital Services
+MPD ProSieben Germany Direct | MPD Prosieben Germany Direct
+MPD VIAPLAY NENT POLAND | MPD Viaplay NENT Poland
+MPD VSI Berlin GmBH | MPD VSI Berlin GmbH
+ParPlus Japan Jcom FSP | Parplus Japan Jcom FSP
+ParPlus ToolBox BRAZIL FSP | ParPlus ToolBox Brazil FSP
+PHILO FSP | Philo FSP
+PLUTO MTV FSP | Pluto MTV FSP
+Pluto TV (Paramount titles) US ENG QA TEST | Pluto TV (Paramount titles) US ENG QA Test
+PLUTO USH FSP | Pluto USH FSP
+TEST OPS InDemand | TEST OPS iNDemand
+Verizon FlexView | Verizon Flexview
+VUDU | Vudu

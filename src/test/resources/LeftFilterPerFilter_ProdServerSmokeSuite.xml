@@ -1,0 +1,62 @@
+<!-- SERVER smoke on PROD: TC101 Basic only (Order Status). Add TC201+ classes to suite when ready.
+     IntelliJ: right-click this file -> Run
+     Maven: mvn test "-DsuiteXmlFile=src/test/resources/LeftFilterPerFilter_ProdServerSmokeSuite.xml" -->
+<suite name="Left Filter Per-Filter PROD SERVER Smoke" parallel="false" preserve-order="true">
+
+    <parameter name="RunAsFactory" value="false"/>
+    <parameter name="Browser" value="Chrome"/>
+    <parameter name="OS" value="Windows"/>
+    <parameter name="OSVersion" value="11"/>
+    <parameter name="DeviceCategory" value="Desktop"/>
+    <parameter name="TestType" value="Regression"/>
+    <parameter name="GuiType" value="Web"/>
+    <parameter name="SendReportAutoEmails" value="true"/>
+    <parameter name="SendReportEmailAddress" value="Akilandeswari.Sundararajan@paramount.com"/>
+    <parameter name="SendChatReport" value="false"/>
+
+    <parameter name="Application" value="Fulfillment Console"/>
+    <parameter name="ApplicationTitle" value="Fulfillment Console"/>
+    <parameter name="TestEnvironment" value="PROD"/>
+
+    <parameter name="LabUrl" value="https://www.synergyserver.tech"/>
+    <parameter name="UserKey" value="af27f06e-2e7e-4c8d-9312-2320423e4641"/>
+    <parameter name="LocalURL" value="http://localhost:39445/synergy"/>
+    <parameter name="LocalExecution" value="false"/>
+    <parameter name="ClientID" value="5CG23257SH"/>
+
+    <parameter name="TargetUrlDEV" value="https://dev-operationsconsole.paramountmsc.com/fulfillment/"/>
+    <parameter name="TargetUrlUAT" value="https://uat-operationsconsole.paramountmsc.com/fulfillment/"/>
+    <parameter name="TargetUrlPROD" value="https://operationsconsole.paramountmsc.com/fulfillment/"/>
+
+    <parameter name="Username" value="mscbsdqasvc@msc.cbs.net"/>
+    <parameter name="Password" value="dtZHl)5C?;?Z;8R=YDm84$YV"/>
+
+    <parameter name="PathToElements" value="/src/test/resources/elements/"/>
+    <parameter name="PathToReports" value="/test-output/reports/"/>
+    <parameter name="PathToAllureResults" value="/Testreports/"/>
+    <parameter name="PageLoadWaitTime" value="120"/>
+
+    <parameter name="sendExecutionReport" value="true"/>
+    <parameter name="authenticationReqd" value="true"/>
+    <parameter name="recipientAddress" value="Akilandeswari.Sundararajan@paramount.com"/>
+    <parameter name="senderAddress" value="mqe.automation@viacomcontractor.com"/>
+    <parameter name="EmailRelayHost" value="imailrelay.viacom.com"/>
+    <parameter name="EmailRelayPort" value="25"/>
+    <parameter name="EmailSenderAddress" value="NOREPLY@dteqa.com"/>
+
+    <listeners>
+        <listener class-name="com.paramount.test.ff.common.listeners.AllureListeners"/>
+        <listener class-name="com.paramount.test.ff.common.listeners.SuiteListeners"/>
+        <listener class-name="com.paramount.test.ff.common.listeners.LeftFilterSuiteListener"/>
+    </listeners>
+
+    <test verbose="1" name="Server smoke - Order Status TC101 Basic (PROD)" preserve-order="true">
+        <classes>
+            <class name="com.paramount.test.ff.uitests.tests.leftfiltersvalidation.perfilter.orders.orderstatus.LF_O_TC101_OrderStatus_BasicTest">
+                <methods>
+                    <include name="tc101_orderStatus_basic"/>
+                </methods>
+            </class>
+        </classes>
+    </test>
+</suite>

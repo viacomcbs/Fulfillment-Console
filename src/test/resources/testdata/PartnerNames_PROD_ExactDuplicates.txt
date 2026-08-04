@@ -1,0 +1,6 @@
+# Exact duplicate partner labels (same string appears 2+ times in raw collection)
+4x	4K SDR DD FSP
+5x	MPD Family Entretainment TV FSP
+5x	MPD VIDAA ITA FSP
+5x	Paramount+ DV, HDR10, SDR
+5x	UAT MPD Network 10 Australia Test

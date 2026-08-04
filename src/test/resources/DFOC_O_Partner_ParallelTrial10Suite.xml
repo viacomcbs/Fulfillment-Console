@@ -1,0 +1,174 @@
+<!--DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd"-->
+<!-- Trial: 10 parallel Synergy sessions, partners 1-1000 (batch index 0-9 x 100 each).
+     Scale thread-count only after Synergy lab confirms concurrent session quota. -->
+<suite name="DFOC Partner Parallel Trial 10" parallel="tests" thread-count="10" preserve-order="true">
+
+    <parameter name="RunAsFactory" value="false"/>
+    <parameter name="Environment" value="PROD"/>
+    <parameter name="Browser" value="Chrome"/>
+    <parameter name="OS" value="Windows"/>
+    <parameter name="OSVersion" value="11"/>
+    <parameter name="DeviceCategory" value="Desktop"/>
+    <parameter name="DeviceName" value=""/>
+    <parameter name="Version" value=""/>
+    <parameter name="TestType" value="Regression"/>
+    <parameter name="GuiType" value="Web"/>
+    <parameter name="RunOnSauce" value="false"/>
+    <parameter name="Region" value=""/>
+    <parameter name="EventsArcstage" value=""/>
+    <parameter name="AkamaiCacheClear" value="false"/>
+    <parameter name="JiraTicketID" value=""/>
+    <parameter name="FWUrl" value=""/>
+    <parameter name="FWUsername" value=""/>
+    <parameter name="FWPassword" value=""/>
+    <parameter name="PathToSauceConnect" value="/src/test/resources/"/>
+    <parameter name="ReportingUrl" value=""/>
+    <parameter name="MegaBeaconUrl" value=""/>
+    <parameter name="DTEChatWebHookUrl" value=""/>
+    <parameter name="ServerCommandTimeout" value="300"/>
+    <parameter name="ReleaseName" value="Latest"/>
+    <parameter name="NetworkBandwidth" value="0"/>
+    <parameter name="NetworkLatency" value="0"/>
+    <parameter name="BuildNumber" value="Latest"/>
+    <parameter name="ReRunOnFailure" value="false"/>
+    <parameter name="ReRunOnFailureCount" value="0"/>
+    <parameter name="ThreadCount" value="10"/>
+    <parameter name="SendReportAutoEmails" value="true"/>
+    <parameter name="SendReportEmailAddress" value="Akilandeswari.Sundararajan@paramount.com"/>
+    <parameter name="ProxyHost" value="localhost"/>
+    <parameter name="ProxyDebugPort" value="9099"/>
+    <parameter name="ProxyPort" value="9097"/>
+    <parameter name="SendChatReport" value="true"/>
+    <parameter name="SendSplunkData" value="false"/>
+    <parameter name="SetHueLights" value="false"/>
+
+    <parameter name="Application" value="Fulfillment Console"/>
+    <parameter name="TestEnvironment" value="PROD"/>
+
+    <parameter name="TestRailProjectId" value="223"/>
+    <parameter name="PostDataToTestRail" value="false"/>
+
+    <parameter name="LabUrl" value="https://www.synergyserver.tech"/>
+    <parameter name="UserKey" value="af27f06e-2e7e-4c8d-9312-2320423e4641"/>
+    <parameter name="LocalURL" value="http://localhost:39445/synergy"/>
+    <parameter name="LocalExecution" value="false"/>
+    <parameter name="ClientID" value="5CG23257SH"/>
+
+    <parameter name="partnerBatchSize" value="100"/>
+
+    <parameter name="ApplicationTitle" value="Fulfillment Console"/>
+    <parameter name="TargetUrlDEV" value="https://dev-operationsconsole.paramountmsc.com/fulfillment/"/>
+    <parameter name="TargetUrlUAT" value="https://uat-operationsconsole.paramountmsc.com/fulfillment/"/>
+    <parameter name="TargetUrlPROD" value="https://operationsconsole.paramountmsc.com/fulfillment/"/>
+    <parameter name="TargetUrlPR" value="https://pr.paramountmsc.com/pr/Fulfillment/11423"/>
+
+    <parameter name="Username" value="mscbsdqasvc@msc.cbs.net"/>
+    <parameter name="Password" value="dtZHl)5C?;?Z;8R=YDm84$YV"/>
+
+    <parameter name="PathToElements" value="/src/test/resources/elements/"/>
+    <parameter name="PathToAppDataConfig" value="/src/test/resources/AppDataConfig.json"/>
+
+    <parameter name="SauceUsername" value=""/>
+    <parameter name="SauceKey" value=""/>
+    <parameter name="SplunkUsername" value=""/>
+    <parameter name="SplunkPassword" value=""/>
+    <parameter name="SplunkIndex" value="MIC"/>
+
+    <parameter name="EmailRelayHost" value="imailrelay.viacom.com"/>
+    <parameter name="EmailRelayPort" value="25"/>
+    <parameter name="EmailSenderAddress" value="NOREPLY@dteqa.com"/>
+    <parameter name="PathToReports" value="/test-output/reports/"/>
+    <parameter name="PathToScreenshots" value="/test-output/screenshots/"/>
+    <parameter name="PathToAllureResults" value="/Testreports/"/>
+    <parameter name="UploadReportToJenkins" value="false"/>
+    <parameter name="S3BucketName" value="Greenroom-Web"/>
+    <parameter name="HueBridgeIP" value=""/>
+    <parameter name="HueUserId" value=""/>
+    <parameter name="HueWebLightId" value=""/>
+
+    <parameter name="WebDriverWebHubPort" value="4443"/>
+    <parameter name="WebDriverHubIP" value="localhost"/>
+    <parameter name="WaitForWaitTime" value="30"/>
+    <parameter name="VideoPlayingWaitTime" value="80"/>
+    <parameter name="VideoImageWaitTime" value="20"/>
+    <parameter name="PageLoadWaitTime" value="120"/>
+    <parameter name="PollingTime" value="500"/>
+    <parameter name="VideoCompareRetryCount" value="2"/>
+
+    <parameter name="sendExecutionReport" value="true"/>
+    <parameter name="authenticationReqd" value="true"/>
+    <parameter name="recipientAddress" value="Akilandeswari.Sundararajan@paramount.com"/>
+    <parameter name="senderAddress" value="mqe.automation@viacomcontractor.com"/>
+
+    <parameter name="reRunFlg" value="false"/>
+    <parameter name="UploadPDF" value="true"/>
+    <parameter name="FailureVideoRecording" value="false"/>
+    <parameter name="PostSplunkData" value="false"/>
+    <parameter name="executeOnlyFailedAndSkippedTests" value="false"/>
+
+    <listeners>
+        <listener class-name="com.paramount.test.ff.common.listeners.AllureListeners"/>
+        <listener class-name="com.paramount.test.ff.common.listeners.SuiteListeners"/>
+    </listeners>
+
+    <test verbose="1" name="Partner Batch 0" annotations="JDK" preserve-order="true">
+        <parameter name="partnerBatchIndex" value="0"/>
+        <classes>
+            <class name="com.paramount.test.ff.uitests.tests.duplicatefilteroptionscheck.orders.DFOC_O_Partner_ValidateNoDuplicateFilterOptionsOnSearch_Batch"/>
+        </classes>
+    </test>
+    <test verbose="1" name="Partner Batch 1" annotations="JDK" preserve-order="true">
+        <parameter name="partnerBatchIndex" value="1"/>
+        <classes>
+            <class name="com.paramount.test.ff.uitests.tests.duplicatefilteroptionscheck.orders.DFOC_O_Partner_ValidateNoDuplicateFilterOptionsOnSearch_Batch"/>
+        </classes>
+    </test>
+    <test verbose="1" name="Partner Batch 2" annotations="JDK" preserve-order="true">
+        <parameter name="partnerBatchIndex" value="2"/>
+        <classes>
+            <class name="com.paramount.test.ff.uitests.tests.duplicatefilteroptionscheck.orders.DFOC_O_Partner_ValidateNoDuplicateFilterOptionsOnSearch_Batch"/>
+        </classes>
+    </test>
+    <test verbose="1" name="Partner Batch 3" annotations="JDK" preserve-order="true">
+        <parameter name="partnerBatchIndex" value="3"/>
+        <classes>
+            <class name="com.paramount.test.ff.uitests.tests.duplicatefilteroptionscheck.orders.DFOC_O_Partner_ValidateNoDuplicateFilterOptionsOnSearch_Batch"/>
+        </classes>
+    </test>
+    <test verbose="1" name="Partner Batch 4" annotations="JDK" preserve-order="true">
+        <parameter name="partnerBatchIndex" value="4"/>
+        <classes>
+            <class name="com.paramount.test.ff.uitests.tests.duplicatefilteroptionscheck.orders.DFOC_O_Partner_ValidateNoDuplicateFilterOptionsOnSearch_Batch"/>
+        </classes>
+    </test>
+    <test verbose="1" name="Partner Batch 5" annotations="JDK" preserve-order="true">
+        <parameter name="partnerBatchIndex" value="5"/>
+        <classes>
+            <class name="com.paramount.test.ff.uitests.tests.duplicatefilteroptionscheck.orders.DFOC_O_Partner_ValidateNoDuplicateFilterOptionsOnSearch_Batch"/>
+        </classes>
+    </test>
+    <test verbose="1" name="Partner Batch 6" annotations="JDK" preserve-order="true">
+        <parameter name="partnerBatchIndex" value="6"/>
+        <classes>
+            <class name="com.paramount.test.ff.uitests.tests.duplicatefilteroptionscheck.orders.DFOC_O_Partner_ValidateNoDuplicateFilterOptionsOnSearch_Batch"/>
+        </classes>
+    </test>
+    <test verbose="1" name="Partner Batch 7" annotations="JDK" preserve-order="true">
+        <parameter name="partnerBatchIndex" value="7"/>
+        <classes>
+            <class name="com.paramount.test.ff.uitests.tests.duplicatefilteroptionscheck.orders.DFOC_O_Partner_ValidateNoDuplicateFilterOptionsOnSearch_Batch"/>
+        </classes>
+    </test>
+    <test verbose="1" name="Partner Batch 8" annotations="JDK" preserve-order="true">
+        <parameter name="partnerBatchIndex" value="8"/>
+        <classes>
+            <class name="com.paramount.test.ff.uitests.tests.duplicatefilteroptionscheck.orders.DFOC_O_Partner_ValidateNoDuplicateFilterOptionsOnSearch_Batch"/>
+        </classes>
+    </test>
+    <test verbose="1" name="Partner Batch 9" annotations="JDK" preserve-order="true">
+        <parameter name="partnerBatchIndex" value="9"/>
+        <classes>
+            <class name="com.paramount.test.ff.uitests.tests.duplicatefilteroptionscheck.orders.DFOC_O_Partner_ValidateNoDuplicateFilterOptionsOnSearch_Batch"/>
+        </classes>
+    </test>
+</suite>

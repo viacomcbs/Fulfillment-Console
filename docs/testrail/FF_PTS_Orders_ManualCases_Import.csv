@@ -1,0 +1,31 @@
+Title,Section,Template,Type,Priority,References,Automation Type,Automation ID,Preconditions,Steps,Expected Result
+FF_PTS_001 — Orders: PTS Packaging ID available in Table View,Fulfillment Console > BSD-29441 > Orders > PTS Packaging ID,Test Case (Text),Functional,1 - Critical,BSD-29441,Java TestNG,com.paramount.test.ff.uitests.tests.tablevalidation.orders.FF_PTS_O_001_ValidateColumnAvailableInTableView#validateColumnAvailableInTableView,"PROD Fulfillment Console; Demand system = PTS","1. Log in to Fulfillment Console
+2. Confirm Orders tab is active
+3. Left filter → Demand system → PTS
+4. Open Table View (Manage columns)
+5. Search or scroll for PTS Packaging ID","PTS Packaging ID appears in the Orders Table View column list (field key ptsPackagingId)"
+FF_PTS_002 — Orders: Select PTS Packaging ID — column appears in grid,Fulfillment Console > BSD-29441 > Orders > PTS Packaging ID,Test Case (Text),Functional,1 - Critical,BSD-29441,Java TestNG,com.paramount.test.ff.uitests.tests.tablevalidation.orders.FF_PTS_O_002_ValidateColumnVisibleInGrid#validateColumnVisibleInGrid,"PROD; Demand system = PTS; Automation table view configured","1. Open Table View on Orders tab
+2. Enable PTS Packaging ID
+3. Apply / close Table View
+4. Horizontal scroll to PTS Packaging ID column if needed
+5. Observe column header and cell values","PTS Packaging ID column header is visible in the Orders grid with populated values where data exists"
+FF_PTS_011 — Orders: Column sort (asc / desc),Fulfillment Console > BSD-29441 > Orders > PTS Packaging ID,Test Case (Text),Functional,2 - High,BSD-29441,Java TestNG,com.paramount.test.ff.uitests.tests.tablevalidation.orders.FF_PTS_O_011_ValidateColumnSort#validateColumnSort,"PROD; Demand system = PTS; PTS column visible in grid","1. Enable PTS Packaging ID column on Orders tab
+2. Click column header to sort ascending — note order
+3. Click again to sort descending — note order","Rows reorder correctly in both ascending and descending sort"
+FF_PTS_009 — Orders: Column search returns matching rows,Fulfillment Console > BSD-29441 > Orders > PTS Packaging ID,Test Case (Text),Functional,2 - High,BSD-29441,Java TestNG,com.paramount.test.ff.uitests.tests.tablevalidation.orders.FF_PTS_O_009_ValidateColumnSearch#validateColumnSearch,"PROD; Demand system = PTS; PTS column visible","1. Enable PTS Packaging ID column on Orders tab
+2. Note a PTS Packaging ID value from a visible row
+3. Use column search on PTS Packaging ID with that value
+4. Review filtered results","Search returns matching rows only; filtered grid shows expected PTS Packaging ID value"
+FF_PTS_015 — Orders: Table value matches Details panel,Fulfillment Console > BSD-29441 > Orders > PTS Packaging ID,Test Case (Text),Functional,2 - High,BSD-29441,Java TestNG,com.paramount.test.ff.uitests.tests.tablevalidation.orders.FF_PTS_O_015_ValidateTableMatchesDetails#validateTableMatchesDetails,"PROD; Demand system = PTS; PTS column visible","1. Enable PTS Packaging ID column on Orders tab
+2. Note PTS Packaging ID in table row
+3. Open order Details panel
+4. Compare PTS Packaging ID in Details vs table cell","Table cell value matches Details panel value"
+FF_PTS_013 — Orders: Excel export includes PTS Packaging ID,Fulfillment Console > BSD-29441 > Orders > PTS Packaging ID,Test Case (Text),Functional,2 - High,BSD-29441,Java TestNG,com.paramount.test.ff.uitests.tests.tablevalidation.orders.FF_PTS_O_013_ValidateColumnInExcelExport#validateColumnInExcelExport,"PROD; Demand system = PTS; column search applied to narrow grid","1. Enable PTS Packaging ID in Table View on Orders tab
+2. Apply column search to filter grid
+3. Export Orders to Excel
+4. Open export file and compare PTS Packaging ID column to UI","Export contains PTS Packaging ID header and values match filtered grid"
+FF_PTS_017 — Orders: Deselect column removes it from grid and export,Fulfillment Console > BSD-29441 > Orders > PTS Packaging ID,Test Case (Text),Functional,3 - Medium,BSD-29441,Java TestNG,com.paramount.test.ff.uitests.tests.tablevalidation.orders.FF_PTS_O_017_ValidateColumnHiddenWhenUnselectedAndExportExcludes#validateColumnHiddenWhenUnselectedAndExportExcludes,"PROD; Demand system = PTS","1. With PTS Packaging ID visible, open Table View
+2. Uncheck PTS Packaging ID
+3. Apply changes
+4. Export Orders to Excel
+5. Verify grid and export file","Column removed from Orders grid; PTS Packaging ID absent from Excel export"

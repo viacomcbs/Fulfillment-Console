@@ -1,0 +1,54 @@
+<!-- PROD collection on local Synergy (60-min session) — UI scroll only for speed -->
+<suite name="DFOC Partner Collect PROD Local" parallel="false" preserve-order="true">
+
+    <parameter name="RunAsFactory" value="false"/>
+    <parameter name="Environment" value="UAT"/>
+    <parameter name="Browser" value="Chrome"/>
+    <parameter name="OS" value="Windows"/>
+    <parameter name="OSVersion" value="11"/>
+    <parameter name="DeviceCategory" value="Desktop"/>
+    <parameter name="TestType" value="Regression"/>
+    <parameter name="GuiType" value="Web"/>
+    <parameter name="SendReportAutoEmails" value="false"/>
+    <parameter name="SendChatReport" value="false"/>
+
+    <parameter name="Application" value="Fulfillment Console"/>
+    <parameter name="TestEnvironment" value="PROD"/>
+
+    <parameter name="LabUrl" value="https://www.synergyserver.tech"/>
+    <parameter name="UserKey" value="af27f06e-2e7e-4c8d-9312-2320423e4641"/>
+    <parameter name="LocalURL" value="http://localhost:39445/synergy"/>
+    <parameter name="LocalExecution" value="true"/>
+    <parameter name="ClientID" value="5CG23257SH"/>
+
+    <parameter name="TargetUrlDEV" value="https://dev-operationsconsole.paramountmsc.com/fulfillment/"/>
+    <parameter name="TargetUrlUAT" value="https://uat-operationsconsole.paramountmsc.com/fulfillment/"/>
+    <parameter name="TargetUrlPROD" value="https://operationsconsole.paramountmsc.com/fulfillment/"/>
+
+    <parameter name="Username" value="Akilandeswari.Sundararajan@paramount.com"/>
+    <parameter name="Password" value="Powerautomate@1103"/>
+
+    <parameter name="PathToElements" value="/src/test/resources/elements/"/>
+    <parameter name="PathToAppDataConfig" value="/src/test/resources/AppDataConfig.json"/>
+    <parameter name="PathToPartnerOptionsJson" value="/src/test/resources/testdata/PartnerOptions_PROD.json"/>
+    <parameter name="MinPartnerCollectionCount" value="1000"/>
+    <parameter name="CollectNetworkOnly" value="false"/>
+    <parameter name="CollectUiScrollOnly" value="true"/>
+
+    <parameter name="PathToReports" value="/test-output/reports/"/>
+    <parameter name="PathToAllureResults" value="/Testreports/"/>
+    <parameter name="PageLoadWaitTime" value="120"/>
+    <parameter name="sendExecutionReport" value="false"/>
+    <parameter name="authenticationReqd" value="true"/>
+
+    <listeners>
+        <listener class-name="com.paramount.test.ff.common.listeners.AllureListeners"/>
+        <listener class-name="com.paramount.test.ff.common.listeners.SuiteListeners"/>
+    </listeners>
+
+    <test verbose="1" name="Collect Partner Options PROD Local" annotations="JDK" preserve-order="true">
+        <classes>
+            <class name="com.paramount.test.ff.uitests.tests.duplicatefilteroptionscheck.orders.DFOC_O_Partner_CollectFilterOptionsToJson"/>
+        </classes>
+    </test>
+</suite>

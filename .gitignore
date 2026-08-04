@@ -1,0 +1,24 @@
+# Build / reports
+target/
+allure-results/
+allure-report/
+test-output/
+*.log
+
+# IDE
+.idea/
+*.iml
+.classpath
+.project
+.settings/
+.vscode/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Local secrets override (optional — copy from TestNGSuiteConfig.xml)
+src/test/resources/TestNGSuiteConfig.local.xml
+
+# Synergy local temp exports (runner machine)
+**/com.viacom.synergy/

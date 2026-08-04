@@ -1,0 +1,90 @@
+# Case-insensitive duplicate pairs (22 groups) - search EACH variant on PROD
+# FAIL if searching full exact string returns 2+ visible exact-match rows
+
+## Group 1
+- PLUTO MTV FSP
+- Pluto MTV FSP
+
+## Group 2
+- Amazon LATAM
+- Amazon Latam
+
+## Group 3
+- AMAZON SD FSP
+- Amazon SD FSP
+
+## Group 4
+- DIRECTV SD MTV2 FSP
+- DirecTV SD MTV2 FSP
+
+## Group 5
+- Indemand
+- iNDemand
+
+## Group 6
+- Internal ProRes NFR FSP
+- Internal Prores NFR FSP
+
+## Group 7
+- MPD ANUVU
+- MPD Anuvu
+
+## Group 8
+- MPD Bein Media Qatar
+- MPD beIN Media Qatar
+
+## Group 9
+- MPD PLUTO INC NORDIC
+- MPD Pluto INC Nordic
+
+## Group 10
+- MPD PREMIERE DIGITAL SERVICES
+- MPD Premiere Digital Services
+
+## Group 11
+- MPD ProSieben Germany Direct
+- MPD Prosieben Germany Direct
+
+## Group 12
+- MPD VIAPLAY NENT POLAND
+- MPD Viaplay NENT Poland
+
+## Group 13
+- MPD VSI Berlin GmBH
+- MPD VSI Berlin GmbH
+
+## Group 14
+- ParPlus Japan Jcom FSP
+- Parplus Japan Jcom FSP
+
+## Group 15
+- ParPlus ToolBox BRAZIL FSP
+- ParPlus ToolBox Brazil FSP
+
+## Group 16
+- PHILO FSP
+- Philo FSP
+
+## Group 17
+- Pluto TV (Paramount titles) US ENG QA TEST
+- Pluto TV (Paramount titles) US ENG QA Test
+
+## Group 18
+- PLUTO USH FSP
+- Pluto USH FSP
+
+## Group 19
+- TEST OPS InDemand
+- TEST OPS iNDemand
+
+## Group 20
+- e.TV
+- e.tv
+
+## Group 21
+- Verizon FlexView
+- Verizon Flexview
+
+## Group 22
+- VUDU
+- Vudu

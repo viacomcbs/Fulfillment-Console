@@ -1,0 +1,37 @@
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<suite name="Orders Tab - Duplicate Filter Options Check" parallel="false" preserve-order="true">
+
+    <listeners>
+        <listener class-name="com.paramount.test.ff.common.listeners.AllureListeners"/>
+        <listener class-name="com.paramount.test.ff.common.listeners.SuiteListeners"/>
+    </listeners>
+
+    <!-- Orders tab — Partner filter -->
+    <test name="Orders Tab - Partner Duplicate Filter Options Check">
+        <classes>
+            <class name="com.paramount.test.ff.uitests.tests.duplicatefilteroptionscheck.orders.DFOC_O_Partner_ValidateNoDuplicateFilterOptionsOnSearch"/>
+        </classes>
+    </test>
+
+    <!-- Uncomment below when ready for Line items tab or full suite -->
+    <!--
+    <test name="Line Items Tab - Partner Duplicate Filter Options Check">
+        <classes>
+            <class name="com.paramount.test.ff.uitests.tests.duplicatefilteroptionscheck.lineitems.DFOC_LI_Partner_ValidateNoDuplicateFilterOptionsOnSearch"/>
+        </classes>
+    </test>
+
+    <test name="Orders Tab - All Duplicate Filter Options Check">
+        <packages>
+            <package name="com.paramount.test.ff.uitests.tests.duplicatefilteroptionscheck.orders"/>
+        </packages>
+    </test>
+
+    <test name="Line Items Tab - All Duplicate Filter Options Check">
+        <packages>
+            <package name="com.paramount.test.ff.uitests.tests.duplicatefilteroptionscheck.lineitems"/>
+        </packages>
+    </test>
+    -->
+
+</suite>

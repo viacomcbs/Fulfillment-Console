@@ -1,0 +1,54 @@
+<!-- TC801 Order Status scroll on DEV Synergy server.
+     Maven: mvn test "-DsuiteXmlFile=src/test/resources/LF_O_TC801_OrderStatus_Scroll_DevServerSuite.xml" -->
+<suite name="LF_O TC801 Order Status Scroll DEV Server" parallel="false" preserve-order="true">
+
+    <parameter name="RunAsFactory" value="false"/>
+    <parameter name="Browser" value="Chrome"/>
+    <parameter name="OS" value="Windows"/>
+    <parameter name="OSVersion" value="11"/>
+    <parameter name="DeviceCategory" value="Desktop"/>
+    <parameter name="TestType" value="Regression"/>
+    <parameter name="GuiType" value="Web"/>
+    <parameter name="SendReportAutoEmails" value="false"/>
+    <parameter name="SendChatReport" value="false"/>
+
+    <parameter name="Application" value="Fulfillment Console"/>
+    <parameter name="ApplicationTitle" value="Fulfillment Console"/>
+    <parameter name="TestEnvironment" value="DEV"/>
+
+    <parameter name="LabUrl" value="https://www.synergyserver.tech"/>
+    <parameter name="UserKey" value="af27f06e-2e7e-4c8d-9312-2320423e4641"/>
+    <parameter name="LocalURL" value="http://localhost:39445/synergy"/>
+    <parameter name="LocalExecution" value="false"/>
+    <parameter name="ClientID" value="5CG23257SH"/>
+
+    <parameter name="TargetUrlDEV" value="https://dev-operationsconsole.paramountmsc.com/fulfillment/"/>
+    <parameter name="TargetUrlUAT" value="https://uat-operationsconsole.paramountmsc.com/fulfillment/"/>
+    <parameter name="TargetUrlPROD" value="https://operationsconsole.paramountmsc.com/fulfillment/"/>
+
+    <parameter name="Username" value="mscbsdqasvc@msc.cbs.net"/>
+    <parameter name="Password" value="dtZHl)5C?;?Z;8R=YDm84$YV"/>
+
+    <parameter name="PathToElements" value="/src/test/resources/elements/"/>
+    <parameter name="PathToReports" value="/test-output/reports/"/>
+    <parameter name="PathToAllureResults" value="/Testreports/"/>
+    <parameter name="PageLoadWaitTime" value="120"/>
+    <parameter name="sendExecutionReport" value="false"/>
+    <parameter name="authenticationReqd" value="true"/>
+
+    <listeners>
+        <listener class-name="com.paramount.test.ff.common.listeners.AllureListeners"/>
+        <listener class-name="com.paramount.test.ff.common.listeners.SuiteListeners"/>
+        <listener class-name="com.paramount.test.ff.common.listeners.LeftFilterSuiteListener"/>
+    </listeners>
+
+    <test verbose="1" name="TC801 Order Status Scroll" preserve-order="true">
+        <classes>
+            <class name="com.paramount.test.ff.uitests.tests.leftfiltersvalidation.perfilter.orders.orderstatus.LF_O_TC801_OrderStatus_ScrollTest">
+                <methods>
+                    <include name="tc801_orderStatus_scroll"/>
+                </methods>
+            </class>
+        </classes>
+    </test>
+</suite>

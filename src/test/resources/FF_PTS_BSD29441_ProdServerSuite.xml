@@ -1,0 +1,57 @@
+<!-- BSD-29441 PTS Orders PROD: O_001 → O_002 → O_011 → O_009 → O_015 → O_013 → O_017
+     mvn test "-DsuiteXmlFile=src/test/resources/FF_PTS_BSD29441_ProdServerSuite.xml" -->
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<suite name="FF PTS Orders BSD-29441 PROD" parallel="false" preserve-order="true">
+
+    <parameter name="RunAsFactory" value="false"/>
+    <parameter name="Browser" value="Chrome"/>
+    <parameter name="OS" value="Windows"/>
+    <parameter name="OSVersion" value="11"/>
+    <parameter name="DeviceCategory" value="Desktop"/>
+    <parameter name="TestType" value="Regression"/>
+    <parameter name="GuiType" value="Web"/>
+    <parameter name="SendReportAutoEmails" value="true"/>
+    <parameter name="SendReportEmailAddress" value="Akilandeswari.Sundararajan@paramount.com"/>
+    <parameter name="SendChatReport" value="false"/>
+
+    <parameter name="Application" value="Fulfillment Console"/>
+    <parameter name="ApplicationTitle" value="Fulfillment Console"/>
+    <parameter name="TestEnvironment" value="PROD"/>
+
+    <parameter name="LabUrl" value="https://www.synergyserver.tech"/>
+    <parameter name="UserKey" value="af27f06e-2e7e-4c8d-9312-2320423e4641"/>
+    <parameter name="LocalURL" value="http://localhost:39445/synergy"/>
+    <parameter name="LocalExecution" value="false"/>
+    <parameter name="ClientID" value="5CG23257SH"/>
+
+    <parameter name="TargetUrlPROD" value="https://operationsconsole.paramountmsc.com/fulfillment/"/>
+    <parameter name="Username" value="mscbsdqasvc@msc.cbs.net"/>
+    <parameter name="Password" value="dtZHl)5C?;?Z;8R=YDm84$YV"/>
+
+    <parameter name="PathToElements" value="/src/test/resources/elements/"/>
+    <parameter name="PageLoadWaitTime" value="120"/>
+    <parameter name="EmailRelayHost" value="imailrelay.viacom.com"/>
+    <parameter name="EmailRelayPort" value="25"/>
+    <parameter name="EmailSenderAddress" value="NOREPLY@dteqa.com"/>
+    <parameter name="TestRailProjectId" value="223"/>
+    <parameter name="PostDataToTestRail" value="false"/>
+
+    <listeners>
+        <listener class-name="com.paramount.test.ff.common.listeners.AllureListeners"/>
+        <listener class-name="com.paramount.test.ff.common.listeners.SuiteListeners"/>
+        <listener class-name="com.paramount.test.ff.common.listeners.PtsPackagingSuiteListener"/>
+    </listeners>
+
+    <test verbose="1" name="Orders - PTS Packaging ID" preserve-order="true">
+        <classes>
+            <class name="com.paramount.test.ff.uitests.tests.tablevalidation.orders.FF_PTS_O_001_ValidateColumnAvailableInTableView"/>
+            <class name="com.paramount.test.ff.uitests.tests.tablevalidation.orders.FF_PTS_O_002_ValidateColumnVisibleInGrid"/>
+            <class name="com.paramount.test.ff.uitests.tests.tablevalidation.orders.FF_PTS_O_011_ValidateColumnSort"/>
+            <class name="com.paramount.test.ff.uitests.tests.tablevalidation.orders.FF_PTS_O_009_ValidateColumnSearch"/>
+            <class name="com.paramount.test.ff.uitests.tests.tablevalidation.orders.FF_PTS_O_015_ValidateTableMatchesDetails"/>
+            <class name="com.paramount.test.ff.uitests.tests.tablevalidation.orders.FF_PTS_O_013_ValidateColumnInExcelExport"/>
+            <class name="com.paramount.test.ff.uitests.tests.tablevalidation.orders.FF_PTS_O_017_ValidateColumnHiddenWhenUnselectedAndExportExcludes"/>
+        </classes>
+    </test>
+
+</suite>

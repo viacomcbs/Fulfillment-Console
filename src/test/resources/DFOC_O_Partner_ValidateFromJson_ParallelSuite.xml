@@ -1,0 +1,189 @@
+﻿<!-- Validate all partners from PartnerOptions_PROD.json — 25 batches x 100, no scroll-skip -->
+<suite name="DFOC Partner Validate From JSON Parallel" parallel="tests" thread-count="5" preserve-order="true">
+    <parameter name="RunAsFactory" value="false"/>
+    <parameter name="Environment" value="PROD"/>
+    <parameter name="Browser" value="Chrome"/>
+    <parameter name="OS" value="Windows"/>
+    <parameter name="OSVersion" value="11"/>
+    <parameter name="DeviceCategory" value="Desktop"/>
+    <parameter name="TestType" value="Regression"/>
+    <parameter name="GuiType" value="Web"/>
+    <parameter name="RunOnSauce" value="false"/>
+    <parameter name="ServerCommandTimeout" value="300"/>
+    <parameter name="SendReportAutoEmails" value="true"/>
+    <parameter name="SendReportEmailAddress" value="Akilandeswari.Sundararajan@paramount.com"/>
+    <parameter name="Application" value="Fulfillment Console"/>
+    <parameter name="TestEnvironment" value="PROD"/>
+    <parameter name="LabUrl" value="https://www.synergyserver.tech"/>
+    <parameter name="UserKey" value="af27f06e-2e7e-4c8d-9312-2320423e4641"/>
+    <parameter name="LocalURL" value="http://localhost:39445/synergy"/>
+    <parameter name="LocalExecution" value="false"/>
+    <parameter name="ClientID" value="5CG23257SH"/>
+    <parameter name="partnerBatchSize" value="100"/>
+    <parameter name="TargetUrlDEV" value="https://dev-operationsconsole.paramountmsc.com/fulfillment/"/>
+    <parameter name="TargetUrlUAT" value="https://uat-operationsconsole.paramountmsc.com/fulfillment/"/>
+    <parameter name="TargetUrlPROD" value="https://operationsconsole.paramountmsc.com/fulfillment/"/>
+    <parameter name="Username" value="mscbsdqasvc@msc.cbs.net"/>
+    <parameter name="Password" value="dtZHl)5C?;?Z;8R=YDm84$YV"/>
+    <parameter name="PathToElements" value="/src/test/resources/elements/"/>
+    <parameter name="PathToPartnerOptionsJson" value="/src/test/resources/testdata/PartnerOptions_PROD.json"/>
+    <parameter name="PathToReports" value="/test-output/reports/"/>
+    <parameter name="PathToAllureResults" value="/Testreports/"/>
+    <parameter name="sendExecutionReport" value="true"/>
+    <parameter name="authenticationReqd" value="true"/>
+    <parameter name="recipientAddress" value="Akilandeswari.Sundararajan@paramount.com"/>
+    <parameter name="senderAddress" value="mqe.automation@viacomcontractor.com"/>
+    <parameter name="PageLoadWaitTime" value="120"/>
+    <listeners>
+        <listener class-name="com.paramount.test.ff.common.listeners.AllureListeners"/>
+        <listener class-name="com.paramount.test.ff.common.listeners.SuiteListeners"/>
+    </listeners>    <test verbose="1" name="Partner JSON Batch 0" annotations="JDK" preserve-order="true">
+        <parameter name="partnerBatchIndex" value="0"/>
+        <classes>
+            <class name="com.paramount.test.ff.uitests.tests.duplicatefilteroptionscheck.orders.DFOC_O_Partner_ValidateNoDuplicateFilterOptionsFromJson_Batch"/>
+        </classes>
+    </test>
+    <test verbose="1" name="Partner JSON Batch 1" annotations="JDK" preserve-order="true">
+        <parameter name="partnerBatchIndex" value="1"/>
+        <classes>
+            <class name="com.paramount.test.ff.uitests.tests.duplicatefilteroptionscheck.orders.DFOC_O_Partner_ValidateNoDuplicateFilterOptionsFromJson_Batch"/>
+        </classes>
+    </test>
+    <test verbose="1" name="Partner JSON Batch 2" annotations="JDK" preserve-order="true">
+        <parameter name="partnerBatchIndex" value="2"/>
+        <classes>
+            <class name="com.paramount.test.ff.uitests.tests.duplicatefilteroptionscheck.orders.DFOC_O_Partner_ValidateNoDuplicateFilterOptionsFromJson_Batch"/>
+        </classes>
+    </test>
+    <test verbose="1" name="Partner JSON Batch 3" annotations="JDK" preserve-order="true">
+        <parameter name="partnerBatchIndex" value="3"/>
+        <classes>
+            <class name="com.paramount.test.ff.uitests.tests.duplicatefilteroptionscheck.orders.DFOC_O_Partner_ValidateNoDuplicateFilterOptionsFromJson_Batch"/>
+        </classes>
+    </test>
+    <test verbose="1" name="Partner JSON Batch 4" annotations="JDK" preserve-order="true">
+        <parameter name="partnerBatchIndex" value="4"/>
+        <classes>
+            <class name="com.paramount.test.ff.uitests.tests.duplicatefilteroptionscheck.orders.DFOC_O_Partner_ValidateNoDuplicateFilterOptionsFromJson_Batch"/>
+        </classes>
+    </test>
+    <test verbose="1" name="Partner JSON Batch 5" annotations="JDK" preserve-order="true">
+        <parameter name="partnerBatchIndex" value="5"/>
+        <classes>
+            <class name="com.paramount.test.ff.uitests.tests.duplicatefilteroptionscheck.orders.DFOC_O_Partner_ValidateNoDuplicateFilterOptionsFromJson_Batch"/>
+        </classes>
+    </test>
+    <test verbose="1" name="Partner JSON Batch 6" annotations="JDK" preserve-order="true">
+        <parameter name="partnerBatchIndex" value="6"/>
+        <classes>
+            <class name="com.paramount.test.ff.uitests.tests.duplicatefilteroptionscheck.orders.DFOC_O_Partner_ValidateNoDuplicateFilterOptionsFromJson_Batch"/>
+        </classes>
+    </test>
+    <test verbose="1" name="Partner JSON Batch 7" annotations="JDK" preserve-order="true">
+        <parameter name="partnerBatchIndex" value="7"/>
+        <classes>
+            <class name="com.paramount.test.ff.uitests.tests.duplicatefilteroptionscheck.orders.DFOC_O_Partner_ValidateNoDuplicateFilterOptionsFromJson_Batch"/>
+        </classes>
+    </test>
+    <test verbose="1" name="Partner JSON Batch 8" annotations="JDK" preserve-order="true">
+        <parameter name="partnerBatchIndex" value="8"/>
+        <classes>
+            <class name="com.paramount.test.ff.uitests.tests.duplicatefilteroptionscheck.orders.DFOC_O_Partner_ValidateNoDuplicateFilterOptionsFromJson_Batch"/>
+        </classes>
+    </test>
+    <test verbose="1" name="Partner JSON Batch 9" annotations="JDK" preserve-order="true">
+        <parameter name="partnerBatchIndex" value="9"/>
+        <classes>
+            <class name="com.paramount.test.ff.uitests.tests.duplicatefilteroptionscheck.orders.DFOC_O_Partner_ValidateNoDuplicateFilterOptionsFromJson_Batch"/>
+        </classes>
+    </test>
+    <test verbose="1" name="Partner JSON Batch 10" annotations="JDK" preserve-order="true">
+        <parameter name="partnerBatchIndex" value="10"/>
+        <classes>
+            <class name="com.paramount.test.ff.uitests.tests.duplicatefilteroptionscheck.orders.DFOC_O_Partner_ValidateNoDuplicateFilterOptionsFromJson_Batch"/>
+        </classes>
+    </test>
+    <test verbose="1" name="Partner JSON Batch 11" annotations="JDK" preserve-order="true">
+        <parameter name="partnerBatchIndex" value="11"/>
+        <classes>
+            <class name="com.paramount.test.ff.uitests.tests.duplicatefilteroptionscheck.orders.DFOC_O_Partner_ValidateNoDuplicateFilterOptionsFromJson_Batch"/>
+        </classes>
+    </test>
+    <test verbose="1" name="Partner JSON Batch 12" annotations="JDK" preserve-order="true">
+        <parameter name="partnerBatchIndex" value="12"/>
+        <classes>
+            <class name="com.paramount.test.ff.uitests.tests.duplicatefilteroptionscheck.orders.DFOC_O_Partner_ValidateNoDuplicateFilterOptionsFromJson_Batch"/>
+        </classes>
+    </test>
+    <test verbose="1" name="Partner JSON Batch 13" annotations="JDK" preserve-order="true">
+        <parameter name="partnerBatchIndex" value="13"/>
+        <classes>
+            <class name="com.paramount.test.ff.uitests.tests.duplicatefilteroptionscheck.orders.DFOC_O_Partner_ValidateNoDuplicateFilterOptionsFromJson_Batch"/>
+        </classes>
+    </test>
+    <test verbose="1" name="Partner JSON Batch 14" annotations="JDK" preserve-order="true">
+        <parameter name="partnerBatchIndex" value="14"/>
+        <classes>
+            <class name="com.paramount.test.ff.uitests.tests.duplicatefilteroptionscheck.orders.DFOC_O_Partner_ValidateNoDuplicateFilterOptionsFromJson_Batch"/>
+        </classes>
+    </test>
+    <test verbose="1" name="Partner JSON Batch 15" annotations="JDK" preserve-order="true">
+        <parameter name="partnerBatchIndex" value="15"/>
+        <classes>
+            <class name="com.paramount.test.ff.uitests.tests.duplicatefilteroptionscheck.orders.DFOC_O_Partner_ValidateNoDuplicateFilterOptionsFromJson_Batch"/>
+        </classes>
+    </test>
+    <test verbose="1" name="Partner JSON Batch 16" annotations="JDK" preserve-order="true">
+        <parameter name="partnerBatchIndex" value="16"/>
+        <classes>
+            <class name="com.paramount.test.ff.uitests.tests.duplicatefilteroptionscheck.orders.DFOC_O_Partner_ValidateNoDuplicateFilterOptionsFromJson_Batch"/>
+        </classes>
+    </test>
+    <test verbose="1" name="Partner JSON Batch 17" annotations="JDK" preserve-order="true">
+        <parameter name="partnerBatchIndex" value="17"/>
+        <classes>
+            <class name="com.paramount.test.ff.uitests.tests.duplicatefilteroptionscheck.orders.DFOC_O_Partner_ValidateNoDuplicateFilterOptionsFromJson_Batch"/>
+        </classes>
+    </test>
+    <test verbose="1" name="Partner JSON Batch 18" annotations="JDK" preserve-order="true">
+        <parameter name="partnerBatchIndex" value="18"/>
+        <classes>
+            <class name="com.paramount.test.ff.uitests.tests.duplicatefilteroptionscheck.orders.DFOC_O_Partner_ValidateNoDuplicateFilterOptionsFromJson_Batch"/>
+        </classes>
+    </test>
+    <test verbose="1" name="Partner JSON Batch 19" annotations="JDK" preserve-order="true">
+        <parameter name="partnerBatchIndex" value="19"/>
+        <classes>
+            <class name="com.paramount.test.ff.uitests.tests.duplicatefilteroptionscheck.orders.DFOC_O_Partner_ValidateNoDuplicateFilterOptionsFromJson_Batch"/>
+        </classes>
+    </test>
+    <test verbose="1" name="Partner JSON Batch 20" annotations="JDK" preserve-order="true">
+        <parameter name="partnerBatchIndex" value="20"/>
+        <classes>
+            <class name="com.paramount.test.ff.uitests.tests.duplicatefilteroptionscheck.orders.DFOC_O_Partner_ValidateNoDuplicateFilterOptionsFromJson_Batch"/>
+        </classes>
+    </test>
+    <test verbose="1" name="Partner JSON Batch 21" annotations="JDK" preserve-order="true">
+        <parameter name="partnerBatchIndex" value="21"/>
+        <classes>
+            <class name="com.paramount.test.ff.uitests.tests.duplicatefilteroptionscheck.orders.DFOC_O_Partner_ValidateNoDuplicateFilterOptionsFromJson_Batch"/>
+        </classes>
+    </test>
+    <test verbose="1" name="Partner JSON Batch 22" annotations="JDK" preserve-order="true">
+        <parameter name="partnerBatchIndex" value="22"/>
+        <classes>
+            <class name="com.paramount.test.ff.uitests.tests.duplicatefilteroptionscheck.orders.DFOC_O_Partner_ValidateNoDuplicateFilterOptionsFromJson_Batch"/>
+        </classes>
+    </test>
+    <test verbose="1" name="Partner JSON Batch 23" annotations="JDK" preserve-order="true">
+        <parameter name="partnerBatchIndex" value="23"/>
+        <classes>
+            <class name="com.paramount.test.ff.uitests.tests.duplicatefilteroptionscheck.orders.DFOC_O_Partner_ValidateNoDuplicateFilterOptionsFromJson_Batch"/>
+        </classes>
+    </test>
+    <test verbose="1" name="Partner JSON Batch 24" annotations="JDK" preserve-order="true">
+        <parameter name="partnerBatchIndex" value="24"/>
+        <classes>
+            <class name="com.paramount.test.ff.uitests.tests.duplicatefilteroptionscheck.orders.DFOC_O_Partner_ValidateNoDuplicateFilterOptionsFromJson_Batch"/>
+        </classes>
+    </test></suite>

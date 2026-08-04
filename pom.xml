@@ -1,0 +1,149 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>com.mtvi.mqe.tests</groupId>
+	<artifactId>fulfillment-console-automation</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+
+	<repositories>
+
+		<repository>
+			<id>central</id>
+			<url>https://repo1.maven.org/maven2/</url>
+		</repository>
+		<repository>
+			<id>nexus-local-releases</id>
+			<url>https://nexus.mtvi.com/nexus/content/repositories/releases/</url>
+		</repository>
+
+	</repositories>
+
+	<properties>
+		<maven.compiler.source>1.8</maven.compiler.source>
+		<maven.compiler.target>1.8</maven.compiler.target>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<suiteXmlFile>src/test/resources/TestNGSuiteConfig.xml</suiteXmlFile>
+	</properties>
+	<dependencies>
+	<!-- https://mvnrepository.com/artifact/org.seleniumhq.selenium/selenium-java
+-->
+		<dependency>
+			<groupId>com.synergy.server</groupId>
+			<artifactId>java</artifactId>
+			<version>5.0.14</version>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/org.testng/testng6.13.1 -->
+		<dependency>
+			<groupId>org.testng</groupId>
+			<artifactId>testng</artifactId>
+			<version>7.3.0</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi</artifactId>
+			<version>3.17</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi-ooxml</artifactId>
+			<version>3.17</version>
+		</dependency>
+		<dependency>
+			<groupId>commons-io</groupId>
+			<artifactId>commons-io</artifactId>
+			<version>2.6</version>
+		</dependency>
+
+
+		<dependency>
+			<groupId>com.sun.xml.bind</groupId>
+			<artifactId>jaxb-impl</artifactId>
+			<version>2.3.3</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache-extras.beanshell</groupId>
+			<artifactId>bsh</artifactId>
+			<version>2.0b6</version>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/com.itextpdf/itextpdf -->
+		<dependency>
+			<groupId>com.itextpdf</groupId>
+			<artifactId>itextpdf</artifactId>
+			<version>5.5.13.3</version>
+		</dependency>
+
+
+		<!-- https://mvnrepository.com/artifact/io.qameta.allure/allure-java-commons
+		<dependency>
+			<groupId>io.qameta.allure</groupId>
+			<artifactId>allure-java-commons</artifactId>
+			<version>2.29.1</version>
+		</dependency>-->
+		<!-- https://mvnrepository.com/artifact/io.qameta.allure/allure-testng -->
+		<dependency>
+			<groupId>io.qameta.allure</groupId>
+			<artifactId>allure-testng</artifactId>
+			<version>2.29.1</version>
+		</dependency>
+
+
+	</dependencies>
+	
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>2.20</version>
+				<configuration>
+					<testFailureIgnore>true</testFailureIgnore>
+
+					<argLine>
+						-javaagent:${settings.localRepository}/org/aspectj/aspectjweaver/1.9.6/aspectjweaver-1.9.6.jar
+					</argLine>
+
+					<properties>
+						<property>
+							<name>listener</name>
+							<!-- <value>com.paramount.test.mip.common.listeners.TestListeners,com.paramount.test.mip.common.listeners.SuiteListeners,com.paramount.test.mip.common.listeners.TestAnnotationTransformer</value>
+						-->
+							<value>com.paramount.test.ff.common.listeners.AllureListeners,com.paramount.test.ff.common.listeners.SuiteListeners</value>
+
+						</property>
+						<property>
+							<name>configfailurepolicy</name>
+							<value>continue</value>
+						</property>
+					</properties>
+					<includes>
+						<include>**/*.java</include>
+					</includes>
+					<suiteXmlFiles>
+						<suiteXmlFile>${suiteXmlFile}</suiteXmlFile>
+					</suiteXmlFiles>
+				</configuration>
+				<dependencies>
+					<dependency>
+						<groupId>org.aspectj</groupId>
+						<artifactId>aspectjweaver</artifactId>
+						<version>1.9.6</version>
+					</dependency>
+				</dependencies>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.12.1</version>
+				<configuration>
+					<source>1.8</source>
+					<target>1.8</target>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+</project>
