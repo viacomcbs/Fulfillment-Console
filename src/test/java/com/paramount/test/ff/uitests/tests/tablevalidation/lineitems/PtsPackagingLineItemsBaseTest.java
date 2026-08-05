@@ -3,6 +3,8 @@ package com.paramount.test.ff.uitests.tests.tablevalidation.lineitems;
 import com.paramount.test.ff.common.base.BaseTest;
 import com.paramount.test.ff.common.loginUtil.DriverUtil;
 import com.paramount.test.ff.common.loginUtil.Login;
+import com.paramount.test.ff.common.loginUtil.Verify;
+import com.paramount.test.ff.uitests.helpers.orders.OrdersTabTestSetupHelper;
 import com.paramount.test.ff.common.util.Logger;
 import com.paramount.test.ff.common.util.SoftAssert;
 import com.paramount.test.ff.uitests.helpers.leftfilters.ConsoleTab;
@@ -26,6 +28,7 @@ public abstract class PtsPackagingLineItemsBaseTest extends BaseTest {
     protected LeftFilterPanelUtil leftFilterPanelUtil;
     protected PtsPackagingIdTableUtil ptsPackagingUtil;
     protected PtsPackagingExportUtil ptsExportUtil;
+    private final OrdersTabTestSetupHelper ordersTabSetup = new OrdersTabTestSetupHelper();
 
     public PtsPackagingLineItemsBaseTest() {
         keepDriverAliveAfterTestMethod = true;
@@ -56,19 +59,31 @@ public abstract class PtsPackagingLineItemsBaseTest extends BaseTest {
             Logger.logReportMessage("Launching Fulfillment Console for PTS Packaging ID (Line Items)");
             DriverUtil.launchApplicationOnBrowser();
             login.loginToFF();
+            Verify.hardAssert(ordersTabSetup.waitForLoginReadyForLeftFilters(),
+                    "Login failed — filter panel not visible after login");
             Thread.sleep(FILTER_EXPAND_WAIT_MS);
             PtsPackagingSessionHelper.markLoggedIn();
             PtsPackagingCalendarSetup.setYesterdayAsDefaultOnce(softAssert);
-        } else {
-            Logger.logReportMessage("Reusing session — navigating to Line Items tab (no refresh, no calendar)");
         }
 
         leftFilterPanelUtil.ensureLeftFilterPanelOpen();
-        leftFilterPanelUtil.navigateToTab(ConsoleTab.LINE_ITEMS);
 
-        if (!PtsPackagingSessionHelper.isPtsDemandFilterAppliedOnLineItems()) {
-            ptsPackagingUtil.applyPtsDemandSystemFilter(leftFilterPanelUtil, softAssert);
-            PtsPackagingSessionHelper.markPtsDemandFilterAppliedOnLineItems();
+        if (!PtsPackagingSessionHelper.isLineItemsConsoleTabActive()) {
+            Logger.logReportMessage("Switching to Line Items tab (one-time — calendar persists across tabs)");
+            leftFilterPanelUtil.navigateToLineItemsTab(true);
+            Verify.hardAssert(leftFilterPanelUtil.isLineItemsTabActive(),
+                    "Line Items tab must be active before PTS Line Items tests (not Orders view)");
+            PtsPackagingSessionHelper.markLineItemsConsoleTabActive();
+            if (!PtsPackagingSessionHelper.isPtsDemandFilterAppliedOnLineItems()) {
+                ptsPackagingUtil.applyPtsDemandSystemFilter(leftFilterPanelUtil, softAssert);
+                PtsPackagingSessionHelper.markPtsDemandFilterAppliedOnLineItems();
+            }
+        } else {
+            if (!leftFilterPanelUtil.isLineItemsTabActive()) {
+                Logger.logReportMessage("Line Items session flag set but Orders view detected — re-clicking Line items tab");
+                leftFilterPanelUtil.navigateToLineItemsTab(true);
+            }
+            Logger.logReportMessage("Reusing Line Items tab — Manage columns is Line-item-only flat list");
         }
     }
 

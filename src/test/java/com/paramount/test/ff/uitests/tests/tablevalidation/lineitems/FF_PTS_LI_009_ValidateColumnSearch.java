@@ -10,7 +10,11 @@ import static com.paramount.test.ff.uitests.tests.tablevalidation.lineitems.FF_P
 /** FF_PTS_LI_009 — Column search on PTS Packaging ID (Line Items, PTS demand system). */
 public class FF_PTS_LI_009_ValidateColumnSearch extends PtsPackagingLineItemsBaseTest {
 
-    @Test(dependsOnGroups = {PTS_LINE_ITEMS_SETUP_GROUP, PTS_LINE_ITEMS_SORT_GROUP})
+    /** Run before LI_013 export — column search narrows grid to a small result set. */
+    public static final String PTS_LINE_ITEMS_SEARCH_GROUP = "ptsLineItemsSearch";
+
+    @Test(groups = PTS_LINE_ITEMS_SEARCH_GROUP,
+            dependsOnGroups = {PTS_LINE_ITEMS_SETUP_GROUP, PTS_LINE_ITEMS_SORT_GROUP})
     @Description("FF_PTS_LI_009 — PTS Packaging ID column search on Line Items (after LI_011 sort)")
     public void validateColumnSearch() throws InterruptedException {
         ptsPackagingUtil.requirePtsColumnOnGrid(ColumnSection.LINE_ITEM, softAssert);

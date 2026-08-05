@@ -5,13 +5,15 @@ import com.paramount.test.ff.uitests.helpers.ptspackaging.PtsPackagingIdTableUti
 import io.qameta.allure.Description;
 import org.testng.annotations.Test;
 
+import static com.paramount.test.ff.uitests.tests.tablevalidation.lineitems.FF_PTS_LI_001_ValidateColumnAvailableInTableView.PTS_LINE_ITEMS_SETUP_GROUP;
+
 /**
  * FF_PTS_LI_018 — Deselect PTS Packaging ID: column hidden in grid and excluded from Excel export.
  */
 public class FF_PTS_LI_018_ValidateColumnHiddenWhenUnselectedAndExportExcludes
         extends PtsPackagingLineItemsBaseTest {
 
-    @Test
+    @Test(dependsOnGroups = {PTS_LINE_ITEMS_SETUP_GROUP})
     @Description("FF_PTS_LI_018 — PTS Packaging ID not in Line Items grid or Excel when deselected")
     public void validateColumnHiddenWhenUnselectedAndExportExcludes() throws Exception {
         ptsPackagingUtil.ensureColumnEnabledAndSaved(ColumnSection.LINE_ITEM, softAssert);

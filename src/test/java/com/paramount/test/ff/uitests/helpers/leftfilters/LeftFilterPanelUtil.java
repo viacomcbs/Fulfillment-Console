@@ -48,40 +48,117 @@ public class LeftFilterPanelUtil extends BaseTest {
     private static final Pattern COUNT_PATTERN = Pattern.compile("\\((\\d+)\\)");
 
     public void navigateToTab(ConsoleTab tab) throws InterruptedException {
-        ensureLeftFilterPanelOpen();
-        if (!isLeftFilterPanelOpenViaDom()
-                && !WaitUtil.isDisplay(leftFilterPanel.filterPanelHeader(), 5)) {
-            Verify.softAssert(false, "Filter panel is visible before navigating to " + tab.getTabLabel() + " tab");
-        }
-
-        if (isTabActive(tab)) {
-            Logger.logMessage("Already on " + tab.getTabLabel() + " tab");
+        if (tab == ConsoleTab.LINE_ITEMS) {
+            navigateToLineItemsTab(false);
             return;
         }
+        navigateToOrdersTab(false);
+    }
 
-        By tabLocator = tab == ConsoleTab.ORDERS ? navigationPage.ordersTab() : navigationPage.lineItemsTab();
-        if (WaitUtil.isDisplayFast(tabLocator, 5)) {
-            DriverUtil.scrollToElement(tabLocator);
-            DriverUtil.clickOnElement(tabLocator, DEFAULT_WAIT_SECONDS);
+    /**
+     * Clicks the Line items nav-pill above the grid and waits until Line Items grid chrome is visible.
+     * PROD: {@code button.nav-link} in {@code ul.nav-pills} inside {@code app-fulfillment-main-table-container}.
+     */
+    public void navigateToLineItemsTab(boolean hardFailIfNotActive) throws InterruptedException {
+        ensureLeftFilterPanelOpen();
+        if (isLineItemsTabActive()) {
+            Logger.logReportMessage("Already on Line Items tab (nav-pill active or LineItem ID grid visible)");
+            return;
+        }
+        if (isOrdersTabContextVisible()) {
+            Logger.logReportMessage("Currently on Orders tab — clicking Line items nav-pill");
+        }
+        By tabBtn = navigationPage.lineItemsNavPillButton();
+        for (int attempt = 1; attempt <= 3; attempt++) {
+            if (!WaitUtil.isDisplayFast(tabBtn, 15)) {
+                Logger.logReportMessage("Line Items nav-pill not visible (attempt " + attempt + ")");
+                Thread.sleep(2000);
+                continue;
+            }
+            DriverUtil.scrollToElement(tabBtn);
+            boolean clicked = DriverUtil.clickOnElement(tabBtn, DEFAULT_WAIT_SECONDS);
+            if (!clicked) {
+                clicked = DriverUtil.clickOnElementJs(tabBtn, 5);
+            }
+            if (!clicked) {
+                Logger.logReportMessage("Line Items nav-pill click failed (attempt " + attempt + ")");
+                continue;
+            }
             WaitUtil.waitForJSToLoad(30);
             Thread.sleep(FILTER_EXPAND_WAIT_MS);
-        } else if (tab == ConsoleTab.ORDERS && isOrdersTabContextVisible()) {
+            if (waitForLineItemsTabContext(60)) {
+                Logger.logReportMessage("Line Items tab opened — LineItem ID / show hidden line items visible");
+                return;
+            }
+            Logger.logReportMessage("Line Items grid not loaded after nav-pill click (attempt " + attempt + ")");
+        }
+        boolean active = isLineItemsTabActive();
+        if (hardFailIfNotActive) {
+            Verify.hardAssert(active, "Line Items tab is active after nav-pill click");
+        } else {
+            Verify.softAssert(active, "Line Items tab is active after nav-pill click");
+        }
+    }
+
+    public void navigateToOrdersTab(boolean hardFailIfNotActive) throws InterruptedException {
+        ensureLeftFilterPanelOpen();
+        if (isTabActive(ConsoleTab.ORDERS)) {
+            Logger.logMessage("Already on Orders tab");
+            return;
+        }
+        By tabLocator = navigationPage.ordersNavPillButton();
+        if (WaitUtil.isDisplayFast(tabLocator, 10)) {
+            DriverUtil.scrollToElement(tabLocator);
+            if (!DriverUtil.clickOnElement(tabLocator, DEFAULT_WAIT_SECONDS)) {
+                DriverUtil.clickOnElementJs(tabLocator, 5);
+            }
+            WaitUtil.waitForJSToLoad(30);
+            Thread.sleep(FILTER_EXPAND_WAIT_MS);
+        } else if (isOrdersTabContextVisible()) {
             Logger.logMessage("Orders tab is already selected (default landing tab)");
         } else {
-            Verify.softAssert(false, tab.getTabLabel() + " tab button is visible");
+            Verify.softAssert(false, "Orders tab button is visible");
         }
+        boolean active = isTabActive(ConsoleTab.ORDERS);
+        if (hardFailIfNotActive) {
+            Verify.hardAssert(active, "Orders tab is active");
+        } else {
+            Verify.softAssert(active, "Orders tab is active");
+        }
+    }
 
-        Verify.softAssert(isTabActive(tab), tab.getTabLabel() + " tab is active");
+    public boolean isLineItemsTabActive() {
+        if (WaitUtil.isDisplayFast(navigationPage.lineItemsNavPillActive(), 3)) {
+            return true;
+        }
+        if (isOrdersTabContextVisible() && !WaitUtil.isDisplayFast(navigationPage.lineItemsTabContextMarker(), 2)) {
+            return false;
+        }
+        return WaitUtil.isDisplayFast(navigationPage.lineItemsTabContextMarker(), 5);
+    }
+
+    private boolean waitForLineItemsTabContext(int maxSec) throws InterruptedException {
+        long deadline = System.currentTimeMillis() + (maxSec * 1000L);
+        while (System.currentTimeMillis() < deadline) {
+            if (isLineItemsTabActive()) {
+                return true;
+            }
+            Thread.sleep(1000);
+        }
+        return isLineItemsTabActive();
     }
 
     public boolean isTabActive(ConsoleTab tab) {
+        if (tab == ConsoleTab.LINE_ITEMS) {
+            return isLineItemsTabActive();
+        }
+        if (WaitUtil.isDisplayFast(navigationPage.ordersNavPillActive(), 3)) {
+            return true;
+        }
         if (WaitUtil.isDisplayFast(navigationPage.activeTab(tab.getTabLabel()), 3)) {
             return true;
         }
-        if (tab == ConsoleTab.ORDERS) {
-            return isOrdersTabContextVisible();
-        }
-        return WaitUtil.isDisplayFast(navigationPage.lineItemsTabContextMarker(), 3);
+        return isOrdersTabContextVisible();
     }
 
     private boolean isOrdersTabContextVisible() {

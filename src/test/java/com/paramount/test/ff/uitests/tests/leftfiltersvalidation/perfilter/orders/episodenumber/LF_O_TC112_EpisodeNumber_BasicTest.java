@@ -1,0 +1,26 @@
+package com.paramount.test.ff.uitests.tests.leftfiltersvalidation.perfilter.orders.episodenumber;
+
+import com.paramount.test.ff.common.util.SoftAssert;
+import com.paramount.test.ff.uitests.helpers.leftfilters.ConsoleTab;
+import com.paramount.test.ff.uitests.helpers.leftfilters.OrdersLeftFilter;
+import com.paramount.test.ff.uitests.helpers.leftfilters.LeftFilterPerFilterTestRunner;
+import com.paramount.test.ff.uitests.helpers.leftfilters.LeftFilterTestCategory;
+import com.paramount.test.ff.uitests.tests.leftfiltersvalidation.orders.LeftFilterOrdersTabBaseTest;
+import io.qameta.allure.Description;
+import org.testng.annotations.Test;
+
+/** TC112 — EpisodeNumber Basic. */
+public class LF_O_TC112_EpisodeNumber_BasicTest extends LeftFilterOrdersTabBaseTest {
+
+    private static final String FILTER = OrdersLeftFilter.EPISODE_NUMBER.getDisplayName();
+    private static final int FILTER_INDEX = 12;
+
+    @Test(priority = 1)
+    @Description("TC112: EpisodeNumber — Basic")
+    public void tc112_episodeNumberBasic() throws InterruptedException {
+        softAssert = new SoftAssert("tc112_episodeNumberBasic", getClass().getSimpleName());
+        LeftFilterPerFilterTestRunner.run(softAssert, leftFilterPanelUtil, ConsoleTab.ORDERS,
+                FILTER, LeftFilterTestCategory.BASIC, FILTER_INDEX);
+        softAssert.assertAll();
+    }
+}

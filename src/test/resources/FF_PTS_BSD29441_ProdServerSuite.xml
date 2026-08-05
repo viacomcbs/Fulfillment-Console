@@ -11,7 +11,7 @@
     <parameter name="TestType" value="Regression"/>
     <parameter name="GuiType" value="Web"/>
     <parameter name="SendReportAutoEmails" value="true"/>
-    <parameter name="SendReportEmailAddress" value="Akilandeswari.Sundararajan@paramount.com"/>
+    <parameter name="SendReportEmailAddress" value="Akilandeswari.Sundararajan@paramount.com,Vishnupriya.Arumugam@paramount.com"/>
     <parameter name="SendChatReport" value="false"/>
 
     <parameter name="Application" value="Fulfillment Console"/>
@@ -35,6 +35,9 @@
     <parameter name="EmailSenderAddress" value="NOREPLY@dteqa.com"/>
     <parameter name="TestRailProjectId" value="223"/>
     <parameter name="PostDataToTestRail" value="false"/>
+    <parameter name="JiraTicketID" value="BSD-29441"/>
+    <parameter name="JiraStoryTitle" value="Add PTS Packaging ID column to Orders and Line Items tables"/>
+    <parameter name="PtsConsoleTab" value="Orders"/>
 
     <listeners>
         <listener class-name="com.paramount.test.ff.common.listeners.AllureListeners"/>

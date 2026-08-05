@@ -5,7 +5,7 @@ Synergy + TestNG automation for **Fulfillment Console** (Paramount MSC Operation
 | Item | Value |
 |------|--------|
 | Jira story (PTS) | BSD-29441 |
-| TestRail project | 223 |
+| TestRail project | 223 — https://paramount.testrail.io/index.php?/projects/overview/223 |
 | Framework | Java 11, TestNG, Synergy 5.x, Allure |
 | PROD PTS suite | `src/test/resources/FF_PTS_BSD29441_ProdServerSuite.xml` |
 

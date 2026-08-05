@@ -1,0 +1,659 @@
+Title,Section,Template,Type,Priority,References,Automation Type,Automation ID,Preconditions,Steps,Expected Result
+LF_LI_TC102 — Line Items Line Item Status: Option list order,Fulfillment Console > Left Filters > Line Items > Per Filter > Line Item Status,Test Case (Text),Functional,2 - High,Left Filters,Java TestNG,com.paramount.test.ff.uitests.tests.leftfiltersvalidation.perfilter.lineitems.lineitemstatus.LF_LI_TC102_LineItemStatus_OptionOrderTest#tc102_lineItemStatus_optionOrder,DEV/PROD Fulfillment Console; calendar = Yesterday; Line Items tab,"1. On Line Items tab, expand Line Item Status
+2. Verify Select All is first
+3. Review non-zero options order
+4. Check divider before zero-count options if present
+5. Verify zero-count options A-Z",Select All first; non-zero A-Z; divider; zero-count A-Z in visible viewport
+LF_LI_TC101 — Line Items Line Item Status: Basic,Fulfillment Console > Left Filters > Line Items > Per Filter > Line Item Status,Test Case (Text),Functional,1 - Critical,Left Filters,Java TestNG,com.paramount.test.ff.uitests.tests.leftfiltersvalidation.perfilter.lineitems.lineitemstatus.LF_LI_TC101_LineItemStatus_BasicTest#tc101_lineItemStatus_basic,DEV/PROD Fulfillment Console; calendar = Yesterday; Line Items tab,"1. Log in; set calendar to Yesterday
+2. Navigate to Line Items tab
+3. Verify Line Item Status is visible in left panel
+4. Expand Line Item Status
+5. Confirm options load and Select All at top
+6. Collapse filter",Line Item Status is visible; expands/collapses; options and Select All at top display correctly
+LF_LI_TC201 — Line Items Line Item Status: Search,Fulfillment Console > Left Filters > Line Items > Per Filter > Line Item Status,Test Case (Text),Functional,2 - High,Left Filters,Java TestNG,com.paramount.test.ff.uitests.tests.leftfiltersvalidation.perfilter.lineitems.lineitemstatus.LF_LI_TC201_LineItemStatus_SearchTest#tc201_lineItemStatus_search,DEV/PROD Fulfillment Console; calendar = Yesterday; Line Items tab,"1. On Line Items tab, expand Line Item Status
+2. Note first visible option label
+3. Type into filter search box
+4. Verify filtered results
+5. Clear search",Search returns matching options; clear restores list
+LF_LI_TC401 — Line Items Line Item Status: Select all,Fulfillment Console > Left Filters > Line Items > Per Filter > Line Item Status,Test Case (Text),Functional,2 - High,Left Filters,Java TestNG,com.paramount.test.ff.uitests.tests.leftfiltersvalidation.perfilter.lineitems.lineitemstatus.LF_LI_TC401_LineItemStatus_SelectAllTest#tc401_lineItemStatus_selectAll,DEV/PROD Fulfillment Console; calendar = Yesterday; Line Items tab,"1. On Line Items tab, expand Line Item Status
+2. Click Select All
+3. Verify all options selected and counts
+4. Deselect one option — check indeterminate
+5. Deselect all",Select All selects all; indeterminate on partial; counts inside/outside match
+LF_LI_TC601 — Line Items Line Item Status: Table sync,Fulfillment Console > Left Filters > Line Items > Per Filter > Line Item Status,Test Case (Text),Functional,1 - Critical,Left Filters,Java TestNG,com.paramount.test.ff.uitests.tests.leftfiltersvalidation.perfilter.lineitems.lineitemstatus.LF_LI_TC601_LineItemStatus_TableSyncTest#tc601_lineItemStatus_tableSync,DEV/PROD Fulfillment Console; calendar = Yesterday; Line Items tab,"1. On Line Items tab, expand Line Item Status
+2. Select one option with non-zero count
+3. Compare filter option count to table total count
+4. Verify first visible grid rows match filter column",Table record count matches filter count; grid rows reflect selected filter value
+LF_LI_TC801 — Line Items Line Item Status: Scroll,Fulfillment Console > Left Filters > Line Items > Per Filter > Line Item Status,Test Case (Text),Functional,3 - Medium,Left Filters,Java TestNG,com.paramount.test.ff.uitests.tests.leftfiltersvalidation.perfilter.lineitems.lineitemstatus.LF_LI_TC801_LineItemStatus_ScrollTest#tc801_lineItemStatus_scroll,DEV/PROD Fulfillment Console; calendar = Yesterday; Line Items tab,"1. On Line Items tab, expand Line Item Status
+2. Scroll option list vertically
+3. Confirm no UI errors and options continue loading",Virtual scroll works without error; additional options appear in viewport
+LF_LI_TC1001 — Line Items Line Item Status: Active filters,Fulfillment Console > Left Filters > Line Items > Per Filter > Line Item Status,Test Case (Text),Functional,2 - High,Left Filters,Java TestNG,com.paramount.test.ff.uitests.tests.leftfiltersvalidation.perfilter.lineitems.lineitemstatus.LF_LI_TC1001_LineItemStatus_ActiveFiltersTest#tc1001_lineItemStatus_activeFilters,DEV/PROD Fulfillment Console; calendar = Yesterday; Line Items tab,"1. On Line Items tab, select one option in Line Item Status
+2. Select a second option (multi-select)
+3. Review Active Filters chips above grid",Active Filters chips show single and multiple selections from Line Item Status
+LF_LI_TC1101 — Line Items Line Item Status: Clear filters,Fulfillment Console > Left Filters > Line Items > Per Filter > Line Item Status,Test Case (Text),Functional,2 - High,Left Filters,Java TestNG,com.paramount.test.ff.uitests.tests.leftfiltersvalidation.perfilter.lineitems.lineitemstatus.LF_LI_TC1101_LineItemStatus_ClearFiltersTest#tc1101_lineItemStatus_clearFilters,DEV/PROD Fulfillment Console; calendar = Yesterday; Line Items tab,"1. On Line Items tab, select options in Line Item Status
+2. Remove chip from Active Filters OR click Clear
+3. Verify selections cleared and grid resets",Filter selections cleared; Active Filters empty; grid shows unfiltered data
+LF_LI_TC103 — Line Items Order Status: Option list order,Fulfillment Console > Left Filters > Line Items > Per Filter > Order Status,Test Case (Text),Functional,2 - High,Left Filters,Java TestNG,com.paramount.test.ff.uitests.tests.leftfiltersvalidation.perfilter.lineitems.orderstatus.LF_LI_TC103_OrderStatus_OptionOrderTest#tc103_orderStatus_optionOrder,DEV/PROD Fulfillment Console; calendar = Yesterday; Line Items tab,"1. On Line Items tab, expand Order Status
+2. Verify Select All is first
+3. Review non-zero options order
+4. Check divider before zero-count options if present
+5. Verify zero-count options A-Z",Select All first; non-zero A-Z; divider; zero-count A-Z in visible viewport
+LF_LI_TC102 — Line Items Order Status: Basic,Fulfillment Console > Left Filters > Line Items > Per Filter > Order Status,Test Case (Text),Functional,1 - Critical,Left Filters,Java TestNG,com.paramount.test.ff.uitests.tests.leftfiltersvalidation.perfilter.lineitems.orderstatus.LF_LI_TC102_OrderStatus_BasicTest#tc102_orderStatus_basic,DEV/PROD Fulfillment Console; calendar = Yesterday; Line Items tab,"1. Log in; set calendar to Yesterday
+2. Navigate to Line Items tab
+3. Verify Order Status is visible in left panel
+4. Expand Order Status
+5. Confirm options load and Select All at top
+6. Collapse filter",Order Status is visible; expands/collapses; options and Select All at top display correctly
+LF_LI_TC202 — Line Items Order Status: Search,Fulfillment Console > Left Filters > Line Items > Per Filter > Order Status,Test Case (Text),Functional,2 - High,Left Filters,Java TestNG,com.paramount.test.ff.uitests.tests.leftfiltersvalidation.perfilter.lineitems.orderstatus.LF_LI_TC202_OrderStatus_SearchTest#tc202_orderStatus_search,DEV/PROD Fulfillment Console; calendar = Yesterday; Line Items tab,"1. On Line Items tab, expand Order Status
+2. Note first visible option label
+3. Type into filter search box
+4. Verify filtered results
+5. Clear search",Search returns matching options; clear restores list
+LF_LI_TC402 — Line Items Order Status: Select all,Fulfillment Console > Left Filters > Line Items > Per Filter > Order Status,Test Case (Text),Functional,2 - High,Left Filters,Java TestNG,com.paramount.test.ff.uitests.tests.leftfiltersvalidation.perfilter.lineitems.orderstatus.LF_LI_TC402_OrderStatus_SelectAllTest#tc402_orderStatus_selectAll,DEV/PROD Fulfillment Console; calendar = Yesterday; Line Items tab,"1. On Line Items tab, expand Order Status
+2. Click Select All
+3. Verify all options selected and counts
+4. Deselect one option — check indeterminate
+5. Deselect all",Select All selects all; indeterminate on partial; counts inside/outside match
+LF_LI_TC602 — Line Items Order Status: Table sync,Fulfillment Console > Left Filters > Line Items > Per Filter > Order Status,Test Case (Text),Functional,1 - Critical,Left Filters,Java TestNG,com.paramount.test.ff.uitests.tests.leftfiltersvalidation.perfilter.lineitems.orderstatus.LF_LI_TC602_OrderStatus_TableSyncTest#tc602_orderStatus_tableSync,DEV/PROD Fulfillment Console; calendar = Yesterday; Line Items tab,"1. On Line Items tab, expand Order Status
+2. Select one option with non-zero count
+3. Compare filter option count to table total count
+4. Verify first visible grid rows match filter column",Table record count matches filter count; grid rows reflect selected filter value
+LF_LI_TC802 — Line Items Order Status: Scroll,Fulfillment Console > Left Filters > Line Items > Per Filter > Order Status,Test Case (Text),Functional,3 - Medium,Left Filters,Java TestNG,com.paramount.test.ff.uitests.tests.leftfiltersvalidation.perfilter.lineitems.orderstatus.LF_LI_TC802_OrderStatus_ScrollTest#tc802_orderStatus_scroll,DEV/PROD Fulfillment Console; calendar = Yesterday; Line Items tab,"1. On Line Items tab, expand Order Status
+2. Scroll option list vertically
+3. Confirm no UI errors and options continue loading",Virtual scroll works without error; additional options appear in viewport
+LF_LI_TC1002 — Line Items Order Status: Active filters,Fulfillment Console > Left Filters > Line Items > Per Filter > Order Status,Test Case (Text),Functional,2 - High,Left Filters,Java TestNG,com.paramount.test.ff.uitests.tests.leftfiltersvalidation.perfilter.lineitems.orderstatus.LF_LI_TC1002_OrderStatus_ActiveFiltersTest#tc1002_orderStatus_activeFilters,DEV/PROD Fulfillment Console; calendar = Yesterday; Line Items tab,"1. On Line Items tab, select one option in Order Status
+2. Select a second option (multi-select)
+3. Review Active Filters chips above grid",Active Filters chips show single and multiple selections from Order Status
+LF_LI_TC1102 — Line Items Order Status: Clear filters,Fulfillment Console > Left Filters > Line Items > Per Filter > Order Status,Test Case (Text),Functional,2 - High,Left Filters,Java TestNG,com.paramount.test.ff.uitests.tests.leftfiltersvalidation.perfilter.lineitems.orderstatus.LF_LI_TC1102_OrderStatus_ClearFiltersTest#tc1102_orderStatus_clearFilters,DEV/PROD Fulfillment Console; calendar = Yesterday; Line Items tab,"1. On Line Items tab, select options in Order Status
+2. Remove chip from Active Filters OR click Clear
+3. Verify selections cleared and grid resets",Filter selections cleared; Active Filters empty; grid shows unfiltered data
+LF_LI_TC104 — Line Items Environment: Option list order,Fulfillment Console > Left Filters > Line Items > Per Filter > Environment,Test Case (Text),Functional,2 - High,Left Filters,Java TestNG,com.paramount.test.ff.uitests.tests.leftfiltersvalidation.perfilter.lineitems.environment.LF_LI_TC104_Environment_OptionOrderTest#tc104_environment_optionOrder,DEV/PROD Fulfillment Console; calendar = Yesterday; Line Items tab,"1. On Line Items tab, expand Environment
+2. Verify Select All is first
+3. Review non-zero options order
+4. Check divider before zero-count options if present
+5. Verify zero-count options A-Z",Select All first; non-zero A-Z; divider; zero-count A-Z in visible viewport
+LF_LI_TC103 — Line Items Environment: Basic,Fulfillment Console > Left Filters > Line Items > Per Filter > Environment,Test Case (Text),Functional,1 - Critical,Left Filters,Java TestNG,com.paramount.test.ff.uitests.tests.leftfiltersvalidation.perfilter.lineitems.environment.LF_LI_TC103_Environment_BasicTest#tc103_environment_basic,DEV/PROD Fulfillment Console; calendar = Yesterday; Line Items tab,"1. Log in; set calendar to Yesterday
+2. Navigate to Line Items tab
+3. Verify Environment is visible in left panel
+4. Expand Environment
+5. Confirm options load and Select All at top
+6. Collapse filter",Environment is visible; expands/collapses; options and Select All at top display correctly
+LF_LI_TC203 — Line Items Environment: Search,Fulfillment Console > Left Filters > Line Items > Per Filter > Environment,Test Case (Text),Functional,2 - High,Left Filters,Java TestNG,com.paramount.test.ff.uitests.tests.leftfiltersvalidation.perfilter.lineitems.environment.LF_LI_TC203_Environment_SearchTest#tc203_environment_search,DEV/PROD Fulfillment Console; calendar = Yesterday; Line Items tab,"1. On Line Items tab, expand Environment
+2. Note first visible option label
+3. Type into filter search box
+4. Verify filtered results
+5. Clear search",Search returns matching options; clear restores list
+LF_LI_TC403 — Line Items Environment: Select all,Fulfillment Console > Left Filters > Line Items > Per Filter > Environment,Test Case (Text),Functional,2 - High,Left Filters,Java TestNG,com.paramount.test.ff.uitests.tests.leftfiltersvalidation.perfilter.lineitems.environment.LF_LI_TC403_Environment_SelectAllTest#tc403_environment_selectAll,DEV/PROD Fulfillment Console; calendar = Yesterday; Line Items tab,"1. On Line Items tab, expand Environment
+2. Click Select All
+3. Verify all options selected and counts
+4. Deselect one option — check indeterminate
+5. Deselect all",Select All selects all; indeterminate on partial; counts inside/outside match
+LF_LI_TC603 — Line Items Environment: Table sync,Fulfillment Console > Left Filters > Line Items > Per Filter > Environment,Test Case (Text),Functional,1 - Critical,Left Filters,Java TestNG,com.paramount.test.ff.uitests.tests.leftfiltersvalidation.perfilter.lineitems.environment.LF_LI_TC603_Environment_TableSyncTest#tc603_environment_tableSync,DEV/PROD Fulfillment Console; calendar = Yesterday; Line Items tab,"1. On Line Items tab, expand Environment
+2. Select one option with non-zero count
+3. Compare filter option count to table total count
+4. Verify first visible grid rows match filter column",Table record count matches filter count; grid rows reflect selected filter value
+LF_LI_TC803 — Line Items Environment: Scroll,Fulfillment Console > Left Filters > Line Items > Per Filter > Environment,Test Case (Text),Functional,3 - Medium,Left Filters,Java TestNG,com.paramount.test.ff.uitests.tests.leftfiltersvalidation.perfilter.lineitems.environment.LF_LI_TC803_Environment_ScrollTest#tc803_environment_scroll,DEV/PROD Fulfillment Console; calendar = Yesterday; Line Items tab,"1. On Line Items tab, expand Environment
+2. Scroll option list vertically
+3. Confirm no UI errors and options continue loading",Virtual scroll works without error; additional options appear in viewport
+LF_LI_TC1003 — Line Items Environment: Active filters,Fulfillment Console > Left Filters > Line Items > Per Filter > Environment,Test Case (Text),Functional,2 - High,Left Filters,Java TestNG,com.paramount.test.ff.uitests.tests.leftfiltersvalidation.perfilter.lineitems.environment.LF_LI_TC1003_Environment_ActiveFiltersTest#tc1003_environment_activeFilters,DEV/PROD Fulfillment Console; calendar = Yesterday; Line Items tab,"1. On Line Items tab, select one option in Environment
+2. Select a second option (multi-select)
+3. Review Active Filters chips above grid",Active Filters chips show single and multiple selections from Environment
+LF_LI_TC1103 — Line Items Environment: Clear filters,Fulfillment Console > Left Filters > Line Items > Per Filter > Environment,Test Case (Text),Functional,2 - High,Left Filters,Java TestNG,com.paramount.test.ff.uitests.tests.leftfiltersvalidation.perfilter.lineitems.environment.LF_LI_TC1103_Environment_ClearFiltersTest#tc1103_environment_clearFilters,DEV/PROD Fulfillment Console; calendar = Yesterday; Line Items tab,"1. On Line Items tab, select options in Environment
+2. Remove chip from Active Filters OR click Clear
+3. Verify selections cleared and grid resets",Filter selections cleared; Active Filters empty; grid shows unfiltered data
+LF_LI_TC105 — Line Items Job type: Option list order,Fulfillment Console > Left Filters > Line Items > Per Filter > Job type,Test Case (Text),Functional,2 - High,Left Filters,Java TestNG,com.paramount.test.ff.uitests.tests.leftfiltersvalidation.perfilter.lineitems.jobtype.LF_LI_TC105_JobType_OptionOrderTest#tc105_jobType_optionOrder,DEV/PROD Fulfillment Console; calendar = Yesterday; Line Items tab,"1. On Line Items tab, expand Job type
+2. Verify Select All is first
+3. Review non-zero options order
+4. Check divider before zero-count options if present
+5. Verify zero-count options A-Z",Select All first; non-zero A-Z; divider; zero-count A-Z in visible viewport
+LF_LI_TC104 — Line Items Job type: Basic,Fulfillment Console > Left Filters > Line Items > Per Filter > Job type,Test Case (Text),Functional,1 - Critical,Left Filters,Java TestNG,com.paramount.test.ff.uitests.tests.leftfiltersvalidation.perfilter.lineitems.jobtype.LF_LI_TC104_JobType_BasicTest#tc104_jobType_basic,DEV/PROD Fulfillment Console; calendar = Yesterday; Line Items tab,"1. Log in; set calendar to Yesterday
+2. Navigate to Line Items tab
+3. Verify Job type is visible in left panel
+4. Expand Job type
+5. Confirm options load and Select All at top
+6. Collapse filter",Job type is visible; expands/collapses; options and Select All at top display correctly
+LF_LI_TC204 — Line Items Job type: Search,Fulfillment Console > Left Filters > Line Items > Per Filter > Job type,Test Case (Text),Functional,2 - High,Left Filters,Java TestNG,com.paramount.test.ff.uitests.tests.leftfiltersvalidation.perfilter.lineitems.jobtype.LF_LI_TC204_JobType_SearchTest#tc204_jobType_search,DEV/PROD Fulfillment Console; calendar = Yesterday; Line Items tab,"1. On Line Items tab, expand Job type
+2. Note first visible option label
+3. Type into filter search box
+4. Verify filtered results
+5. Clear search",Search returns matching options; clear restores list
+LF_LI_TC404 — Line Items Job type: Select all,Fulfillment Console > Left Filters > Line Items > Per Filter > Job type,Test Case (Text),Functional,2 - High,Left Filters,Java TestNG,com.paramount.test.ff.uitests.tests.leftfiltersvalidation.perfilter.lineitems.jobtype.LF_LI_TC404_JobType_SelectAllTest#tc404_jobType_selectAll,DEV/PROD Fulfillment Console; calendar = Yesterday; Line Items tab,"1. On Line Items tab, expand Job type
+2. Click Select All
+3. Verify all options selected and counts
+4. Deselect one option — check indeterminate
+5. Deselect all",Select All selects all; indeterminate on partial; counts inside/outside match
+LF_LI_TC604 — Line Items Job type: Table sync,Fulfillment Console > Left Filters > Line Items > Per Filter > Job type,Test Case (Text),Functional,1 - Critical,Left Filters,Java TestNG,com.paramount.test.ff.uitests.tests.leftfiltersvalidation.perfilter.lineitems.jobtype.LF_LI_TC604_JobType_TableSyncTest#tc604_jobType_tableSync,DEV/PROD Fulfillment Console; calendar = Yesterday; Line Items tab,"1. On Line Items tab, expand Job type
+2. Select one option with non-zero count
+3. Compare filter option count to table total count
+4. Verify first visible grid rows match filter column",Table record count matches filter count; grid rows reflect selected filter value
+LF_LI_TC804 — Line Items Job type: Scroll,Fulfillment Console > Left Filters > Line Items > Per Filter > Job type,Test Case (Text),Functional,3 - Medium,Left Filters,Java TestNG,com.paramount.test.ff.uitests.tests.leftfiltersvalidation.perfilter.lineitems.jobtype.LF_LI_TC804_JobType_ScrollTest#tc804_jobType_scroll,DEV/PROD Fulfillment Console; calendar = Yesterday; Line Items tab,"1. On Line Items tab, expand Job type
+2. Scroll option list vertically
+3. Confirm no UI errors and options continue loading",Virtual scroll works without error; additional options appear in viewport
+LF_LI_TC1004 — Line Items Job type: Active filters,Fulfillment Console > Left Filters > Line Items > Per Filter > Job type,Test Case (Text),Functional,2 - High,Left Filters,Java TestNG,com.paramount.test.ff.uitests.tests.leftfiltersvalidation.perfilter.lineitems.jobtype.LF_LI_TC1004_JobType_ActiveFiltersTest#tc1004_jobType_activeFilters,DEV/PROD Fulfillment Console; calendar = Yesterday; Line Items tab,"1. On Line Items tab, select one option in Job type
+2. Select a second option (multi-select)
+3. Review Active Filters chips above grid",Active Filters chips show single and multiple selections from Job type
+LF_LI_TC1104 — Line Items Job type: Clear filters,Fulfillment Console > Left Filters > Line Items > Per Filter > Job type,Test Case (Text),Functional,2 - High,Left Filters,Java TestNG,com.paramount.test.ff.uitests.tests.leftfiltersvalidation.perfilter.lineitems.jobtype.LF_LI_TC1104_JobType_ClearFiltersTest#tc1104_jobType_clearFilters,DEV/PROD Fulfillment Console; calendar = Yesterday; Line Items tab,"1. On Line Items tab, select options in Job type
+2. Remove chip from Active Filters OR click Clear
+3. Verify selections cleared and grid resets",Filter selections cleared; Active Filters empty; grid shows unfiltered data
+LF_LI_TC106 — Line Items Submitted by: Option list order,Fulfillment Console > Left Filters > Line Items > Per Filter > Submitted by,Test Case (Text),Functional,2 - High,Left Filters,Java TestNG,com.paramount.test.ff.uitests.tests.leftfiltersvalidation.perfilter.lineitems.submittedby.LF_LI_TC106_SubmittedBy_OptionOrderTest#tc106_submittedBy_optionOrder,DEV/PROD Fulfillment Console; calendar = Yesterday; Line Items tab,"1. On Line Items tab, expand Submitted by
+2. Verify Select All is first
+3. Review non-zero options order
+4. Check divider before zero-count options if present
+5. Verify zero-count options A-Z",Select All first; non-zero A-Z; divider; zero-count A-Z in visible viewport
+LF_LI_TC105 — Line Items Submitted by: Basic,Fulfillment Console > Left Filters > Line Items > Per Filter > Submitted by,Test Case (Text),Functional,1 - Critical,Left Filters,Java TestNG,com.paramount.test.ff.uitests.tests.leftfiltersvalidation.perfilter.lineitems.submittedby.LF_LI_TC105_SubmittedBy_BasicTest#tc105_submittedBy_basic,DEV/PROD Fulfillment Console; calendar = Yesterday; Line Items tab,"1. Log in; set calendar to Yesterday
+2. Navigate to Line Items tab
+3. Verify Submitted by is visible in left panel
+4. Expand Submitted by
+5. Confirm options load and Select All at top
+6. Collapse filter",Submitted by is visible; expands/collapses; options and Select All at top display correctly
+LF_LI_TC205 — Line Items Submitted by: Search,Fulfillment Console > Left Filters > Line Items > Per Filter > Submitted by,Test Case (Text),Functional,2 - High,Left Filters,Java TestNG,com.paramount.test.ff.uitests.tests.leftfiltersvalidation.perfilter.lineitems.submittedby.LF_LI_TC205_SubmittedBy_SearchTest#tc205_submittedBy_search,DEV/PROD Fulfillment Console; calendar = Yesterday; Line Items tab,"1. On Line Items tab, expand Submitted by
+2. Note first visible option label
+3. Type into filter search box
+4. Verify filtered results
+5. Clear search",Search returns matching options; clear restores list
+LF_LI_TC405 — Line Items Submitted by: Select all,Fulfillment Console > Left Filters > Line Items > Per Filter > Submitted by,Test Case (Text),Functional,2 - High,Left Filters,Java TestNG,com.paramount.test.ff.uitests.tests.leftfiltersvalidation.perfilter.lineitems.submittedby.LF_LI_TC405_SubmittedBy_SelectAllTest#tc405_submittedBy_selectAll,DEV/PROD Fulfillment Console; calendar = Yesterday; Line Items tab,"1. On Line Items tab, expand Submitted by
+2. Click Select All
+3. Verify all options selected and counts
+4. Deselect one option — check indeterminate
+5. Deselect all",Select All selects all; indeterminate on partial; counts inside/outside match
+LF_LI_TC605 — Line Items Submitted by: Table sync,Fulfillment Console > Left Filters > Line Items > Per Filter > Submitted by,Test Case (Text),Functional,1 - Critical,Left Filters,Java TestNG,com.paramount.test.ff.uitests.tests.leftfiltersvalidation.perfilter.lineitems.submittedby.LF_LI_TC605_SubmittedBy_TableSyncTest#tc605_submittedBy_tableSync,DEV/PROD Fulfillment Console; calendar = Yesterday; Line Items tab,"1. On Line Items tab, expand Submitted by
+2. Select one option with non-zero count
+3. Compare filter option count to table total count
+4. Verify first visible grid rows match filter column",Table record count matches filter count; grid rows reflect selected filter value
+LF_LI_TC805 — Line Items Submitted by: Scroll,Fulfillment Console > Left Filters > Line Items > Per Filter > Submitted by,Test Case (Text),Functional,3 - Medium,Left Filters,Java TestNG,com.paramount.test.ff.uitests.tests.leftfiltersvalidation.perfilter.lineitems.submittedby.LF_LI_TC805_SubmittedBy_ScrollTest#tc805_submittedBy_scroll,DEV/PROD Fulfillment Console; calendar = Yesterday; Line Items tab,"1. On Line Items tab, expand Submitted by
+2. Scroll option list vertically
+3. Confirm no UI errors and options continue loading",Virtual scroll works without error; additional options appear in viewport
+LF_LI_TC1005 — Line Items Submitted by: Active filters,Fulfillment Console > Left Filters > Line Items > Per Filter > Submitted by,Test Case (Text),Functional,2 - High,Left Filters,Java TestNG,com.paramount.test.ff.uitests.tests.leftfiltersvalidation.perfilter.lineitems.submittedby.LF_LI_TC1005_SubmittedBy_ActiveFiltersTest#tc1005_submittedBy_activeFilters,DEV/PROD Fulfillment Console; calendar = Yesterday; Line Items tab,"1. On Line Items tab, select one option in Submitted by
+2. Select a second option (multi-select)
+3. Review Active Filters chips above grid",Active Filters chips show single and multiple selections from Submitted by
+LF_LI_TC1105 — Line Items Submitted by: Clear filters,Fulfillment Console > Left Filters > Line Items > Per Filter > Submitted by,Test Case (Text),Functional,2 - High,Left Filters,Java TestNG,com.paramount.test.ff.uitests.tests.leftfiltersvalidation.perfilter.lineitems.submittedby.LF_LI_TC1105_SubmittedBy_ClearFiltersTest#tc1105_submittedBy_clearFilters,DEV/PROD Fulfillment Console; calendar = Yesterday; Line Items tab,"1. On Line Items tab, select options in Submitted by
+2. Remove chip from Active Filters OR click Clear
+3. Verify selections cleared and grid resets",Filter selections cleared; Active Filters empty; grid shows unfiltered data
+LF_LI_TC106 — Line Items Partner: Basic,Fulfillment Console > Left Filters > Line Items > Per Filter > Partner,Test Case (Text),Functional,1 - Critical,Left Filters,Java TestNG,com.paramount.test.ff.uitests.tests.leftfiltersvalidation.perfilter.lineitems.partner.LF_LI_TC106_Partner_BasicTest#tc106_partner_basic,DEV/PROD Fulfillment Console; calendar = Yesterday; Line Items tab,"1. Log in; set calendar to Yesterday
+2. Navigate to Line Items tab
+3. Verify Partner is visible in left panel
+4. Expand Partner
+5. Confirm options load and Select All at top
+6. Collapse filter",Partner is visible; expands/collapses; options and Select All at top display correctly
+LF_LI_TC206 — Line Items Partner: Search,Fulfillment Console > Left Filters > Line Items > Per Filter > Partner,Test Case (Text),Functional,2 - High,Left Filters,Java TestNG,com.paramount.test.ff.uitests.tests.leftfiltersvalidation.perfilter.lineitems.partner.LF_LI_TC206_Partner_SearchTest#tc206_partner_search,DEV/PROD Fulfillment Console; calendar = Yesterday; Line Items tab,"1. On Line Items tab, expand Partner
+2. Note first visible option label
+3. Type into filter search box
+4. Verify filtered results
+5. Clear search",Search returns matching options; clear restores list
+LF_LI_TC806 — Line Items Partner: Scroll,Fulfillment Console > Left Filters > Line Items > Per Filter > Partner,Test Case (Text),Functional,3 - Medium,Left Filters,Java TestNG,com.paramount.test.ff.uitests.tests.leftfiltersvalidation.perfilter.lineitems.partner.LF_LI_TC806_Partner_ScrollTest#tc806_partner_scroll,DEV/PROD Fulfillment Console; calendar = Yesterday; Line Items tab,"1. On Line Items tab, expand Partner
+2. Scroll option list vertically
+3. Confirm no UI errors and options continue loading",Virtual scroll works without error; additional options appear in viewport
+LF_LI_TC1006 — Line Items Partner: Active filters,Fulfillment Console > Left Filters > Line Items > Per Filter > Partner,Test Case (Text),Functional,2 - High,Left Filters,Java TestNG,com.paramount.test.ff.uitests.tests.leftfiltersvalidation.perfilter.lineitems.partner.LF_LI_TC1006_Partner_ActiveFiltersTest#tc1006_partner_activeFilters,DEV/PROD Fulfillment Console; calendar = Yesterday; Line Items tab,"1. On Line Items tab, select one option in Partner
+2. Select a second option (multi-select)
+3. Review Active Filters chips above grid",Active Filters chips show single and multiple selections from Partner
+LF_LI_TC1106 — Line Items Partner: Clear filters,Fulfillment Console > Left Filters > Line Items > Per Filter > Partner,Test Case (Text),Functional,2 - High,Left Filters,Java TestNG,com.paramount.test.ff.uitests.tests.leftfiltersvalidation.perfilter.lineitems.partner.LF_LI_TC1106_Partner_ClearFiltersTest#tc1106_partner_clearFilters,DEV/PROD Fulfillment Console; calendar = Yesterday; Line Items tab,"1. On Line Items tab, select options in Partner
+2. Remove chip from Active Filters OR click Clear
+3. Verify selections cleared and grid resets",Filter selections cleared; Active Filters empty; grid shows unfiltered data
+LF_LI_TC108 — Line Items Series title: Option list order,Fulfillment Console > Left Filters > Line Items > Per Filter > Series title,Test Case (Text),Functional,2 - High,Left Filters,Java TestNG,com.paramount.test.ff.uitests.tests.leftfiltersvalidation.perfilter.lineitems.seriestitle.LF_LI_TC108_SeriesTitle_OptionOrderTest#tc108_seriesTitle_optionOrder,DEV/PROD Fulfillment Console; calendar = Yesterday; Line Items tab,"1. On Line Items tab, expand Series title
+2. Verify Select All is first
+3. Review non-zero options order
+4. Check divider before zero-count options if present
+5. Verify zero-count options A-Z",Select All first; non-zero A-Z; divider; zero-count A-Z in visible viewport
+LF_LI_TC107 — Line Items Series title: Basic,Fulfillment Console > Left Filters > Line Items > Per Filter > Series title,Test Case (Text),Functional,1 - Critical,Left Filters,Java TestNG,com.paramount.test.ff.uitests.tests.leftfiltersvalidation.perfilter.lineitems.seriestitle.LF_LI_TC107_SeriesTitle_BasicTest#tc107_seriesTitle_basic,DEV/PROD Fulfillment Console; calendar = Yesterday; Line Items tab,"1. Log in; set calendar to Yesterday
+2. Navigate to Line Items tab
+3. Verify Series title is visible in left panel
+4. Expand Series title
+5. Confirm options load and Select All at top
+6. Collapse filter",Series title is visible; expands/collapses; options and Select All at top display correctly
+LF_LI_TC207 — Line Items Series title: Search,Fulfillment Console > Left Filters > Line Items > Per Filter > Series title,Test Case (Text),Functional,2 - High,Left Filters,Java TestNG,com.paramount.test.ff.uitests.tests.leftfiltersvalidation.perfilter.lineitems.seriestitle.LF_LI_TC207_SeriesTitle_SearchTest#tc207_seriesTitle_search,DEV/PROD Fulfillment Console; calendar = Yesterday; Line Items tab,"1. On Line Items tab, expand Series title
+2. Note first visible option label
+3. Type into filter search box
+4. Verify filtered results
+5. Clear search",Search returns matching options; clear restores list
+LF_LI_TC407 — Line Items Series title: Select all,Fulfillment Console > Left Filters > Line Items > Per Filter > Series title,Test Case (Text),Functional,2 - High,Left Filters,Java TestNG,com.paramount.test.ff.uitests.tests.leftfiltersvalidation.perfilter.lineitems.seriestitle.LF_LI_TC407_SeriesTitle_SelectAllTest#tc407_seriesTitle_selectAll,DEV/PROD Fulfillment Console; calendar = Yesterday; Line Items tab,"1. On Line Items tab, expand Series title
+2. Click Select All
+3. Verify all options selected and counts
+4. Deselect one option — check indeterminate
+5. Deselect all",Select All selects all; indeterminate on partial; counts inside/outside match
+LF_LI_TC607 — Line Items Series title: Table sync,Fulfillment Console > Left Filters > Line Items > Per Filter > Series title,Test Case (Text),Functional,1 - Critical,Left Filters,Java TestNG,com.paramount.test.ff.uitests.tests.leftfiltersvalidation.perfilter.lineitems.seriestitle.LF_LI_TC607_SeriesTitle_TableSyncTest#tc607_seriesTitle_tableSync,DEV/PROD Fulfillment Console; calendar = Yesterday; Line Items tab,"1. On Line Items tab, expand Series title
+2. Select one option with non-zero count
+3. Compare filter option count to table total count
+4. Verify first visible grid rows match filter column",Table record count matches filter count; grid rows reflect selected filter value
+LF_LI_TC807 — Line Items Series title: Scroll,Fulfillment Console > Left Filters > Line Items > Per Filter > Series title,Test Case (Text),Functional,3 - Medium,Left Filters,Java TestNG,com.paramount.test.ff.uitests.tests.leftfiltersvalidation.perfilter.lineitems.seriestitle.LF_LI_TC807_SeriesTitle_ScrollTest#tc807_seriesTitle_scroll,DEV/PROD Fulfillment Console; calendar = Yesterday; Line Items tab,"1. On Line Items tab, expand Series title
+2. Scroll option list vertically
+3. Confirm no UI errors and options continue loading",Virtual scroll works without error; additional options appear in viewport
+LF_LI_TC1007 — Line Items Series title: Active filters,Fulfillment Console > Left Filters > Line Items > Per Filter > Series title,Test Case (Text),Functional,2 - High,Left Filters,Java TestNG,com.paramount.test.ff.uitests.tests.leftfiltersvalidation.perfilter.lineitems.seriestitle.LF_LI_TC1007_SeriesTitle_ActiveFiltersTest#tc1007_seriesTitle_activeFilters,DEV/PROD Fulfillment Console; calendar = Yesterday; Line Items tab,"1. On Line Items tab, select one option in Series title
+2. Select a second option (multi-select)
+3. Review Active Filters chips above grid",Active Filters chips show single and multiple selections from Series title
+LF_LI_TC1107 — Line Items Series title: Clear filters,Fulfillment Console > Left Filters > Line Items > Per Filter > Series title,Test Case (Text),Functional,2 - High,Left Filters,Java TestNG,com.paramount.test.ff.uitests.tests.leftfiltersvalidation.perfilter.lineitems.seriestitle.LF_LI_TC1107_SeriesTitle_ClearFiltersTest#tc1107_seriesTitle_clearFilters,DEV/PROD Fulfillment Console; calendar = Yesterday; Line Items tab,"1. On Line Items tab, select options in Series title
+2. Remove chip from Active Filters OR click Clear
+3. Verify selections cleared and grid resets",Filter selections cleared; Active Filters empty; grid shows unfiltered data
+LF_LI_TC109 — Line Items Flag: Option list order,Fulfillment Console > Left Filters > Line Items > Per Filter > Flag,Test Case (Text),Functional,2 - High,Left Filters,Java TestNG,com.paramount.test.ff.uitests.tests.leftfiltersvalidation.perfilter.lineitems.flag.LF_LI_TC109_Flag_OptionOrderTest#tc109_flag_optionOrder,DEV/PROD Fulfillment Console; calendar = Yesterday; Line Items tab,"1. On Line Items tab, expand Flag
+2. Verify Select All is first
+3. Review non-zero options order
+4. Check divider before zero-count options if present
+5. Verify zero-count options A-Z",Select All first; non-zero A-Z; divider; zero-count A-Z in visible viewport
+LF_LI_TC108 — Line Items Flag: Basic,Fulfillment Console > Left Filters > Line Items > Per Filter > Flag,Test Case (Text),Functional,1 - Critical,Left Filters,Java TestNG,com.paramount.test.ff.uitests.tests.leftfiltersvalidation.perfilter.lineitems.flag.LF_LI_TC108_Flag_BasicTest#tc108_flag_basic,DEV/PROD Fulfillment Console; calendar = Yesterday; Line Items tab,"1. Log in; set calendar to Yesterday
+2. Navigate to Line Items tab
+3. Verify Flag is visible in left panel
+4. Expand Flag
+5. Confirm options load and Select All at top
+6. Collapse filter",Flag is visible; expands/collapses; options and Select All at top display correctly
+LF_LI_TC208 — Line Items Flag: Search,Fulfillment Console > Left Filters > Line Items > Per Filter > Flag,Test Case (Text),Functional,2 - High,Left Filters,Java TestNG,com.paramount.test.ff.uitests.tests.leftfiltersvalidation.perfilter.lineitems.flag.LF_LI_TC208_Flag_SearchTest#tc208_flag_search,DEV/PROD Fulfillment Console; calendar = Yesterday; Line Items tab,"1. On Line Items tab, expand Flag
+2. Note first visible option label
+3. Type into filter search box
+4. Verify filtered results
+5. Clear search",Search returns matching options; clear restores list
+LF_LI_TC408 — Line Items Flag: Select all,Fulfillment Console > Left Filters > Line Items > Per Filter > Flag,Test Case (Text),Functional,2 - High,Left Filters,Java TestNG,com.paramount.test.ff.uitests.tests.leftfiltersvalidation.perfilter.lineitems.flag.LF_LI_TC408_Flag_SelectAllTest#tc408_flag_selectAll,DEV/PROD Fulfillment Console; calendar = Yesterday; Line Items tab,"1. On Line Items tab, expand Flag
+2. Click Select All
+3. Verify all options selected and counts
+4. Deselect one option — check indeterminate
+5. Deselect all",Select All selects all; indeterminate on partial; counts inside/outside match
+LF_LI_TC608 — Line Items Flag: Table sync,Fulfillment Console > Left Filters > Line Items > Per Filter > Flag,Test Case (Text),Functional,1 - Critical,Left Filters,Java TestNG,com.paramount.test.ff.uitests.tests.leftfiltersvalidation.perfilter.lineitems.flag.LF_LI_TC608_Flag_TableSyncTest#tc608_flag_tableSync,DEV/PROD Fulfillment Console; calendar = Yesterday; Line Items tab,"1. On Line Items tab, expand Flag
+2. Select one option with non-zero count
+3. Compare filter option count to table total count
+4. Verify first visible grid rows match filter column",Table record count matches filter count; grid rows reflect selected filter value
+LF_LI_TC808 — Line Items Flag: Scroll,Fulfillment Console > Left Filters > Line Items > Per Filter > Flag,Test Case (Text),Functional,3 - Medium,Left Filters,Java TestNG,com.paramount.test.ff.uitests.tests.leftfiltersvalidation.perfilter.lineitems.flag.LF_LI_TC808_Flag_ScrollTest#tc808_flag_scroll,DEV/PROD Fulfillment Console; calendar = Yesterday; Line Items tab,"1. On Line Items tab, expand Flag
+2. Scroll option list vertically
+3. Confirm no UI errors and options continue loading",Virtual scroll works without error; additional options appear in viewport
+LF_LI_TC1008 — Line Items Flag: Active filters,Fulfillment Console > Left Filters > Line Items > Per Filter > Flag,Test Case (Text),Functional,2 - High,Left Filters,Java TestNG,com.paramount.test.ff.uitests.tests.leftfiltersvalidation.perfilter.lineitems.flag.LF_LI_TC1008_Flag_ActiveFiltersTest#tc1008_flag_activeFilters,DEV/PROD Fulfillment Console; calendar = Yesterday; Line Items tab,"1. On Line Items tab, select one option in Flag
+2. Select a second option (multi-select)
+3. Review Active Filters chips above grid",Active Filters chips show single and multiple selections from Flag
+LF_LI_TC1108 — Line Items Flag: Clear filters,Fulfillment Console > Left Filters > Line Items > Per Filter > Flag,Test Case (Text),Functional,2 - High,Left Filters,Java TestNG,com.paramount.test.ff.uitests.tests.leftfiltersvalidation.perfilter.lineitems.flag.LF_LI_TC1108_Flag_ClearFiltersTest#tc1108_flag_clearFilters,DEV/PROD Fulfillment Console; calendar = Yesterday; Line Items tab,"1. On Line Items tab, select options in Flag
+2. Remove chip from Active Filters OR click Clear
+3. Verify selections cleared and grid resets",Filter selections cleared; Active Filters empty; grid shows unfiltered data
+LF_LI_TC110 — Line Items Assigned To: Option list order,Fulfillment Console > Left Filters > Line Items > Per Filter > Assigned To,Test Case (Text),Functional,2 - High,Left Filters,Java TestNG,com.paramount.test.ff.uitests.tests.leftfiltersvalidation.perfilter.lineitems.assignedto.LF_LI_TC110_AssignedTo_OptionOrderTest#tc110_assignedTo_optionOrder,DEV/PROD Fulfillment Console; calendar = Yesterday; Line Items tab,"1. On Line Items tab, expand Assigned To
+2. Verify Select All is first
+3. Review non-zero options order
+4. Check divider before zero-count options if present
+5. Verify zero-count options A-Z",Select All first; non-zero A-Z; divider; zero-count A-Z in visible viewport
+LF_LI_TC109 — Line Items Assigned To: Basic,Fulfillment Console > Left Filters > Line Items > Per Filter > Assigned To,Test Case (Text),Functional,1 - Critical,Left Filters,Java TestNG,com.paramount.test.ff.uitests.tests.leftfiltersvalidation.perfilter.lineitems.assignedto.LF_LI_TC109_AssignedTo_BasicTest#tc109_assignedTo_basic,DEV/PROD Fulfillment Console; calendar = Yesterday; Line Items tab,"1. Log in; set calendar to Yesterday
+2. Navigate to Line Items tab
+3. Verify Assigned To is visible in left panel
+4. Expand Assigned To
+5. Confirm options load and Select All at top
+6. Collapse filter",Assigned To is visible; expands/collapses; options and Select All at top display correctly
+LF_LI_TC209 — Line Items Assigned To: Search,Fulfillment Console > Left Filters > Line Items > Per Filter > Assigned To,Test Case (Text),Functional,2 - High,Left Filters,Java TestNG,com.paramount.test.ff.uitests.tests.leftfiltersvalidation.perfilter.lineitems.assignedto.LF_LI_TC209_AssignedTo_SearchTest#tc209_assignedTo_search,DEV/PROD Fulfillment Console; calendar = Yesterday; Line Items tab,"1. On Line Items tab, expand Assigned To
+2. Note first visible option label
+3. Type into filter search box
+4. Verify filtered results
+5. Clear search",Search returns matching options; clear restores list
+LF_LI_TC409 — Line Items Assigned To: Select all,Fulfillment Console > Left Filters > Line Items > Per Filter > Assigned To,Test Case (Text),Functional,2 - High,Left Filters,Java TestNG,com.paramount.test.ff.uitests.tests.leftfiltersvalidation.perfilter.lineitems.assignedto.LF_LI_TC409_AssignedTo_SelectAllTest#tc409_assignedTo_selectAll,DEV/PROD Fulfillment Console; calendar = Yesterday; Line Items tab,"1. On Line Items tab, expand Assigned To
+2. Click Select All
+3. Verify all options selected and counts
+4. Deselect one option — check indeterminate
+5. Deselect all",Select All selects all; indeterminate on partial; counts inside/outside match
+LF_LI_TC609 — Line Items Assigned To: Table sync,Fulfillment Console > Left Filters > Line Items > Per Filter > Assigned To,Test Case (Text),Functional,1 - Critical,Left Filters,Java TestNG,com.paramount.test.ff.uitests.tests.leftfiltersvalidation.perfilter.lineitems.assignedto.LF_LI_TC609_AssignedTo_TableSyncTest#tc609_assignedTo_tableSync,DEV/PROD Fulfillment Console; calendar = Yesterday; Line Items tab,"1. On Line Items tab, expand Assigned To
+2. Select one option with non-zero count
+3. Compare filter option count to table total count
+4. Verify first visible grid rows match filter column",Table record count matches filter count; grid rows reflect selected filter value
+LF_LI_TC809 — Line Items Assigned To: Scroll,Fulfillment Console > Left Filters > Line Items > Per Filter > Assigned To,Test Case (Text),Functional,3 - Medium,Left Filters,Java TestNG,com.paramount.test.ff.uitests.tests.leftfiltersvalidation.perfilter.lineitems.assignedto.LF_LI_TC809_AssignedTo_ScrollTest#tc809_assignedTo_scroll,DEV/PROD Fulfillment Console; calendar = Yesterday; Line Items tab,"1. On Line Items tab, expand Assigned To
+2. Scroll option list vertically
+3. Confirm no UI errors and options continue loading",Virtual scroll works without error; additional options appear in viewport
+LF_LI_TC1009 — Line Items Assigned To: Active filters,Fulfillment Console > Left Filters > Line Items > Per Filter > Assigned To,Test Case (Text),Functional,2 - High,Left Filters,Java TestNG,com.paramount.test.ff.uitests.tests.leftfiltersvalidation.perfilter.lineitems.assignedto.LF_LI_TC1009_AssignedTo_ActiveFiltersTest#tc1009_assignedTo_activeFilters,DEV/PROD Fulfillment Console; calendar = Yesterday; Line Items tab,"1. On Line Items tab, select one option in Assigned To
+2. Select a second option (multi-select)
+3. Review Active Filters chips above grid",Active Filters chips show single and multiple selections from Assigned To
+LF_LI_TC1109 — Line Items Assigned To: Clear filters,Fulfillment Console > Left Filters > Line Items > Per Filter > Assigned To,Test Case (Text),Functional,2 - High,Left Filters,Java TestNG,com.paramount.test.ff.uitests.tests.leftfiltersvalidation.perfilter.lineitems.assignedto.LF_LI_TC1109_AssignedTo_ClearFiltersTest#tc1109_assignedTo_clearFilters,DEV/PROD Fulfillment Console; calendar = Yesterday; Line Items tab,"1. On Line Items tab, select options in Assigned To
+2. Remove chip from Active Filters OR click Clear
+3. Verify selections cleared and grid resets",Filter selections cleared; Active Filters empty; grid shows unfiltered data
+LF_LI_TC110 — Line Items Season number: Basic,Fulfillment Console > Left Filters > Line Items > Per Filter > Season number,Test Case (Text),Functional,1 - Critical,Left Filters,Java TestNG,com.paramount.test.ff.uitests.tests.leftfiltersvalidation.perfilter.lineitems.seasonnumber.LF_LI_TC110_SeasonNumber_BasicTest#tc110_seasonNumber_basic,DEV/PROD Fulfillment Console; calendar = Yesterday; Line Items tab,"1. Log in; set calendar to Yesterday
+2. Navigate to Line Items tab
+3. Expand Season number filter
+4. Verify From/To range inputs present",Season number filter expands; range input fields are visible and usable
+LF_LI_TC210 — Line Items Season number: Search,Fulfillment Console > Left Filters > Line Items > Per Filter > Season number,Test Case (Text),Functional,2 - High,Left Filters,Java TestNG,com.paramount.test.ff.uitests.tests.leftfiltersvalidation.perfilter.lineitems.seasonnumber.LF_LI_TC210_SeasonNumber_SearchTest#tc210_seasonNumber_search,DEV/PROD Fulfillment Console; calendar = Yesterday; Line Items tab,"1. On Line Items tab, expand Season number
+2. Note first visible option label
+3. Type into filter search box
+4. Verify filtered results
+5. Clear search",Search returns matching options; clear restores list
+LF_LI_TC610 — Line Items Season number: Table sync,Fulfillment Console > Left Filters > Line Items > Per Filter > Season number,Test Case (Text),Functional,1 - Critical,Left Filters,Java TestNG,com.paramount.test.ff.uitests.tests.leftfiltersvalidation.perfilter.lineitems.seasonnumber.LF_LI_TC610_SeasonNumber_TableSyncTest#tc610_seasonNumber_tableSync,DEV/PROD Fulfillment Console; calendar = Yesterday; Line Items tab,"1. On Line Items tab, expand Season number
+2. Select one option with non-zero count
+3. Compare filter option count to table total count
+4. Verify first visible grid rows match filter column",Table record count matches filter count; grid rows reflect selected filter value
+LF_LI_TC112 — Line Items Region: Option list order,Fulfillment Console > Left Filters > Line Items > Per Filter > Region,Test Case (Text),Functional,2 - High,Left Filters,Java TestNG,com.paramount.test.ff.uitests.tests.leftfiltersvalidation.perfilter.lineitems.region.LF_LI_TC112_Region_OptionOrderTest#tc112_region_optionOrder,DEV/PROD Fulfillment Console; calendar = Yesterday; Line Items tab,"1. On Line Items tab, expand Region
+2. Verify Select All is first
+3. Review non-zero options order
+4. Check divider before zero-count options if present
+5. Verify zero-count options A-Z",Select All first; non-zero A-Z; divider; zero-count A-Z in visible viewport
+LF_LI_TC111 — Line Items Region: Basic,Fulfillment Console > Left Filters > Line Items > Per Filter > Region,Test Case (Text),Functional,1 - Critical,Left Filters,Java TestNG,com.paramount.test.ff.uitests.tests.leftfiltersvalidation.perfilter.lineitems.region.LF_LI_TC111_Region_BasicTest#tc111_region_basic,DEV/PROD Fulfillment Console; calendar = Yesterday; Line Items tab,"1. Log in; set calendar to Yesterday
+2. Navigate to Line Items tab
+3. Verify Region is visible in left panel
+4. Expand Region
+5. Confirm options load and Select All at top
+6. Collapse filter",Region is visible; expands/collapses; options and Select All at top display correctly
+LF_LI_TC211 — Line Items Region: Search,Fulfillment Console > Left Filters > Line Items > Per Filter > Region,Test Case (Text),Functional,2 - High,Left Filters,Java TestNG,com.paramount.test.ff.uitests.tests.leftfiltersvalidation.perfilter.lineitems.region.LF_LI_TC211_Region_SearchTest#tc211_region_search,DEV/PROD Fulfillment Console; calendar = Yesterday; Line Items tab,"1. On Line Items tab, expand Region
+2. Note first visible option label
+3. Type into filter search box
+4. Verify filtered results
+5. Clear search",Search returns matching options; clear restores list
+LF_LI_TC411 — Line Items Region: Select all,Fulfillment Console > Left Filters > Line Items > Per Filter > Region,Test Case (Text),Functional,2 - High,Left Filters,Java TestNG,com.paramount.test.ff.uitests.tests.leftfiltersvalidation.perfilter.lineitems.region.LF_LI_TC411_Region_SelectAllTest#tc411_region_selectAll,DEV/PROD Fulfillment Console; calendar = Yesterday; Line Items tab,"1. On Line Items tab, expand Region
+2. Click Select All
+3. Verify all options selected and counts
+4. Deselect one option — check indeterminate
+5. Deselect all",Select All selects all; indeterminate on partial; counts inside/outside match
+LF_LI_TC611 — Line Items Region: Table sync,Fulfillment Console > Left Filters > Line Items > Per Filter > Region,Test Case (Text),Functional,1 - Critical,Left Filters,Java TestNG,com.paramount.test.ff.uitests.tests.leftfiltersvalidation.perfilter.lineitems.region.LF_LI_TC611_Region_TableSyncTest#tc611_region_tableSync,DEV/PROD Fulfillment Console; calendar = Yesterday; Line Items tab,"1. On Line Items tab, expand Region
+2. Select one option with non-zero count
+3. Compare filter option count to table total count
+4. Verify first visible grid rows match filter column",Table record count matches filter count; grid rows reflect selected filter value
+LF_LI_TC811 — Line Items Region: Scroll,Fulfillment Console > Left Filters > Line Items > Per Filter > Region,Test Case (Text),Functional,3 - Medium,Left Filters,Java TestNG,com.paramount.test.ff.uitests.tests.leftfiltersvalidation.perfilter.lineitems.region.LF_LI_TC811_Region_ScrollTest#tc811_region_scroll,DEV/PROD Fulfillment Console; calendar = Yesterday; Line Items tab,"1. On Line Items tab, expand Region
+2. Scroll option list vertically
+3. Confirm no UI errors and options continue loading",Virtual scroll works without error; additional options appear in viewport
+LF_LI_TC1011 — Line Items Region: Active filters,Fulfillment Console > Left Filters > Line Items > Per Filter > Region,Test Case (Text),Functional,2 - High,Left Filters,Java TestNG,com.paramount.test.ff.uitests.tests.leftfiltersvalidation.perfilter.lineitems.region.LF_LI_TC1011_Region_ActiveFiltersTest#tc1011_region_activeFilters,DEV/PROD Fulfillment Console; calendar = Yesterday; Line Items tab,"1. On Line Items tab, select one option in Region
+2. Select a second option (multi-select)
+3. Review Active Filters chips above grid",Active Filters chips show single and multiple selections from Region
+LF_LI_TC1111 — Line Items Region: Clear filters,Fulfillment Console > Left Filters > Line Items > Per Filter > Region,Test Case (Text),Functional,2 - High,Left Filters,Java TestNG,com.paramount.test.ff.uitests.tests.leftfiltersvalidation.perfilter.lineitems.region.LF_LI_TC1111_Region_ClearFiltersTest#tc1111_region_clearFilters,DEV/PROD Fulfillment Console; calendar = Yesterday; Line Items tab,"1. On Line Items tab, select options in Region
+2. Remove chip from Active Filters OR click Clear
+3. Verify selections cleared and grid resets",Filter selections cleared; Active Filters empty; grid shows unfiltered data
+LF_LI_TC112 — Line Items Episode number: Basic,Fulfillment Console > Left Filters > Line Items > Per Filter > Episode number,Test Case (Text),Functional,1 - Critical,Left Filters,Java TestNG,com.paramount.test.ff.uitests.tests.leftfiltersvalidation.perfilter.lineitems.episodenumber.LF_LI_TC112_EpisodeNumber_BasicTest#tc112_episodeNumber_basic,DEV/PROD Fulfillment Console; calendar = Yesterday; Line Items tab,"1. Log in; set calendar to Yesterday
+2. Navigate to Line Items tab
+3. Expand Episode number filter
+4. Verify From/To range inputs present",Episode number filter expands; range input fields are visible and usable
+LF_LI_TC212 — Line Items Episode number: Search,Fulfillment Console > Left Filters > Line Items > Per Filter > Episode number,Test Case (Text),Functional,2 - High,Left Filters,Java TestNG,com.paramount.test.ff.uitests.tests.leftfiltersvalidation.perfilter.lineitems.episodenumber.LF_LI_TC212_EpisodeNumber_SearchTest#tc212_episodeNumber_search,DEV/PROD Fulfillment Console; calendar = Yesterday; Line Items tab,"1. On Line Items tab, expand Episode number
+2. Note first visible option label
+3. Type into filter search box
+4. Verify filtered results
+5. Clear search",Search returns matching options; clear restores list
+LF_LI_TC612 — Line Items Episode number: Table sync,Fulfillment Console > Left Filters > Line Items > Per Filter > Episode number,Test Case (Text),Functional,1 - Critical,Left Filters,Java TestNG,com.paramount.test.ff.uitests.tests.leftfiltersvalidation.perfilter.lineitems.episodenumber.LF_LI_TC612_EpisodeNumber_TableSyncTest#tc612_episodeNumber_tableSync,DEV/PROD Fulfillment Console; calendar = Yesterday; Line Items tab,"1. On Line Items tab, expand Episode number
+2. Select one option with non-zero count
+3. Compare filter option count to table total count
+4. Verify first visible grid rows match filter column",Table record count matches filter count; grid rows reflect selected filter value
+LF_LI_TC114 — Line Items Brand: Option list order,Fulfillment Console > Left Filters > Line Items > Per Filter > Brand,Test Case (Text),Functional,2 - High,Left Filters,Java TestNG,com.paramount.test.ff.uitests.tests.leftfiltersvalidation.perfilter.lineitems.brand.LF_LI_TC114_Brand_OptionOrderTest#tc114_brand_optionOrder,DEV/PROD Fulfillment Console; calendar = Yesterday; Line Items tab,"1. On Line Items tab, expand Brand
+2. Verify Select All is first
+3. Review non-zero options order
+4. Check divider before zero-count options if present
+5. Verify zero-count options A-Z",Select All first; non-zero A-Z; divider; zero-count A-Z in visible viewport
+LF_LI_TC113 — Line Items Brand: Basic,Fulfillment Console > Left Filters > Line Items > Per Filter > Brand,Test Case (Text),Functional,1 - Critical,Left Filters,Java TestNG,com.paramount.test.ff.uitests.tests.leftfiltersvalidation.perfilter.lineitems.brand.LF_LI_TC113_Brand_BasicTest#tc113_brand_basic,DEV/PROD Fulfillment Console; calendar = Yesterday; Line Items tab,"1. Log in; set calendar to Yesterday
+2. Navigate to Line Items tab
+3. Verify Brand is visible in left panel
+4. Expand Brand
+5. Confirm options load and Select All at top
+6. Collapse filter",Brand is visible; expands/collapses; options and Select All at top display correctly
+LF_LI_TC213 — Line Items Brand: Search,Fulfillment Console > Left Filters > Line Items > Per Filter > Brand,Test Case (Text),Functional,2 - High,Left Filters,Java TestNG,com.paramount.test.ff.uitests.tests.leftfiltersvalidation.perfilter.lineitems.brand.LF_LI_TC213_Brand_SearchTest#tc213_brand_search,DEV/PROD Fulfillment Console; calendar = Yesterday; Line Items tab,"1. On Line Items tab, expand Brand
+2. Note first visible option label
+3. Type into filter search box
+4. Verify filtered results
+5. Clear search",Search returns matching options; clear restores list
+LF_LI_TC413 — Line Items Brand: Select all,Fulfillment Console > Left Filters > Line Items > Per Filter > Brand,Test Case (Text),Functional,2 - High,Left Filters,Java TestNG,com.paramount.test.ff.uitests.tests.leftfiltersvalidation.perfilter.lineitems.brand.LF_LI_TC413_Brand_SelectAllTest#tc413_brand_selectAll,DEV/PROD Fulfillment Console; calendar = Yesterday; Line Items tab,"1. On Line Items tab, expand Brand
+2. Click Select All
+3. Verify all options selected and counts
+4. Deselect one option — check indeterminate
+5. Deselect all",Select All selects all; indeterminate on partial; counts inside/outside match
+LF_LI_TC613 — Line Items Brand: Table sync,Fulfillment Console > Left Filters > Line Items > Per Filter > Brand,Test Case (Text),Functional,1 - Critical,Left Filters,Java TestNG,com.paramount.test.ff.uitests.tests.leftfiltersvalidation.perfilter.lineitems.brand.LF_LI_TC613_Brand_TableSyncTest#tc613_brand_tableSync,DEV/PROD Fulfillment Console; calendar = Yesterday; Line Items tab,"1. On Line Items tab, expand Brand
+2. Select one option with non-zero count
+3. Compare filter option count to table total count
+4. Verify first visible grid rows match filter column",Table record count matches filter count; grid rows reflect selected filter value
+LF_LI_TC813 — Line Items Brand: Scroll,Fulfillment Console > Left Filters > Line Items > Per Filter > Brand,Test Case (Text),Functional,3 - Medium,Left Filters,Java TestNG,com.paramount.test.ff.uitests.tests.leftfiltersvalidation.perfilter.lineitems.brand.LF_LI_TC813_Brand_ScrollTest#tc813_brand_scroll,DEV/PROD Fulfillment Console; calendar = Yesterday; Line Items tab,"1. On Line Items tab, expand Brand
+2. Scroll option list vertically
+3. Confirm no UI errors and options continue loading",Virtual scroll works without error; additional options appear in viewport
+LF_LI_TC1013 — Line Items Brand: Active filters,Fulfillment Console > Left Filters > Line Items > Per Filter > Brand,Test Case (Text),Functional,2 - High,Left Filters,Java TestNG,com.paramount.test.ff.uitests.tests.leftfiltersvalidation.perfilter.lineitems.brand.LF_LI_TC1013_Brand_ActiveFiltersTest#tc1013_brand_activeFilters,DEV/PROD Fulfillment Console; calendar = Yesterday; Line Items tab,"1. On Line Items tab, select one option in Brand
+2. Select a second option (multi-select)
+3. Review Active Filters chips above grid",Active Filters chips show single and multiple selections from Brand
+LF_LI_TC1113 — Line Items Brand: Clear filters,Fulfillment Console > Left Filters > Line Items > Per Filter > Brand,Test Case (Text),Functional,2 - High,Left Filters,Java TestNG,com.paramount.test.ff.uitests.tests.leftfiltersvalidation.perfilter.lineitems.brand.LF_LI_TC1113_Brand_ClearFiltersTest#tc1113_brand_clearFilters,DEV/PROD Fulfillment Console; calendar = Yesterday; Line Items tab,"1. On Line Items tab, select options in Brand
+2. Remove chip from Active Filters OR click Clear
+3. Verify selections cleared and grid resets",Filter selections cleared; Active Filters empty; grid shows unfiltered data
+LF_LI_TC115 — Line Items System Name: Option list order,Fulfillment Console > Left Filters > Line Items > Per Filter > System Name,Test Case (Text),Functional,2 - High,Left Filters,Java TestNG,com.paramount.test.ff.uitests.tests.leftfiltersvalidation.perfilter.lineitems.systemname.LF_LI_TC115_SystemName_OptionOrderTest#tc115_systemName_optionOrder,DEV/PROD Fulfillment Console; calendar = Yesterday; Line Items tab,"1. On Line Items tab, expand System Name
+2. Verify Select All is first
+3. Review non-zero options order
+4. Check divider before zero-count options if present
+5. Verify zero-count options A-Z",Select All first; non-zero A-Z; divider; zero-count A-Z in visible viewport
+LF_LI_TC114 — Line Items System Name: Basic,Fulfillment Console > Left Filters > Line Items > Per Filter > System Name,Test Case (Text),Functional,1 - Critical,Left Filters,Java TestNG,com.paramount.test.ff.uitests.tests.leftfiltersvalidation.perfilter.lineitems.systemname.LF_LI_TC114_SystemName_BasicTest#tc114_systemName_basic,DEV/PROD Fulfillment Console; calendar = Yesterday; Line Items tab,"1. Log in; set calendar to Yesterday
+2. Navigate to Line Items tab
+3. Verify System Name is visible in left panel
+4. Expand System Name
+5. Confirm options load and Select All at top
+6. Collapse filter",System Name is visible; expands/collapses; options and Select All at top display correctly
+LF_LI_TC214 — Line Items System Name: Search,Fulfillment Console > Left Filters > Line Items > Per Filter > System Name,Test Case (Text),Functional,2 - High,Left Filters,Java TestNG,com.paramount.test.ff.uitests.tests.leftfiltersvalidation.perfilter.lineitems.systemname.LF_LI_TC214_SystemName_SearchTest#tc214_systemName_search,DEV/PROD Fulfillment Console; calendar = Yesterday; Line Items tab,"1. On Line Items tab, expand System Name
+2. Note first visible option label
+3. Type into filter search box
+4. Verify filtered results
+5. Clear search",Search returns matching options; clear restores list
+LF_LI_TC414 — Line Items System Name: Select all,Fulfillment Console > Left Filters > Line Items > Per Filter > System Name,Test Case (Text),Functional,2 - High,Left Filters,Java TestNG,com.paramount.test.ff.uitests.tests.leftfiltersvalidation.perfilter.lineitems.systemname.LF_LI_TC414_SystemName_SelectAllTest#tc414_systemName_selectAll,DEV/PROD Fulfillment Console; calendar = Yesterday; Line Items tab,"1. On Line Items tab, expand System Name
+2. Click Select All
+3. Verify all options selected and counts
+4. Deselect one option — check indeterminate
+5. Deselect all",Select All selects all; indeterminate on partial; counts inside/outside match
+LF_LI_TC614 — Line Items System Name: Table sync,Fulfillment Console > Left Filters > Line Items > Per Filter > System Name,Test Case (Text),Functional,1 - Critical,Left Filters,Java TestNG,com.paramount.test.ff.uitests.tests.leftfiltersvalidation.perfilter.lineitems.systemname.LF_LI_TC614_SystemName_TableSyncTest#tc614_systemName_tableSync,DEV/PROD Fulfillment Console; calendar = Yesterday; Line Items tab,"1. On Line Items tab, expand System Name
+2. Select one option with non-zero count
+3. Compare filter option count to table total count
+4. Verify first visible grid rows match filter column",Table record count matches filter count; grid rows reflect selected filter value
+LF_LI_TC814 — Line Items System Name: Scroll,Fulfillment Console > Left Filters > Line Items > Per Filter > System Name,Test Case (Text),Functional,3 - Medium,Left Filters,Java TestNG,com.paramount.test.ff.uitests.tests.leftfiltersvalidation.perfilter.lineitems.systemname.LF_LI_TC814_SystemName_ScrollTest#tc814_systemName_scroll,DEV/PROD Fulfillment Console; calendar = Yesterday; Line Items tab,"1. On Line Items tab, expand System Name
+2. Scroll option list vertically
+3. Confirm no UI errors and options continue loading",Virtual scroll works without error; additional options appear in viewport
+LF_LI_TC1014 — Line Items System Name: Active filters,Fulfillment Console > Left Filters > Line Items > Per Filter > System Name,Test Case (Text),Functional,2 - High,Left Filters,Java TestNG,com.paramount.test.ff.uitests.tests.leftfiltersvalidation.perfilter.lineitems.systemname.LF_LI_TC1014_SystemName_ActiveFiltersTest#tc1014_systemName_activeFilters,DEV/PROD Fulfillment Console; calendar = Yesterday; Line Items tab,"1. On Line Items tab, select one option in System Name
+2. Select a second option (multi-select)
+3. Review Active Filters chips above grid",Active Filters chips show single and multiple selections from System Name
+LF_LI_TC1114 — Line Items System Name: Clear filters,Fulfillment Console > Left Filters > Line Items > Per Filter > System Name,Test Case (Text),Functional,2 - High,Left Filters,Java TestNG,com.paramount.test.ff.uitests.tests.leftfiltersvalidation.perfilter.lineitems.systemname.LF_LI_TC1114_SystemName_ClearFiltersTest#tc1114_systemName_clearFilters,DEV/PROD Fulfillment Console; calendar = Yesterday; Line Items tab,"1. On Line Items tab, select options in System Name
+2. Remove chip from Active Filters OR click Clear
+3. Verify selections cleared and grid resets",Filter selections cleared; Active Filters empty; grid shows unfiltered data
+LF_LI_TC116 — Line Items Language: Option list order,Fulfillment Console > Left Filters > Line Items > Per Filter > Language,Test Case (Text),Functional,2 - High,Left Filters,Java TestNG,com.paramount.test.ff.uitests.tests.leftfiltersvalidation.perfilter.lineitems.language.LF_LI_TC116_Language_OptionOrderTest#tc116_language_optionOrder,DEV/PROD Fulfillment Console; calendar = Yesterday; Line Items tab,"1. On Line Items tab, expand Language
+2. Verify Select All is first
+3. Review non-zero options order
+4. Check divider before zero-count options if present
+5. Verify zero-count options A-Z",Select All first; non-zero A-Z; divider; zero-count A-Z in visible viewport
+LF_LI_TC115 — Line Items Language: Basic,Fulfillment Console > Left Filters > Line Items > Per Filter > Language,Test Case (Text),Functional,1 - Critical,Left Filters,Java TestNG,com.paramount.test.ff.uitests.tests.leftfiltersvalidation.perfilter.lineitems.language.LF_LI_TC115_Language_BasicTest#tc115_language_basic,DEV/PROD Fulfillment Console; calendar = Yesterday; Line Items tab,"1. Log in; set calendar to Yesterday
+2. Navigate to Line Items tab
+3. Verify Language is visible in left panel
+4. Expand Language
+5. Confirm options load and Select All at top
+6. Collapse filter",Language is visible; expands/collapses; options and Select All at top display correctly
+LF_LI_TC215 — Line Items Language: Search,Fulfillment Console > Left Filters > Line Items > Per Filter > Language,Test Case (Text),Functional,2 - High,Left Filters,Java TestNG,com.paramount.test.ff.uitests.tests.leftfiltersvalidation.perfilter.lineitems.language.LF_LI_TC215_Language_SearchTest#tc215_language_search,DEV/PROD Fulfillment Console; calendar = Yesterday; Line Items tab,"1. On Line Items tab, expand Language
+2. Note first visible option label
+3. Type into filter search box
+4. Verify filtered results
+5. Clear search",Search returns matching options; clear restores list
+LF_LI_TC415 — Line Items Language: Select all,Fulfillment Console > Left Filters > Line Items > Per Filter > Language,Test Case (Text),Functional,2 - High,Left Filters,Java TestNG,com.paramount.test.ff.uitests.tests.leftfiltersvalidation.perfilter.lineitems.language.LF_LI_TC415_Language_SelectAllTest#tc415_language_selectAll,DEV/PROD Fulfillment Console; calendar = Yesterday; Line Items tab,"1. On Line Items tab, expand Language
+2. Click Select All
+3. Verify all options selected and counts
+4. Deselect one option — check indeterminate
+5. Deselect all",Select All selects all; indeterminate on partial; counts inside/outside match
+LF_LI_TC615 — Line Items Language: Table sync,Fulfillment Console > Left Filters > Line Items > Per Filter > Language,Test Case (Text),Functional,1 - Critical,Left Filters,Java TestNG,com.paramount.test.ff.uitests.tests.leftfiltersvalidation.perfilter.lineitems.language.LF_LI_TC615_Language_TableSyncTest#tc615_language_tableSync,DEV/PROD Fulfillment Console; calendar = Yesterday; Line Items tab,"1. On Line Items tab, expand Language
+2. Select one option with non-zero count
+3. Compare filter option count to table total count
+4. Verify first visible grid rows match filter column",Table record count matches filter count; grid rows reflect selected filter value
+LF_LI_TC815 — Line Items Language: Scroll,Fulfillment Console > Left Filters > Line Items > Per Filter > Language,Test Case (Text),Functional,3 - Medium,Left Filters,Java TestNG,com.paramount.test.ff.uitests.tests.leftfiltersvalidation.perfilter.lineitems.language.LF_LI_TC815_Language_ScrollTest#tc815_language_scroll,DEV/PROD Fulfillment Console; calendar = Yesterday; Line Items tab,"1. On Line Items tab, expand Language
+2. Scroll option list vertically
+3. Confirm no UI errors and options continue loading",Virtual scroll works without error; additional options appear in viewport
+LF_LI_TC1015 — Line Items Language: Active filters,Fulfillment Console > Left Filters > Line Items > Per Filter > Language,Test Case (Text),Functional,2 - High,Left Filters,Java TestNG,com.paramount.test.ff.uitests.tests.leftfiltersvalidation.perfilter.lineitems.language.LF_LI_TC1015_Language_ActiveFiltersTest#tc1015_language_activeFilters,DEV/PROD Fulfillment Console; calendar = Yesterday; Line Items tab,"1. On Line Items tab, select one option in Language
+2. Select a second option (multi-select)
+3. Review Active Filters chips above grid",Active Filters chips show single and multiple selections from Language
+LF_LI_TC1115 — Line Items Language: Clear filters,Fulfillment Console > Left Filters > Line Items > Per Filter > Language,Test Case (Text),Functional,2 - High,Left Filters,Java TestNG,com.paramount.test.ff.uitests.tests.leftfiltersvalidation.perfilter.lineitems.language.LF_LI_TC1115_Language_ClearFiltersTest#tc1115_language_clearFilters,DEV/PROD Fulfillment Console; calendar = Yesterday; Line Items tab,"1. On Line Items tab, select options in Language
+2. Remove chip from Active Filters OR click Clear
+3. Verify selections cleared and grid resets",Filter selections cleared; Active Filters empty; grid shows unfiltered data
+LF_LI_TC117 — Line Items Demand system: Option list order,Fulfillment Console > Left Filters > Line Items > Per Filter > Demand system,Test Case (Text),Functional,2 - High,Left Filters,Java TestNG,com.paramount.test.ff.uitests.tests.leftfiltersvalidation.perfilter.lineitems.demandsystem.LF_LI_TC117_DemandSystem_OptionOrderTest#tc117_demandSystem_optionOrder,DEV/PROD Fulfillment Console; calendar = Yesterday; Line Items tab,"1. On Line Items tab, expand Demand system
+2. Verify Select All is first
+3. Review non-zero options order
+4. Check divider before zero-count options if present
+5. Verify zero-count options A-Z",Select All first; non-zero A-Z; divider; zero-count A-Z in visible viewport
+LF_LI_TC116 — Line Items Demand system: Basic,Fulfillment Console > Left Filters > Line Items > Per Filter > Demand system,Test Case (Text),Functional,1 - Critical,Left Filters,Java TestNG,com.paramount.test.ff.uitests.tests.leftfiltersvalidation.perfilter.lineitems.demandsystem.LF_LI_TC116_DemandSystem_BasicTest#tc116_demandSystem_basic,DEV/PROD Fulfillment Console; calendar = Yesterday; Line Items tab,"1. Log in; set calendar to Yesterday
+2. Navigate to Line Items tab
+3. Verify Demand system is visible in left panel
+4. Expand Demand system
+5. Confirm options load and Select All at top
+6. Collapse filter",Demand system is visible; expands/collapses; options and Select All at top display correctly
+LF_LI_TC216 — Line Items Demand system: Search,Fulfillment Console > Left Filters > Line Items > Per Filter > Demand system,Test Case (Text),Functional,2 - High,Left Filters,Java TestNG,com.paramount.test.ff.uitests.tests.leftfiltersvalidation.perfilter.lineitems.demandsystem.LF_LI_TC216_DemandSystem_SearchTest#tc216_demandSystem_search,DEV/PROD Fulfillment Console; calendar = Yesterday; Line Items tab,"1. On Line Items tab, expand Demand system
+2. Note first visible option label
+3. Type into filter search box
+4. Verify filtered results
+5. Clear search",Search returns matching options; clear restores list
+LF_LI_TC416 — Line Items Demand system: Select all,Fulfillment Console > Left Filters > Line Items > Per Filter > Demand system,Test Case (Text),Functional,2 - High,Left Filters,Java TestNG,com.paramount.test.ff.uitests.tests.leftfiltersvalidation.perfilter.lineitems.demandsystem.LF_LI_TC416_DemandSystem_SelectAllTest#tc416_demandSystem_selectAll,DEV/PROD Fulfillment Console; calendar = Yesterday; Line Items tab,"1. On Line Items tab, expand Demand system
+2. Click Select All
+3. Verify all options selected and counts
+4. Deselect one option — check indeterminate
+5. Deselect all",Select All selects all; indeterminate on partial; counts inside/outside match
+LF_LI_TC616 — Line Items Demand system: Table sync,Fulfillment Console > Left Filters > Line Items > Per Filter > Demand system,Test Case (Text),Functional,1 - Critical,Left Filters,Java TestNG,com.paramount.test.ff.uitests.tests.leftfiltersvalidation.perfilter.lineitems.demandsystem.LF_LI_TC616_DemandSystem_TableSyncTest#tc616_demandSystem_tableSync,DEV/PROD Fulfillment Console; calendar = Yesterday; Line Items tab,"1. On Line Items tab, expand Demand system
+2. Select one option with non-zero count
+3. Compare filter option count to table total count
+4. Verify first visible grid rows match filter column",Table record count matches filter count; grid rows reflect selected filter value
+LF_LI_TC816 — Line Items Demand system: Scroll,Fulfillment Console > Left Filters > Line Items > Per Filter > Demand system,Test Case (Text),Functional,3 - Medium,Left Filters,Java TestNG,com.paramount.test.ff.uitests.tests.leftfiltersvalidation.perfilter.lineitems.demandsystem.LF_LI_TC816_DemandSystem_ScrollTest#tc816_demandSystem_scroll,DEV/PROD Fulfillment Console; calendar = Yesterday; Line Items tab,"1. On Line Items tab, expand Demand system
+2. Scroll option list vertically
+3. Confirm no UI errors and options continue loading",Virtual scroll works without error; additional options appear in viewport
+LF_LI_TC1016 — Line Items Demand system: Active filters,Fulfillment Console > Left Filters > Line Items > Per Filter > Demand system,Test Case (Text),Functional,2 - High,Left Filters,Java TestNG,com.paramount.test.ff.uitests.tests.leftfiltersvalidation.perfilter.lineitems.demandsystem.LF_LI_TC1016_DemandSystem_ActiveFiltersTest#tc1016_demandSystem_activeFilters,DEV/PROD Fulfillment Console; calendar = Yesterday; Line Items tab,"1. On Line Items tab, select one option in Demand system
+2. Select a second option (multi-select)
+3. Review Active Filters chips above grid",Active Filters chips show single and multiple selections from Demand system
+LF_LI_TC1116 — Line Items Demand system: Clear filters,Fulfillment Console > Left Filters > Line Items > Per Filter > Demand system,Test Case (Text),Functional,2 - High,Left Filters,Java TestNG,com.paramount.test.ff.uitests.tests.leftfiltersvalidation.perfilter.lineitems.demandsystem.LF_LI_TC1116_DemandSystem_ClearFiltersTest#tc1116_demandSystem_clearFilters,DEV/PROD Fulfillment Console; calendar = Yesterday; Line Items tab,"1. On Line Items tab, select options in Demand system
+2. Remove chip from Active Filters OR click Clear
+3. Verify selections cleared and grid resets",Filter selections cleared; Active Filters empty; grid shows unfiltered data
+LF_LI_TC118 — Line Items Error message: Option list order,Fulfillment Console > Left Filters > Line Items > Per Filter > Error message,Test Case (Text),Functional,2 - High,Left Filters,Java TestNG,com.paramount.test.ff.uitests.tests.leftfiltersvalidation.perfilter.lineitems.errormessage.LF_LI_TC118_ErrorMessage_OptionOrderTest#tc118_errorMessage_optionOrder,DEV/PROD Fulfillment Console; calendar = Yesterday; Line Items tab,"1. On Line Items tab, expand Error message
+2. Verify Select All is first
+3. Review non-zero options order
+4. Check divider before zero-count options if present
+5. Verify zero-count options A-Z",Select All first; non-zero A-Z; divider; zero-count A-Z in visible viewport
+LF_LI_TC117 — Line Items Error message: Basic,Fulfillment Console > Left Filters > Line Items > Per Filter > Error message,Test Case (Text),Functional,1 - Critical,Left Filters,Java TestNG,com.paramount.test.ff.uitests.tests.leftfiltersvalidation.perfilter.lineitems.errormessage.LF_LI_TC117_ErrorMessage_BasicTest#tc117_errorMessage_basic,DEV/PROD Fulfillment Console; calendar = Yesterday; Line Items tab,"1. Log in; set calendar to Yesterday
+2. Navigate to Line Items tab
+3. Verify Error message is visible in left panel
+4. Expand Error message
+5. Confirm options load and Select All at top
+6. Collapse filter",Error message is visible; expands/collapses; options and Select All at top display correctly
+LF_LI_TC217 — Line Items Error message: Search,Fulfillment Console > Left Filters > Line Items > Per Filter > Error message,Test Case (Text),Functional,2 - High,Left Filters,Java TestNG,com.paramount.test.ff.uitests.tests.leftfiltersvalidation.perfilter.lineitems.errormessage.LF_LI_TC217_ErrorMessage_SearchTest#tc217_errorMessage_search,DEV/PROD Fulfillment Console; calendar = Yesterday; Line Items tab,"1. On Line Items tab, expand Error message
+2. Note first visible option label
+3. Type into filter search box
+4. Verify filtered results
+5. Clear search",Search returns matching options; clear restores list
+LF_LI_TC417 — Line Items Error message: Select all,Fulfillment Console > Left Filters > Line Items > Per Filter > Error message,Test Case (Text),Functional,2 - High,Left Filters,Java TestNG,com.paramount.test.ff.uitests.tests.leftfiltersvalidation.perfilter.lineitems.errormessage.LF_LI_TC417_ErrorMessage_SelectAllTest#tc417_errorMessage_selectAll,DEV/PROD Fulfillment Console; calendar = Yesterday; Line Items tab,"1. On Line Items tab, expand Error message
+2. Click Select All
+3. Verify all options selected and counts
+4. Deselect one option — check indeterminate
+5. Deselect all",Select All selects all; indeterminate on partial; counts inside/outside match
+LF_LI_TC617 — Line Items Error message: Table sync,Fulfillment Console > Left Filters > Line Items > Per Filter > Error message,Test Case (Text),Functional,1 - Critical,Left Filters,Java TestNG,com.paramount.test.ff.uitests.tests.leftfiltersvalidation.perfilter.lineitems.errormessage.LF_LI_TC617_ErrorMessage_TableSyncTest#tc617_errorMessage_tableSync,DEV/PROD Fulfillment Console; calendar = Yesterday; Line Items tab,"1. On Line Items tab, expand Error message
+2. Select one option with non-zero count
+3. Compare filter option count to table total count
+4. Verify first visible grid rows match filter column",Table record count matches filter count; grid rows reflect selected filter value
+LF_LI_TC817 — Line Items Error message: Scroll,Fulfillment Console > Left Filters > Line Items > Per Filter > Error message,Test Case (Text),Functional,3 - Medium,Left Filters,Java TestNG,com.paramount.test.ff.uitests.tests.leftfiltersvalidation.perfilter.lineitems.errormessage.LF_LI_TC817_ErrorMessage_ScrollTest#tc817_errorMessage_scroll,DEV/PROD Fulfillment Console; calendar = Yesterday; Line Items tab,"1. On Line Items tab, expand Error message
+2. Scroll option list vertically
+3. Confirm no UI errors and options continue loading",Virtual scroll works without error; additional options appear in viewport
+LF_LI_TC1017 — Line Items Error message: Active filters,Fulfillment Console > Left Filters > Line Items > Per Filter > Error message,Test Case (Text),Functional,2 - High,Left Filters,Java TestNG,com.paramount.test.ff.uitests.tests.leftfiltersvalidation.perfilter.lineitems.errormessage.LF_LI_TC1017_ErrorMessage_ActiveFiltersTest#tc1017_errorMessage_activeFilters,DEV/PROD Fulfillment Console; calendar = Yesterday; Line Items tab,"1. On Line Items tab, select one option in Error message
+2. Select a second option (multi-select)
+3. Review Active Filters chips above grid",Active Filters chips show single and multiple selections from Error message
+LF_LI_TC1117 — Line Items Error message: Clear filters,Fulfillment Console > Left Filters > Line Items > Per Filter > Error message,Test Case (Text),Functional,2 - High,Left Filters,Java TestNG,com.paramount.test.ff.uitests.tests.leftfiltersvalidation.perfilter.lineitems.errormessage.LF_LI_TC1117_ErrorMessage_ClearFiltersTest#tc1117_errorMessage_clearFilters,DEV/PROD Fulfillment Console; calendar = Yesterday; Line Items tab,"1. On Line Items tab, select options in Error message
+2. Remove chip from Active Filters OR click Clear
+3. Verify selections cleared and grid resets",Filter selections cleared; Active Filters empty; grid shows unfiltered data
+LF_LI_TC119 — Line Items Franchise: Option list order,Fulfillment Console > Left Filters > Line Items > Per Filter > Franchise,Test Case (Text),Functional,2 - High,Left Filters,Java TestNG,com.paramount.test.ff.uitests.tests.leftfiltersvalidation.perfilter.lineitems.franchise.LF_LI_TC119_Franchise_OptionOrderTest#tc119_franchise_optionOrder,DEV/PROD Fulfillment Console; calendar = Yesterday; Line Items tab,"1. On Line Items tab, expand Franchise
+2. Verify Select All is first
+3. Review non-zero options order
+4. Check divider before zero-count options if present
+5. Verify zero-count options A-Z",Select All first; non-zero A-Z; divider; zero-count A-Z in visible viewport
+LF_LI_TC118 — Line Items Franchise: Basic,Fulfillment Console > Left Filters > Line Items > Per Filter > Franchise,Test Case (Text),Functional,1 - Critical,Left Filters,Java TestNG,com.paramount.test.ff.uitests.tests.leftfiltersvalidation.perfilter.lineitems.franchise.LF_LI_TC118_Franchise_BasicTest#tc118_franchise_basic,DEV/PROD Fulfillment Console; calendar = Yesterday; Line Items tab,"1. Log in; set calendar to Yesterday
+2. Navigate to Line Items tab
+3. Verify Franchise is visible in left panel
+4. Expand Franchise
+5. Confirm options load and Select All at top
+6. Collapse filter",Franchise is visible; expands/collapses; options and Select All at top display correctly
+LF_LI_TC218 — Line Items Franchise: Search,Fulfillment Console > Left Filters > Line Items > Per Filter > Franchise,Test Case (Text),Functional,2 - High,Left Filters,Java TestNG,com.paramount.test.ff.uitests.tests.leftfiltersvalidation.perfilter.lineitems.franchise.LF_LI_TC218_Franchise_SearchTest#tc218_franchise_search,DEV/PROD Fulfillment Console; calendar = Yesterday; Line Items tab,"1. On Line Items tab, expand Franchise
+2. Note first visible option label
+3. Type into filter search box
+4. Verify filtered results
+5. Clear search",Search returns matching options; clear restores list
+LF_LI_TC418 — Line Items Franchise: Select all,Fulfillment Console > Left Filters > Line Items > Per Filter > Franchise,Test Case (Text),Functional,2 - High,Left Filters,Java TestNG,com.paramount.test.ff.uitests.tests.leftfiltersvalidation.perfilter.lineitems.franchise.LF_LI_TC418_Franchise_SelectAllTest#tc418_franchise_selectAll,DEV/PROD Fulfillment Console; calendar = Yesterday; Line Items tab,"1. On Line Items tab, expand Franchise
+2. Click Select All
+3. Verify all options selected and counts
+4. Deselect one option — check indeterminate
+5. Deselect all",Select All selects all; indeterminate on partial; counts inside/outside match
+LF_LI_TC618 — Line Items Franchise: Table sync,Fulfillment Console > Left Filters > Line Items > Per Filter > Franchise,Test Case (Text),Functional,1 - Critical,Left Filters,Java TestNG,com.paramount.test.ff.uitests.tests.leftfiltersvalidation.perfilter.lineitems.franchise.LF_LI_TC618_Franchise_TableSyncTest#tc618_franchise_tableSync,DEV/PROD Fulfillment Console; calendar = Yesterday; Line Items tab,"1. On Line Items tab, expand Franchise
+2. Select one option with non-zero count
+3. Compare filter option count to table total count
+4. Verify first visible grid rows match filter column",Table record count matches filter count; grid rows reflect selected filter value
+LF_LI_TC818 — Line Items Franchise: Scroll,Fulfillment Console > Left Filters > Line Items > Per Filter > Franchise,Test Case (Text),Functional,3 - Medium,Left Filters,Java TestNG,com.paramount.test.ff.uitests.tests.leftfiltersvalidation.perfilter.lineitems.franchise.LF_LI_TC818_Franchise_ScrollTest#tc818_franchise_scroll,DEV/PROD Fulfillment Console; calendar = Yesterday; Line Items tab,"1. On Line Items tab, expand Franchise
+2. Scroll option list vertically
+3. Confirm no UI errors and options continue loading",Virtual scroll works without error; additional options appear in viewport
+LF_LI_TC1018 — Line Items Franchise: Active filters,Fulfillment Console > Left Filters > Line Items > Per Filter > Franchise,Test Case (Text),Functional,2 - High,Left Filters,Java TestNG,com.paramount.test.ff.uitests.tests.leftfiltersvalidation.perfilter.lineitems.franchise.LF_LI_TC1018_Franchise_ActiveFiltersTest#tc1018_franchise_activeFilters,DEV/PROD Fulfillment Console; calendar = Yesterday; Line Items tab,"1. On Line Items tab, select one option in Franchise
+2. Select a second option (multi-select)
+3. Review Active Filters chips above grid",Active Filters chips show single and multiple selections from Franchise
+LF_LI_TC1118 — Line Items Franchise: Clear filters,Fulfillment Console > Left Filters > Line Items > Per Filter > Franchise,Test Case (Text),Functional,2 - High,Left Filters,Java TestNG,com.paramount.test.ff.uitests.tests.leftfiltersvalidation.perfilter.lineitems.franchise.LF_LI_TC1118_Franchise_ClearFiltersTest#tc1118_franchise_clearFilters,DEV/PROD Fulfillment Console; calendar = Yesterday; Line Items tab,"1. On Line Items tab, select options in Franchise
+2. Remove chip from Active Filters OR click Clear
+3. Verify selections cleared and grid resets",Filter selections cleared; Active Filters empty; grid shows unfiltered data
+LF_LI_TC120 — Line Items Delivery Protocol: Option list order,Fulfillment Console > Left Filters > Line Items > Per Filter > Delivery Protocol,Test Case (Text),Functional,2 - High,Left Filters,Java TestNG,com.paramount.test.ff.uitests.tests.leftfiltersvalidation.perfilter.lineitems.deliveryprotocol.LF_LI_TC120_DeliveryProtocol_OptionOrderTest#tc120_deliveryProtocol_optionOrder,DEV/PROD Fulfillment Console; calendar = Yesterday; Line Items tab,"1. On Line Items tab, expand Delivery Protocol
+2. Verify Select All is first
+3. Review non-zero options order
+4. Check divider before zero-count options if present
+5. Verify zero-count options A-Z",Select All first; non-zero A-Z; divider; zero-count A-Z in visible viewport
+LF_LI_TC119 — Line Items Delivery Protocol: Basic,Fulfillment Console > Left Filters > Line Items > Per Filter > Delivery Protocol,Test Case (Text),Functional,1 - Critical,Left Filters,Java TestNG,com.paramount.test.ff.uitests.tests.leftfiltersvalidation.perfilter.lineitems.deliveryprotocol.LF_LI_TC119_DeliveryProtocol_BasicTest#tc119_deliveryProtocol_basic,DEV/PROD Fulfillment Console; calendar = Yesterday; Line Items tab,"1. Log in; set calendar to Yesterday
+2. Navigate to Line Items tab
+3. Verify Delivery Protocol is visible in left panel
+4. Expand Delivery Protocol
+5. Confirm options load and Select All at top
+6. Collapse filter",Delivery Protocol is visible; expands/collapses; options and Select All at top display correctly
+LF_LI_TC219 — Line Items Delivery Protocol: Search,Fulfillment Console > Left Filters > Line Items > Per Filter > Delivery Protocol,Test Case (Text),Functional,2 - High,Left Filters,Java TestNG,com.paramount.test.ff.uitests.tests.leftfiltersvalidation.perfilter.lineitems.deliveryprotocol.LF_LI_TC219_DeliveryProtocol_SearchTest#tc219_deliveryProtocol_search,DEV/PROD Fulfillment Console; calendar = Yesterday; Line Items tab,"1. On Line Items tab, expand Delivery Protocol
+2. Note first visible option label
+3. Type into filter search box
+4. Verify filtered results
+5. Clear search",Search returns matching options; clear restores list
+LF_LI_TC419 — Line Items Delivery Protocol: Select all,Fulfillment Console > Left Filters > Line Items > Per Filter > Delivery Protocol,Test Case (Text),Functional,2 - High,Left Filters,Java TestNG,com.paramount.test.ff.uitests.tests.leftfiltersvalidation.perfilter.lineitems.deliveryprotocol.LF_LI_TC419_DeliveryProtocol_SelectAllTest#tc419_deliveryProtocol_selectAll,DEV/PROD Fulfillment Console; calendar = Yesterday; Line Items tab,"1. On Line Items tab, expand Delivery Protocol
+2. Click Select All
+3. Verify all options selected and counts
+4. Deselect one option — check indeterminate
+5. Deselect all",Select All selects all; indeterminate on partial; counts inside/outside match
+LF_LI_TC619 — Line Items Delivery Protocol: Table sync,Fulfillment Console > Left Filters > Line Items > Per Filter > Delivery Protocol,Test Case (Text),Functional,1 - Critical,Left Filters,Java TestNG,com.paramount.test.ff.uitests.tests.leftfiltersvalidation.perfilter.lineitems.deliveryprotocol.LF_LI_TC619_DeliveryProtocol_TableSyncTest#tc619_deliveryProtocol_tableSync,DEV/PROD Fulfillment Console; calendar = Yesterday; Line Items tab,"1. On Line Items tab, expand Delivery Protocol
+2. Select one option with non-zero count
+3. Compare filter option count to table total count
+4. Verify first visible grid rows match filter column",Table record count matches filter count; grid rows reflect selected filter value
+LF_LI_TC819 — Line Items Delivery Protocol: Scroll,Fulfillment Console > Left Filters > Line Items > Per Filter > Delivery Protocol,Test Case (Text),Functional,3 - Medium,Left Filters,Java TestNG,com.paramount.test.ff.uitests.tests.leftfiltersvalidation.perfilter.lineitems.deliveryprotocol.LF_LI_TC819_DeliveryProtocol_ScrollTest#tc819_deliveryProtocol_scroll,DEV/PROD Fulfillment Console; calendar = Yesterday; Line Items tab,"1. On Line Items tab, expand Delivery Protocol
+2. Scroll option list vertically
+3. Confirm no UI errors and options continue loading",Virtual scroll works without error; additional options appear in viewport
+LF_LI_TC1019 — Line Items Delivery Protocol: Active filters,Fulfillment Console > Left Filters > Line Items > Per Filter > Delivery Protocol,Test Case (Text),Functional,2 - High,Left Filters,Java TestNG,com.paramount.test.ff.uitests.tests.leftfiltersvalidation.perfilter.lineitems.deliveryprotocol.LF_LI_TC1019_DeliveryProtocol_ActiveFiltersTest#tc1019_deliveryProtocol_activeFilters,DEV/PROD Fulfillment Console; calendar = Yesterday; Line Items tab,"1. On Line Items tab, select one option in Delivery Protocol
+2. Select a second option (multi-select)
+3. Review Active Filters chips above grid",Active Filters chips show single and multiple selections from Delivery Protocol
+LF_LI_TC1119 — Line Items Delivery Protocol: Clear filters,Fulfillment Console > Left Filters > Line Items > Per Filter > Delivery Protocol,Test Case (Text),Functional,2 - High,Left Filters,Java TestNG,com.paramount.test.ff.uitests.tests.leftfiltersvalidation.perfilter.lineitems.deliveryprotocol.LF_LI_TC1119_DeliveryProtocol_ClearFiltersTest#tc1119_deliveryProtocol_clearFilters,DEV/PROD Fulfillment Console; calendar = Yesterday; Line Items tab,"1. On Line Items tab, select options in Delivery Protocol
+2. Remove chip from Active Filters OR click Clear
+3. Verify selections cleared and grid resets",Filter selections cleared; Active Filters empty; grid shows unfiltered data
+LF_LI_TC121 — Line Items Activity Type: Option list order,Fulfillment Console > Left Filters > Line Items > Per Filter > Activity Type,Test Case (Text),Functional,2 - High,Left Filters,Java TestNG,com.paramount.test.ff.uitests.tests.leftfiltersvalidation.perfilter.lineitems.activitytype.LF_LI_TC121_ActivityType_OptionOrderTest#tc121_activityType_optionOrder,DEV/PROD Fulfillment Console; calendar = Yesterday; Line Items tab,"1. On Line Items tab, expand Activity Type
+2. Verify Select All is first
+3. Review non-zero options order
+4. Check divider before zero-count options if present
+5. Verify zero-count options A-Z",Select All first; non-zero A-Z; divider; zero-count A-Z in visible viewport
+LF_LI_TC120 — Line Items Activity Type: Basic,Fulfillment Console > Left Filters > Line Items > Per Filter > Activity Type,Test Case (Text),Functional,1 - Critical,Left Filters,Java TestNG,com.paramount.test.ff.uitests.tests.leftfiltersvalidation.perfilter.lineitems.activitytype.LF_LI_TC120_ActivityType_BasicTest#tc120_activityType_basic,DEV/PROD Fulfillment Console; calendar = Yesterday; Line Items tab,"1. Log in; set calendar to Yesterday
+2. Navigate to Line Items tab
+3. Verify Activity Type is visible in left panel
+4. Expand Activity Type
+5. Confirm options load and Select All at top
+6. Collapse filter",Activity Type is visible; expands/collapses; options and Select All at top display correctly
+LF_LI_TC220 — Line Items Activity Type: Search,Fulfillment Console > Left Filters > Line Items > Per Filter > Activity Type,Test Case (Text),Functional,2 - High,Left Filters,Java TestNG,com.paramount.test.ff.uitests.tests.leftfiltersvalidation.perfilter.lineitems.activitytype.LF_LI_TC220_ActivityType_SearchTest#tc220_activityType_search,DEV/PROD Fulfillment Console; calendar = Yesterday; Line Items tab,"1. On Line Items tab, expand Activity Type
+2. Note first visible option label
+3. Type into filter search box
+4. Verify filtered results
+5. Clear search",Search returns matching options; clear restores list
+LF_LI_TC420 — Line Items Activity Type: Select all,Fulfillment Console > Left Filters > Line Items > Per Filter > Activity Type,Test Case (Text),Functional,2 - High,Left Filters,Java TestNG,com.paramount.test.ff.uitests.tests.leftfiltersvalidation.perfilter.lineitems.activitytype.LF_LI_TC420_ActivityType_SelectAllTest#tc420_activityType_selectAll,DEV/PROD Fulfillment Console; calendar = Yesterday; Line Items tab,"1. On Line Items tab, expand Activity Type
+2. Click Select All
+3. Verify all options selected and counts
+4. Deselect one option — check indeterminate
+5. Deselect all",Select All selects all; indeterminate on partial; counts inside/outside match
+LF_LI_TC620 — Line Items Activity Type: Table sync,Fulfillment Console > Left Filters > Line Items > Per Filter > Activity Type,Test Case (Text),Functional,1 - Critical,Left Filters,Java TestNG,com.paramount.test.ff.uitests.tests.leftfiltersvalidation.perfilter.lineitems.activitytype.LF_LI_TC620_ActivityType_TableSyncTest#tc620_activityType_tableSync,DEV/PROD Fulfillment Console; calendar = Yesterday; Line Items tab,"1. On Line Items tab, expand Activity Type
+2. Select one option with non-zero count
+3. Compare filter option count to table total count
+4. Verify first visible grid rows match filter column",Table record count matches filter count; grid rows reflect selected filter value
+LF_LI_TC820 — Line Items Activity Type: Scroll,Fulfillment Console > Left Filters > Line Items > Per Filter > Activity Type,Test Case (Text),Functional,3 - Medium,Left Filters,Java TestNG,com.paramount.test.ff.uitests.tests.leftfiltersvalidation.perfilter.lineitems.activitytype.LF_LI_TC820_ActivityType_ScrollTest#tc820_activityType_scroll,DEV/PROD Fulfillment Console; calendar = Yesterday; Line Items tab,"1. On Line Items tab, expand Activity Type
+2. Scroll option list vertically
+3. Confirm no UI errors and options continue loading",Virtual scroll works without error; additional options appear in viewport
+LF_LI_TC1020 — Line Items Activity Type: Active filters,Fulfillment Console > Left Filters > Line Items > Per Filter > Activity Type,Test Case (Text),Functional,2 - High,Left Filters,Java TestNG,com.paramount.test.ff.uitests.tests.leftfiltersvalidation.perfilter.lineitems.activitytype.LF_LI_TC1020_ActivityType_ActiveFiltersTest#tc1020_activityType_activeFilters,DEV/PROD Fulfillment Console; calendar = Yesterday; Line Items tab,"1. On Line Items tab, select one option in Activity Type
+2. Select a second option (multi-select)
+3. Review Active Filters chips above grid",Active Filters chips show single and multiple selections from Activity Type
+LF_LI_TC1120 — Line Items Activity Type: Clear filters,Fulfillment Console > Left Filters > Line Items > Per Filter > Activity Type,Test Case (Text),Functional,2 - High,Left Filters,Java TestNG,com.paramount.test.ff.uitests.tests.leftfiltersvalidation.perfilter.lineitems.activitytype.LF_LI_TC1120_ActivityType_ClearFiltersTest#tc1120_activityType_clearFilters,DEV/PROD Fulfillment Console; calendar = Yesterday; Line Items tab,"1. On Line Items tab, select options in Activity Type
+2. Remove chip from Active Filters OR click Clear
+3. Verify selections cleared and grid resets",Filter selections cleared; Active Filters empty; grid shows unfiltered data
+LF_LI_TC122 — Line Items Content type: Option list order,Fulfillment Console > Left Filters > Line Items > Per Filter > Content type,Test Case (Text),Functional,2 - High,Left Filters,Java TestNG,com.paramount.test.ff.uitests.tests.leftfiltersvalidation.perfilter.lineitems.contenttype.LF_LI_TC122_ContentType_OptionOrderTest#tc122_contentType_optionOrder,DEV/PROD Fulfillment Console; calendar = Yesterday; Line Items tab,"1. On Line Items tab, expand Content type
+2. Verify Select All is first
+3. Review non-zero options order
+4. Check divider before zero-count options if present
+5. Verify zero-count options A-Z",Select All first; non-zero A-Z; divider; zero-count A-Z in visible viewport
+LF_LI_TC121 — Line Items Content type: Basic,Fulfillment Console > Left Filters > Line Items > Per Filter > Content type,Test Case (Text),Functional,1 - Critical,Left Filters,Java TestNG,com.paramount.test.ff.uitests.tests.leftfiltersvalidation.perfilter.lineitems.contenttype.LF_LI_TC121_ContentType_BasicTest#tc121_contentType_basic,DEV/PROD Fulfillment Console; calendar = Yesterday; Line Items tab,"1. Log in; set calendar to Yesterday
+2. Navigate to Line Items tab
+3. Verify Content type is visible in left panel
+4. Expand Content type
+5. Confirm options load and Select All at top
+6. Collapse filter",Content type is visible; expands/collapses; options and Select All at top display correctly
+LF_LI_TC221 — Line Items Content type: Search,Fulfillment Console > Left Filters > Line Items > Per Filter > Content type,Test Case (Text),Functional,2 - High,Left Filters,Java TestNG,com.paramount.test.ff.uitests.tests.leftfiltersvalidation.perfilter.lineitems.contenttype.LF_LI_TC221_ContentType_SearchTest#tc221_contentType_search,DEV/PROD Fulfillment Console; calendar = Yesterday; Line Items tab,"1. On Line Items tab, expand Content type
+2. Note first visible option label
+3. Type into filter search box
+4. Verify filtered results
+5. Clear search",Search returns matching options; clear restores list
+LF_LI_TC421 — Line Items Content type: Select all,Fulfillment Console > Left Filters > Line Items > Per Filter > Content type,Test Case (Text),Functional,2 - High,Left Filters,Java TestNG,com.paramount.test.ff.uitests.tests.leftfiltersvalidation.perfilter.lineitems.contenttype.LF_LI_TC421_ContentType_SelectAllTest#tc421_contentType_selectAll,DEV/PROD Fulfillment Console; calendar = Yesterday; Line Items tab,"1. On Line Items tab, expand Content type
+2. Click Select All
+3. Verify all options selected and counts
+4. Deselect one option — check indeterminate
+5. Deselect all",Select All selects all; indeterminate on partial; counts inside/outside match
+LF_LI_TC621 — Line Items Content type: Table sync,Fulfillment Console > Left Filters > Line Items > Per Filter > Content type,Test Case (Text),Functional,1 - Critical,Left Filters,Java TestNG,com.paramount.test.ff.uitests.tests.leftfiltersvalidation.perfilter.lineitems.contenttype.LF_LI_TC621_ContentType_TableSyncTest#tc621_contentType_tableSync,DEV/PROD Fulfillment Console; calendar = Yesterday; Line Items tab,"1. On Line Items tab, expand Content type
+2. Select one option with non-zero count
+3. Compare filter option count to table total count
+4. Verify first visible grid rows match filter column",Table record count matches filter count; grid rows reflect selected filter value
+LF_LI_TC821 — Line Items Content type: Scroll,Fulfillment Console > Left Filters > Line Items > Per Filter > Content type,Test Case (Text),Functional,3 - Medium,Left Filters,Java TestNG,com.paramount.test.ff.uitests.tests.leftfiltersvalidation.perfilter.lineitems.contenttype.LF_LI_TC821_ContentType_ScrollTest#tc821_contentType_scroll,DEV/PROD Fulfillment Console; calendar = Yesterday; Line Items tab,"1. On Line Items tab, expand Content type
+2. Scroll option list vertically
+3. Confirm no UI errors and options continue loading",Virtual scroll works without error; additional options appear in viewport
+LF_LI_TC1021 — Line Items Content type: Active filters,Fulfillment Console > Left Filters > Line Items > Per Filter > Content type,Test Case (Text),Functional,2 - High,Left Filters,Java TestNG,com.paramount.test.ff.uitests.tests.leftfiltersvalidation.perfilter.lineitems.contenttype.LF_LI_TC1021_ContentType_ActiveFiltersTest#tc1021_contentType_activeFilters,DEV/PROD Fulfillment Console; calendar = Yesterday; Line Items tab,"1. On Line Items tab, select one option in Content type
+2. Select a second option (multi-select)
+3. Review Active Filters chips above grid",Active Filters chips show single and multiple selections from Content type
+LF_LI_TC1121 — Line Items Content type: Clear filters,Fulfillment Console > Left Filters > Line Items > Per Filter > Content type,Test Case (Text),Functional,2 - High,Left Filters,Java TestNG,com.paramount.test.ff.uitests.tests.leftfiltersvalidation.perfilter.lineitems.contenttype.LF_LI_TC1121_ContentType_ClearFiltersTest#tc1121_contentType_clearFilters,DEV/PROD Fulfillment Console; calendar = Yesterday; Line Items tab,"1. On Line Items tab, select options in Content type
+2. Remove chip from Active Filters OR click Clear
+3. Verify selections cleared and grid resets",Filter selections cleared; Active Filters empty; grid shows unfiltered data

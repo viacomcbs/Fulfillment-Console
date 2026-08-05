@@ -51,8 +51,19 @@ public class HomePage {
 	}
 
 	public By exportLineItemsMenuItem() {
-		return By.XPath("//div[contains(@class,'dropdown-menu') and contains(@class,'show')]"
+		return By.XPath("//div[contains(@class,'export-dropdown-menu') and contains(@class,'show')]"
+				+ "//button[contains(@class,'dropdown-item') and (normalize-space()='Line items'"
+				+ " or normalize-space()='Line Items')]"
+				+ " | //div[contains(@class,'dropdown-menu') and contains(@class,'show')]"
 				+ "//button[normalize-space()='Line items' or normalize-space()='Line Items']");
+	}
+
+	/** Open Export dropdown showing Orders / Line items menu items. */
+	public By exportDropdownOpen() {
+		return By.XPath("//div[contains(@class,'export-dropdown-menu') and contains(@class,'show')]"
+				+ " | //div[contains(@class,'dropdown-menu') and contains(@class,'show')]"
+				+ "[.//button[normalize-space()='Orders' or normalize-space()='Line items'"
+				+ " or normalize-space()='Line Items']]");
 	}
 
 	/** In-app async export progress (PROD: spinner + "Exporting File 0%" top-right of grid toolbar). */

@@ -421,7 +421,8 @@ public class PtsPackagingIdTableUtil {
         WaitUtil.waitForJSToLoad(GRID_WAIT_S);
         Thread.sleep(1500);
         resetColumnEnabledInSession(section);
-        Logger.logReportMessage("Switched to Standard view — PTS Packaging ID column not persisted");
+        Logger.logReportMessage("Switched to Standard view on " + sectionLabel(section)
+                + " — PTS Packaging ID column not persisted (Manage columns is per console tab; calendar persists)");
     }
 
     public void ensureColumnDisabledAndSaved(SoftAssert softAssert) throws InterruptedException {
@@ -598,6 +599,10 @@ public class PtsPackagingIdTableUtil {
 
     /** Toggle a non-PTS column so Save changes appears without removing PTS from the view. */
     private void markAutomationViewDirty(ColumnSection section) throws InterruptedException {
+        if (section == ColumnSection.LINE_ITEM) {
+            markAutomationViewDirtyLineItemTable();
+            return;
+        }
         String sectionTitle = sectionLabel(section);
         try {
             Object result = driver.get().browser().executeScript(
@@ -625,6 +630,42 @@ public class PtsPackagingIdTableUtil {
             }
         } catch (Exception e) {
             Logger.logConsoleMessage("Could not mark Automation view dirty: " + e.getMessage());
+        }
+    }
+
+    /** Line Items tab — flat "Manage Columns (Line item table)" list (no Order/Package sections). */
+    private void markAutomationViewDirtyLineItemTable() {
+        try {
+            Object result = driver.get().browser().executeScript(
+                    "(function() {"
+                            + "var ptsLabel = '" + PtsPackagingIdPage.COLUMN_LABEL + "';"
+                            + "var headings = document.querySelectorAll('span');"
+                            + "var panel = null;"
+                            + "for (var h = 0; h < headings.length; h++) {"
+                            + "  var t = (headings[h].textContent || '').toLowerCase();"
+                            + "  if (t.indexOf('manage columns') >= 0 && t.indexOf('line item') >= 0) {"
+                            + "    panel = headings[h].closest('[class*=\"table-view\"], [class*=\"manage-column\"]');"
+                            + "    break;"
+                            + "  }"
+                            + "}"
+                            + "if (!panel) return null;"
+                            + "var labels = panel.querySelectorAll('label');"
+                            + "for (var i = 0; i < labels.length; i++) {"
+                            + "  var text = (labels[i].textContent || '').trim();"
+                            + "  if (!text || text.indexOf(ptsLabel) >= 0) continue;"
+                            + "  var row = labels[i].closest('.draggable-item') || labels[i].closest('a[cdkdrag]');"
+                            + "  var cb = row ? row.querySelector('input[type=checkbox]') : null;"
+                            + "  if (!cb) continue;"
+                            + "  cb.click();"
+                            + "  return text;"
+                            + "}"
+                            + "return null;"
+                            + "})();");
+            if (result != null && !"null".equals(String.valueOf(result)) && !String.valueOf(result).isEmpty()) {
+                Logger.logReportMessage("Toggled column '" + result + "' in Line item table to expose Save changes");
+            }
+        } catch (Exception e) {
+            Logger.logConsoleMessage("Could not mark Line item table view dirty: " + e.getMessage());
         }
     }
 
@@ -1396,7 +1437,17 @@ public class PtsPackagingIdTableUtil {
     private void scrollToColumnInManagePanel(ColumnSection section) {
         By label = columnLabelLocator(section);
         try {
-            if (section == ColumnSection.ORDER && WaitUtil.isDisplayFast(ptsPage.orderColumnsListContainer(), 2)) {
+            if (section == ColumnSection.LINE_ITEM) {
+                By list = ptsPage.lineItemManageColumnsOptionsList();
+                if (WaitUtil.isDisplayFast(list, 2)) {
+                    DesktopBrowserElement container = driver.get().finder().findElement(list);
+                    container.executeScript("this.scrollTop = this.scrollHeight;");
+                } else if (WaitUtil.isDisplayFast(ptsPage.lineItemColumnsDropList(), 2)) {
+                    DesktopBrowserElement container = driver.get().finder().findElement(ptsPage.lineItemColumnsDropList());
+                    container.executeScript("this.scrollTop = this.scrollHeight;");
+                }
+            } else if (section == ColumnSection.ORDER
+                    && WaitUtil.isDisplayFast(ptsPage.orderColumnsListContainer(), 2)) {
                 DesktopBrowserElement container = driver.get().finder().findElement(ptsPage.orderColumnsListContainer());
                 container.executeScript("this.scrollTop = this.scrollHeight;");
             }
@@ -1470,7 +1521,7 @@ public class PtsPackagingIdTableUtil {
     }
 
     private static String sectionLabel(ColumnSection section) {
-        return section == ColumnSection.ORDER ? "Order columns" : "Line item columns";
+        return section == ColumnSection.ORDER ? "Order columns" : "Line item table";
     }
 
     private static boolean isColumnEnabledInSession(ColumnSection section) {

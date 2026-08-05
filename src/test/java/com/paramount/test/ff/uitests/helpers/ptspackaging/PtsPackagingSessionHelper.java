@@ -23,6 +23,7 @@ public final class PtsPackagingSessionHelper {
         boolean ptsColumnEnabledOnOrders;
         boolean ptsColumnEnabledOnLineItems;
         String lastOrdersColumnSearchTerm;
+        boolean lineItemsConsoleTabActive;
     }
 
     private PtsPackagingSessionHelper() {
@@ -62,6 +63,7 @@ public final class PtsPackagingSessionHelper {
 
     public static void markLoggedIn() {
         state().loggedIn = true;
+        PtsPackagingEmailReport.captureSynergySessionId();
     }
 
     public static boolean isPtsDemandFilterAppliedOnOrders() {
@@ -141,6 +143,14 @@ public final class PtsPackagingSessionHelper {
         state().ptsColumnEnabledOnLineItems = false;
     }
 
+    public static boolean isLineItemsConsoleTabActive() {
+        return state().lineItemsConsoleTabActive;
+    }
+
+    public static void markLineItemsConsoleTabActive() {
+        state().lineItemsConsoleTabActive = true;
+    }
+
     /** O_009 column search term — reused by O_013 export without re-reading an empty grid. */
     public static void setLastOrdersColumnSearchTerm(String term) {
         state().lastOrdersColumnSearchTerm = term == null ? "" : term.trim();
@@ -161,6 +171,7 @@ public final class PtsPackagingSessionHelper {
     }
 
     public static void stopSharedDriver() {
+        PtsPackagingEmailReport.captureSynergySessionId();
         try {
             if (BaseTest.driver.get() != null) {
                 BaseTest.driver.get().stop();

@@ -5,6 +5,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import com.paramount.test.ff.common.util.props.IProps.ConfigProps;
+import com.paramount.test.ff.uitests.helpers.ptspackaging.PtsPackagingEmailReport;
 import com.synergy.core.reporting.Emailer;
 
 public class EmailUtil {
@@ -86,30 +87,31 @@ public class EmailUtil {
 		Date date = new Date();
 		String applicationTitle = Config.getString("ApplicationTitle");
 		String appEnv = resolveAppEnv(Config.getString("TestEnvironment"));
+
+		int summaryPass = passCount;
+		int summaryFail = failCount;
+		int summarySkip = skipCount;
+		if (PtsPackagingEmailReport.isEnabled()) {
+			summaryPass = PtsPackagingEmailReport.getPassedCount();
+			summaryFail = PtsPackagingEmailReport.getFailedCount();
+			summarySkip = PtsPackagingEmailReport.getSkippedCount();
+		}
+
 		String subject = applicationTitle + " : Test Execution Report: " + appEnv
-				+ (failCount.equals(0) ? " - Passed" : " - Failed");
+				+ (summaryFail == 0 ? " - Passed" : " - Failed");
+		if (PtsPackagingEmailReport.isEnabled()) {
+			subject = applicationTitle + " — " + PtsPackagingEmailReport.FEATURE_TITLE + " ("
+					+ PtsPackagingEmailReport.JIRA_KEY + "): " + appEnv
+					+ (summaryFail == 0 ? " - Passed" : " - Failed");
+		}
 
 		String reportAttachmentTxt = jenkinsReportURL.isEmpty() ? "The test report was not uploaded."
 				: "<a href='" + jenkinsReportURL + "'>Report link</a>";
 		String env = Config.getString("TestEnvironment");
+		String ptsSection = PtsPackagingEmailReport.isEnabled() ? PtsPackagingEmailReport.buildHtmlSection() : "";
 
-		String messageContent = "<body><b>Execution Completed!!!</b>"
-				+ "<head><style>"
-				+ "#TestResults{font-family:Calibri,Helvetica,sans-serif;font-size:large;border-collapse:collapse;width:100%;}"
-				+ "#TestResults td,#TestResults th{border:2px solid black;padding:8px;}"
-				+ "#TestResults tr:nth-child(even){background-color:#f2f2f2;}"
-				+ "#TestResults tr:hover{background-color:#ddd;}"
-				+ "#TestResults th{padding-top:12px;padding-bottom:12px;text-align:left;background-color:#04AA6D;color:white;}"
-				+ "#pass{background-color:#9ff51d}#skip{background-color:#f4ff2b}#fail{background-color:red}"
-				+ "</style></head>"
-				+ "<h1>Automation Test Result</h1>"
-				+ "<table id=TestResults><tr><th>Application</th><th>Environment</th>"
-				+ "<th>Tests Passed</th><th>Tests Skipped</th><th>Tests Failed</th><th>Synergy Report</th></tr>"
-				+ "<tr><td>" + applicationTitle + "</td><td>" + env + "</td>"
-				+ "<td id=pass>" + passCount + "</td><td id=skip>" + skipCount + "</td><td id=fail>" + failCount
-				+ "</td><td>" + reportAttachmentTxt + "</td></tr></table>"
-				+ "<br /><br />Execution Date : " + dateFormat.format(date)
-				+ "<br /><br /><b>Regards,</b><br /><br />ViacomCBS </body>";
+		String messageContent = buildExecutionEmailBody(applicationTitle, env, summaryPass, summarySkip, summaryFail,
+				reportAttachmentTxt, ptsSection, dateFormat.format(date));
 
 		String sender = Config.getString("EmailSenderAddress");
 		String recipient = Config.getString("SendReportEmailAddress");
@@ -125,6 +127,29 @@ public class EmailUtil {
 			e.printStackTrace();
 			Logger.logMessage("Email not sent");
 		}
+	}
+
+	private static String buildExecutionEmailBody(String applicationTitle, String env, int summaryPass,
+			int summarySkip, int summaryFail, String reportAttachmentTxt, String ptsSection, String executionDate) {
+		return "<body><b>Execution Completed!!!</b>"
+				+ "<head><style>"
+				+ "#TestResults{font-family:Calibri,Helvetica,sans-serif;font-size:large;border-collapse:collapse;width:100%;}"
+				+ "#TestResults td,#TestResults th{border:2px solid black;padding:8px;}"
+				+ "#TestResults tr:nth-child(even){background-color:#f2f2f2;}"
+				+ "#TestResults tr:hover{background-color:#ddd;}"
+				+ "#TestResults th{padding-top:12px;padding-bottom:12px;text-align:left;background-color:#04AA6D;color:white;}"
+				+ "#pass{background-color:#9ff51d}#skip{background-color:#f4ff2b}#fail{background-color:red}"
+				+ "</style></head>"
+				+ "<h1>Automation Test Result</h1>"
+				+ (ptsSection.isEmpty() ? "" : ptsSection + "<br />")
+				+ "<h2>Execution Summary</h2>"
+				+ "<table id=TestResults><tr><th>Application</th><th>Environment</th>"
+				+ "<th>Tests Passed</th><th>Tests Skipped</th><th>Tests Failed</th><th>Synergy Report</th></tr>"
+				+ "<tr><td>" + applicationTitle + "</td><td>" + env + "</td>"
+				+ "<td id=pass>" + summaryPass + "</td><td id=skip>" + summarySkip + "</td><td id=fail>" + summaryFail
+				+ "</td><td>" + reportAttachmentTxt + "</td></tr></table>"
+				+ "<br /><br />Execution Date : " + executionDate
+				+ "<br /><br /><b>Regards,</b><br /><br />ViacomCBS </body>";
 	}
 
 	private static String resolveAppEnv(String testEnvironment) {

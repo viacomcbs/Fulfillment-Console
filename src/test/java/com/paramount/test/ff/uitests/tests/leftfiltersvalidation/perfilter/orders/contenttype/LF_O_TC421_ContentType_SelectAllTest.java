@@ -1,0 +1,26 @@
+package com.paramount.test.ff.uitests.tests.leftfiltersvalidation.perfilter.orders.contenttype;
+
+import com.paramount.test.ff.common.util.SoftAssert;
+import com.paramount.test.ff.uitests.helpers.leftfilters.ConsoleTab;
+import com.paramount.test.ff.uitests.helpers.leftfilters.OrdersLeftFilter;
+import com.paramount.test.ff.uitests.helpers.leftfilters.LeftFilterPerFilterTestRunner;
+import com.paramount.test.ff.uitests.helpers.leftfilters.LeftFilterTestCategory;
+import com.paramount.test.ff.uitests.tests.leftfiltersvalidation.orders.LeftFilterOrdersTabBaseTest;
+import io.qameta.allure.Description;
+import org.testng.annotations.Test;
+
+/** TC421 — ContentType Select all. */
+public class LF_O_TC421_ContentType_SelectAllTest extends LeftFilterOrdersTabBaseTest {
+
+    private static final String FILTER = OrdersLeftFilter.CONTENT_TYPE.getDisplayName();
+    private static final int FILTER_INDEX = 21;
+
+    @Test(priority = 1)
+    @Description("TC421: ContentType — Select all")
+    public void tc421_contentTypeSelectAll() throws InterruptedException {
+        softAssert = new SoftAssert("tc421_contentTypeSelectAll", getClass().getSimpleName());
+        LeftFilterPerFilterTestRunner.run(softAssert, leftFilterPanelUtil, ConsoleTab.ORDERS,
+                FILTER, LeftFilterTestCategory.SELECT_ALL, FILTER_INDEX);
+        softAssert.assertAll();
+    }
+}

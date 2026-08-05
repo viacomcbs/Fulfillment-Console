@@ -74,15 +74,36 @@ public class PtsPackagingIdPage {
     }
 
     public By manageColumnsPanelHeading() {
-        return By.XPath("//span[contains(normalize-space(),'Manage columns')]");
+        return By.XPath("//span[contains(normalize-space(),'Manage columns')"
+                + " or contains(normalize-space(),'Manage Columns')]");
+    }
+
+    /** Line Items tab: flat list under "Manage Columns (Line item table)" — no Order/Package sections. */
+    public By lineItemTableManagePanelRoot() {
+        return By.XPath("//span[contains(translate(normalize-space(.),"
+                + " 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'), 'manage columns')"
+                + " and contains(translate(normalize-space(.),"
+                + " 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'), 'line item')]"
+                + "/ancestor::div[contains(@class,'table-view') or contains(@class,'manage-column')][1]");
     }
 
     public By orderColumnCheckboxLabel() {
         return tableView.OrderColumnNameOnTableView(COLUMN_LABEL);
     }
 
+    /**
+     * Line Items console tab — single flat column list (PROD: label.option-label in draggable-item).
+     * Title: "Manage Columns (Line item table)" — no Order/Package/Line item sections.
+     */
     public By lineItemColumnCheckboxLabel() {
-        return tableView.LineitemColumnNameOnTableView(COLUMN_LABEL);
+        return By.XPath("(" + lineItemTableManagePanelRootXPath()
+                + "//label[contains(@class,'option-label') and normalize-space()='" + COLUMN_LABEL + "'])[1]"
+                + " | (" + lineItemTableManagePanelRootXPath()
+                + "//label[normalize-space()='" + COLUMN_LABEL + "'])[1]"
+                + " | //div[contains(@class,'options-list-scrollbar')]"
+                + "//label[normalize-space()='" + COLUMN_LABEL + "']"
+                + " | //div[contains(@class, 'table-column')]//div[contains(text(), 'Line item columns')]"
+                + "//following::label[contains(text(), '" + COLUMN_LABEL + "')]");
     }
 
     /** Scoped to Order columns section — PTS Packaging ID is last in the list. */
@@ -92,11 +113,23 @@ public class PtsPackagingIdPage {
                 + "/preceding-sibling::input[@type='checkbox']");
     }
 
-    /** Scoped to Line item columns section. */
+    /** Line Items tab flat list, or Line item columns section when Manage columns opened from Orders tab. */
     public By lineItemColumnCheckbox() {
-        return By.XPath("//div[contains(@class, 'table-column')]//div[contains(text(), 'Line item columns')]"
+        return By.XPath("(" + lineItemTableManagePanelRootXPath()
+                + "//label[normalize-space()='" + COLUMN_LABEL + "']"
+                + "/preceding-sibling::input[@type='checkbox'])[1]"
+                + " | //div[contains(@class,'options-list-scrollbar')]"
+                + "//label[normalize-space()='" + COLUMN_LABEL + "']"
+                + "/preceding-sibling::input[@type='checkbox']"
+                + " | //div[contains(@class, 'table-column')]//div[contains(text(), 'Line item columns')]"
                 + "//following::label[normalize-space()='" + COLUMN_LABEL + "']"
                 + "/preceding-sibling::input[@type='checkbox']");
+    }
+
+    public By lineItemManageColumnsOptionsList() {
+        return By.XPath(lineItemTableManagePanelRootXPath()
+                + "//div[contains(@class,'options-list-scrollbar') or contains(@class,'cdk-drop-list')]"
+                + " | //div[contains(@class,'options-list-scrollbar')]");
     }
 
     /** Scrollable CDK drop list for Order columns (PROD: cdk-drop-list options-list-scrollbar). */
@@ -216,7 +249,16 @@ public class PtsPackagingIdPage {
     }
 
     private String lineItemColumnsSectionRoot() {
-        return "//div[contains(@class, 'table-column')][.//div[contains(text(), 'Line item columns')]]";
+        return lineItemTableManagePanelRootXPath()
+                + " | //div[contains(@class, 'table-column')][.//div[contains(text(), 'Line item columns')]]";
+    }
+
+    private String lineItemTableManagePanelRootXPath() {
+        return "//span[contains(translate(normalize-space(.),"
+                + " 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'), 'manage columns')"
+                + " and contains(translate(normalize-space(.),"
+                + " 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'), 'line item')]"
+                + "/ancestor::div[contains(@class,'table-view') or contains(@class,'manage-column')][1]";
     }
 
     /**

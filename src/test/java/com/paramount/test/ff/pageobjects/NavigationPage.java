@@ -3,22 +3,52 @@ package com.paramount.test.ff.pageobjects;
 import com.synergy.core.driver.By;
 
 /**
- * Navigation locators for Fulfillment Console tabs.
+ * Navigation locators for Fulfillment Console tabs (Orders / Line items nav-pills above grid).
  */
 public class NavigationPage {
 
     private static final String EXCLUDE_FILTER_PANEL = "[not(ancestor::msc-left-filter-panel)]";
+    /** Table toolbar nav-pills — PROD DOM: {@code ul.nav-pills > button.nav-link}. */
+    private static final String TABLE_NAV_ROOT =
+            "//app-fulfillment-main-table-container//div[contains(@class,'table-top')]";
 
     public By ordersTab() {
-        return tabButton("Orders");
+        return ordersNavPillButton();
     }
 
     public By lineItemsTab() {
-        return tabButton("Line Items");
+        return lineItemsNavPillButton();
+    }
+
+    public By ordersNavPillButton() {
+        return By.XPath(TABLE_NAV_ROOT + "//ul[contains(@class,'nav-pills')]//button[contains(@class,'nav-link')]"
+                + "[normalize-space()='Orders']");
+    }
+
+    public By lineItemsNavPillButton() {
+        return By.XPath(TABLE_NAV_ROOT + "//ul[contains(@class,'nav-pills')]//button[contains(@class,'nav-link')]"
+                + "[normalize-space()='Line items' or normalize-space()='Line Items']");
+    }
+
+    public By lineItemsNavPillActive() {
+        return By.XPath(TABLE_NAV_ROOT + "//ul[contains(@class,'nav-pills')]//button[contains(@class,'nav-link')]"
+                + "[contains(@class,'active')]"
+                + "[normalize-space()='Line items' or normalize-space()='Line Items']");
+    }
+
+    public By ordersNavPillActive() {
+        return By.XPath(TABLE_NAV_ROOT + "//ul[contains(@class,'nav-pills')]//button[contains(@class,'nav-link')]"
+                + "[contains(@class,'active')][normalize-space()='Orders']");
     }
 
     public By activeTab(String tabLabel) {
         String lowerLabel = tabLabel.toLowerCase();
+        if ("line items".equals(lowerLabel)) {
+            return lineItemsNavPillActive();
+        }
+        if ("orders".equals(lowerLabel)) {
+            return ordersNavPillActive();
+        }
         return By.XPath(
                 tabLabelXPath(tabLabel)
                         + "[ancestor-or-self::*[contains(@class,'active') or contains(@class,'selected')"
@@ -33,14 +63,17 @@ public class NavigationPage {
     public By ordersTabContextMarker() {
         return By.XPath("//*[contains(normalize-space(),'Show hidden orders')]"
                 + " | //th[contains(normalize-space(),'Order start date')]"
+                + " | //th[contains(normalize-space(),'Order ID') and not(contains(normalize-space(),'LineItem'))]"
                 + " | //div[contains(@class,'header')]//span[normalize-space()='Order start date']");
     }
 
     public By lineItemsTabContextMarker() {
         return By.XPath("//*[contains(translate(normalize-space(), 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'),"
                 + " 'show hidden line items')]"
-                + " | //th[contains(normalize-space(),'Line item start date')]"
-                + " | //div[contains(@class,'header')]//span[normalize-space()='Line item start date']");
+                + " | //th[contains(normalize-space(),'LineItem ID')]"
+                + " | //th[contains(normalize-space(),'Line Item ID')]"
+                + " | //div[contains(@class,'header')]//span[normalize-space()='LineItem ID']"
+                + " | //span[contains(normalize-space(),'Manage Columns') and contains(normalize-space(),'Line item')]");
     }
 
     private By tabButton(String tabLabel) {

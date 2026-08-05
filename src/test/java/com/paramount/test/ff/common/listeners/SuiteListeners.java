@@ -16,6 +16,7 @@ import com.paramount.test.ff.common.util.ExecuteFailedTests;
 import com.paramount.test.ff.common.util.Logger;
 import com.paramount.test.ff.common.util.TestUtil;
 import com.paramount.test.ff.common.util.props.IProps.ConfigProps;
+import com.paramount.test.ff.uitests.helpers.ptspackaging.PtsPackagingEmailReport;
 import com.synergy.common.SynergyKey;
 import com.synergy.core.reporting.AllureReportGenerator;
 
@@ -48,8 +49,13 @@ public class SuiteListeners implements ISuiteListener {
 		}
 
 		try {
-			String allureResultZip = System.getProperty("user.dir") + File.separator + "allure-results.zip";
-			TestUtil.forceDelete(allureResultZip);
+			String projectDir = System.getProperty("user.dir");
+			TestUtil.forceDelete(projectDir + File.separator + "allure-results.zip");
+			File allureResultsDir = new File(projectDir + File.separator + "allure-results");
+			if (allureResultsDir.exists()) {
+				TestUtil.forceDelete(allureResultsDir.getAbsolutePath());
+				Logger.logMessage("Cleared previous allure-results folder");
+			}
 		} catch (Exception e) {
 			System.out.println("Failed to clear Allure previous reports.");
 			e.printStackTrace();
@@ -119,6 +125,9 @@ public class SuiteListeners implements ISuiteListener {
 						"SendReportAutoEmails is enabled but SendReportEmailAddress is empty; skipping email.");
 			} else {
 				try {
+					if (PtsPackagingEmailReport.isEnabled()) {
+						PtsPackagingEmailReport.captureSynergySessionId();
+					}
 					EmailUtil.sendResultEmail(s3ReportUrl, passCount, failCount, skipCount, brknCount);
 				} catch (Exception e) {
 					Logger.logConsoleMessage("Email sending failed: " + e.getMessage());

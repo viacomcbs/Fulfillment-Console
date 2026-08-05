@@ -16,7 +16,7 @@ public final class SynergyLocalPaths {
 	/** {@code %LOCALAPPDATA%\Temp\com.viacom.synergy} — Synergy-staged Excel/export files on the local runner. */
 	public static Path synergyImportTempDir() {
 		String localAppData = System.getenv("LOCALAPPDATA");
-		if (localAppData != null && !localAppData.isBlank()) {
+		if (localAppData != null && !localAppData.trim().isEmpty()) {
 			return Paths.get(localAppData, "Temp", "com.viacom.synergy");
 		}
 		return Paths.get(System.getProperty("java.io.tmpdir"), "com.viacom.synergy");

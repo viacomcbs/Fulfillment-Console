@@ -2,6 +2,7 @@
 
 **Jira:** BSD-29441  
 **TestRail project ID (this repo):** `223`  
+**TestRail URL:** https://paramount.testrail.io/index.php?/projects/overview/223
 **Automation suite:** `src/test/resources/FF_PTS_BSD29441_ProdServerSuite.xml`
 
 ---

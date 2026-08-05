@@ -20,6 +20,26 @@ public class AllureAttachment {
 		}
 	};
 	private static final String emptyString = "empty string";
+	private static final String SYNERGY_RECORDING_URL =
+			"https://www.synergyplatform.tech/tests?sessionID=%s&open=true";
+
+	public static String buildRecordingUrl(String sessionId) {
+		if (sessionId == null || sessionId.trim().isEmpty()) {
+			return "";
+		}
+		return String.format(SYNERGY_RECORDING_URL, sessionId.trim());
+	}
+
+	public static String captureSessionIdFromDriver() {
+		try {
+			if (BaseTest.driver.get() != null) {
+				return BaseTest.driver.get().getSessionID();
+			}
+		} catch (Exception e) {
+			Logger.logMessage("WebDriver is null, hence Session id is not created");
+		}
+		return "";
+	}
 
 	//@Attachment(value = "Screenshot", type = "image/png")
 	public static byte[] attachScreenshot() {
@@ -37,13 +57,9 @@ public class AllureAttachment {
 	@Attachment(value = "Screen Recording Link", type = "text/uri-list")
 	public static byte[] attachScreenRecordingLink(){
 		attachSuccess.set(true);
-		String link="https://www.synergyplatform.tech/tests?sessionID={Session_ID}&open=true";
-
-		try {
-			link = "https://www.synergyplatform.tech/tests?sessionID=" + BaseTest.driver.get().getSessionID() + "&open=true";
-			//Logger.logMessage("Screen Recording :: Navigate to below link: " + link);
-		}catch (Exception e){
-			Logger.logMessage("WebDriver is null, hence Session id is not created");
+		String link = buildRecordingUrl(captureSessionIdFromDriver());
+		if (link.isEmpty()) {
+			link = String.format(SYNERGY_RECORDING_URL, "{Session_ID}");
 		}
 		return link.getBytes();
 	}
