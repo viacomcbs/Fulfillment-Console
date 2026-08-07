@@ -16,6 +16,7 @@ import com.paramount.test.ff.common.util.ExecuteFailedTests;
 import com.paramount.test.ff.common.util.Logger;
 import com.paramount.test.ff.common.util.TestUtil;
 import com.paramount.test.ff.common.util.props.IProps.ConfigProps;
+import com.paramount.test.ff.uitests.helpers.leftfilters.LeftFilterEmailReport;
 import com.paramount.test.ff.uitests.helpers.ptspackaging.PtsPackagingEmailReport;
 import com.synergy.common.SynergyKey;
 import com.synergy.core.reporting.AllureReportGenerator;
@@ -127,6 +128,8 @@ public class SuiteListeners implements ISuiteListener {
 				try {
 					if (PtsPackagingEmailReport.isEnabled()) {
 						PtsPackagingEmailReport.captureSynergySessionId();
+					} else if (LeftFilterEmailReport.isEnabled()) {
+						LeftFilterEmailReport.captureSynergySessionId();
 					}
 					EmailUtil.sendResultEmail(s3ReportUrl, passCount, failCount, skipCount, brknCount);
 				} catch (Exception e) {

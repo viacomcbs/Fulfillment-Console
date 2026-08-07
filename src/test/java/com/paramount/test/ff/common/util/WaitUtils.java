@@ -4,9 +4,12 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import com.paramount.test.ff.common.base.BaseTest;
+import com.paramount.test.ff.common.driver.LocalCapabilityFactory;
 import com.synergy.common.utils.SleepUtils;
 import com.synergy.core.driver.By;
 import com.synergy.core.driver.elements.DesktopBrowserElement;
+
+import java.util.List;
 
 public class WaitUtils {
 
@@ -20,13 +23,25 @@ public class WaitUtils {
 	}
 
 	public DesktopBrowserElement waitForVisibilityOfElement(By by, int timeOutInSec) {
-		DesktopBrowserElement element = BaseTest.driver.get().finder().findElement(by);
-		long time = TimeUnit.MILLISECONDS.convert(timeOutInSec, TimeUnit.SECONDS);
-		try {
-			return elementIfVisible(element, time);
-		} catch (Exception e) {
-			return null;
+		long endTime = System.currentTimeMillis() + TimeUnit.MILLISECONDS.convert(timeOutInSec, TimeUnit.SECONDS);
+		while (System.currentTimeMillis() < endTime) {
+			try {
+				BaseTest.driver.get().options().setElementTimeout(2000);
+				List<DesktopBrowserElement> elements = BaseTest.driver.get().finder().findElements(by);
+				if (!elements.isEmpty()) {
+					DesktopBrowserElement element = elements.get(0);
+					if (element.isDisplayed()) {
+						return element;
+					}
+				}
+			} catch (Exception ignored) {
+				// element may be stale while panel animates
+			} finally {
+				restoreDefaultElementTimeout();
+			}
+			SleepUtils.sleep(300);
 		}
+		return null;
 	}
 
 	public List<DesktopBrowserElement> waitForVisibilityOfAllElements(List<DesktopBrowserElement> elements,
@@ -65,8 +80,7 @@ public class WaitUtils {
 	}
 
 	public DesktopBrowserElement waitUntilElementIsClickable(By by, int timeOut) {
-		DesktopBrowserElement browserElement = waitForVisibilityOfElement(
-				BaseTest.driver.get().finder().findElement(by), timeOut);
+		DesktopBrowserElement browserElement = waitForVisibilityOfElement(by, timeOut);
 		try {
 			if (browserElement != null && browserElement.isEnabled()) {
 				return browserElement;
@@ -74,6 +88,14 @@ public class WaitUtils {
 			return null;
 		} catch (Exception e) {
 			return null;
+		}
+	}
+
+	private void restoreDefaultElementTimeout() {
+		try {
+			BaseTest.driver.get().options().setElementTimeout(LocalCapabilityFactory.DEFAULT_ELEMENT_TIMEOUT);
+		} catch (Exception ignored) {
+			// session may be closing
 		}
 	}
 

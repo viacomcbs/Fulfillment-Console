@@ -61,7 +61,9 @@ public final class OrdersDataRecoveryHelper extends BaseTest {
         RECOVERY_ATTEMPTED.set(true);
         calendarSetup.hardRefreshAndSetYesterday(softAssert);
         LeftFilterSessionHelper.markCalendarSetToYesterday();
-        new LeftFilterPanelUtil().ensureLeftFilterPanelOpen();
+        LeftFilterPanelUtil panelUtil = new LeftFilterPanelUtil();
+        panelUtil.ensureLeftFilterPanelOpen();
+        panelUtil.waitForFilterHeaderVisible(OrdersLeftFilter.ORDER_STATUS.getDisplayName(), 30);
         Logger.logReportMessage("Orders page recovery complete after hard refresh");
     }
 

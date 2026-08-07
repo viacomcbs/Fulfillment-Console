@@ -1,0 +1,15 @@
+WSR Week 4 (30 Jul - 5 Aug 2026) — Admin Console row
+Tab: July 2026 → Week 4
+
+=== COLUMN O — Bug ID ===
+BSD-29754
+
+=== COLUMN P — Completed activities ===
+(none this week)
+
+=== COLUMN Q — In Progress activities ===
+BSD-29702: OC-AC-QA- Edit User Option in API Permissions Tab Opens the New User Panel
+
+Notes:
+- BSD-29754: Incorrect toast when granting Feature Permissions — always shows "Fast Track access given" (filed 5 Aug, PROD, To Do)
+- BSD-29702: Sent back to Dev during week; now Complete

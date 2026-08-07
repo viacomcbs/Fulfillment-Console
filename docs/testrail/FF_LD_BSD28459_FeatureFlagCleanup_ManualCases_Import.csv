@@ -1,0 +1,137 @@
+Title,Section,Template,Type,Priority,References,Automation Type,Automation ID,Preconditions,Steps,Expected Result
+FF_LD_001 — App bootstrap after Okta login (enable-okta-auth removed),Fulfillment Console > BSD-28459 > Feature Flag Cleanup > Authentication,Test Case (Text),Regression,1 - Critical,BSD-28459; flag=enable-okta-auth,Java TestNG,com.paramount.test.ff.uitests.tests.featureflag.bsd28459.FF_LD_001_ValidateAppBootstrapAfterOktaLogin#validateAppBootstrapAfterOktaLogin,UAT or PROD Fulfillment Console build containing BSD-28459 feature-flag cleanup; valid Okta user with FF access,"1. Open Fulfillment Console URL in a fresh browser session
+2. Complete Okta SSO login with a valid FF user
+3. Wait for the application shell to finish loading
+4. Open browser DevTools → Console tab
+5. Confirm Orders or Line Items tab is reachable",App bootstraps successfully without blank screen or auth-guard loop; no JS errors related to removed enable-okta-auth flag
+FF_LD_002 — Okta token sent on API requests (add-okta-token-to-http-header),Fulfillment Console > BSD-28459 > Feature Flag Cleanup > Authentication,Test Case (Text),Regression,1 - Critical,BSD-28459; flag=add-okta-token-to-http-header,Java TestNG,com.paramount.test.ff.uitests.tests.featureflag.bsd28459.FF_LD_002_ValidateOktaTokenInHttpHeaders#validateOktaTokenInHttpHeaders,UAT or PROD Fulfillment Console build containing BSD-28459 feature-flag cleanup; valid Okta user with FF access,"1. Log in to Fulfillment Console
+2. Open DevTools → Network tab; filter XHR/Fetch
+3. Navigate to Orders tab and wait for grid data to load
+4. Select any GraphQL or REST request to the FF backend
+5. Inspect Request Headers for Authorization or configured Okta token header",Authenticated API requests include the Okta bearer/token header; requests succeed (HTTP 200) without 401 due to missing token
+FF_LD_003 — Orders view loads with dynamic GraphQL (enable-dynamic-graphql-generation-for-orders-view),Fulfillment Console > BSD-28459 > Feature Flag Cleanup > Orders View,Test Case (Text),Regression,1 - Critical,BSD-28459; flag=enable-dynamic-graphql-generation-for-orders-view,Java TestNG,com.paramount.test.ff.uitests.tests.featureflag.bsd28459.FF_LD_003_ValidateOrdersViewDynamicGraphql#validateOrdersViewDynamicGraphql,UAT or PROD Fulfillment Console build containing BSD-28459 feature-flag cleanup; valid Okta user with FF access; Orders tab; calendar = Yesterday,"1. Log in; set calendar to Yesterday
+2. Navigate to Orders tab
+3. Wait for grid to populate
+4. Open DevTools → Network; confirm GraphQL request for orders view
+5. Apply one left filter (e.g. Order Status → one value) and wait for refresh",Orders grid loads with data; GraphQL query succeeds; filtered results refresh without page reload or console errors
+FF_LD_004 — Material ID column available in Orders Table View (add-material-id-to-both-the-views),Fulfillment Console > BSD-28459 > Feature Flag Cleanup > Orders View,Test Case (Text),Regression,1 - Critical,BSD-28459; flag=add-material-id-to-both-the-views,Java TestNG,com.paramount.test.ff.uitests.tests.featureflag.bsd28459.FF_LD_004_ValidateMaterialIdAvailableInOrdersTableView#validateMaterialIdAvailableInOrdersTableView,UAT or PROD Fulfillment Console build containing BSD-28459 feature-flag cleanup; valid Okta user with FF access; Orders tab; calendar = Yesterday,"1. Log in; navigate to Orders tab
+2. Open Table View (Manage columns)
+3. Search or scroll for Material ID
+4. Enable Material ID checkbox
+5. Apply / Save changes and close Table View",Material ID appears in Manage columns list and can be enabled on Orders grid
+FF_LD_005 — Material ID column visible and populated in Orders grid,Fulfillment Console > BSD-28459 > Feature Flag Cleanup > Orders View,Test Case (Text),Regression,1 - Critical,BSD-28459; flag=add-material-id-to-both-the-views,Java TestNG,com.paramount.test.ff.uitests.tests.featureflag.bsd28459.FF_LD_005_ValidateMaterialIdVisibleInOrdersGrid#validateMaterialIdVisibleInOrdersGrid,UAT or PROD Fulfillment Console build containing BSD-28459 feature-flag cleanup; valid Okta user with FF access; Orders tab; calendar = Yesterday; Material ID enabled in Table View,"1. On Orders tab with Material ID column enabled
+2. Horizontal scroll to Material ID column if needed
+3. Review column header text
+4. Review cell values on first 5 visible rows",Material ID column header is visible; cells show values where backend data exists (not blank for all rows when data exists)
+FF_LD_006 — Edit CRID on Orders row (add-edit-crid-to-both-the-views),Fulfillment Console > BSD-28459 > Feature Flag Cleanup > Orders View,Test Case (Text),Regression,2 - High,BSD-28459; flag=add-edit-crid-to-both-the-views,Java TestNG,com.paramount.test.ff.uitests.tests.featureflag.bsd28459.FF_LD_006_ValidateEditCridOnOrdersRow#validateEditCridOnOrdersRow,UAT or PROD Fulfillment Console build containing BSD-28459 feature-flag cleanup; valid Okta user with FF access; Orders tab; calendar = Yesterday; user has edit permission; CRID editable row available,"1. On Orders tab locate a row with editable CRID
+2. Open inline edit or edit action for CRID field
+3. Change CRID to a valid test value (or append suffix per test data policy)
+4. Save the change
+5. Refresh grid or reopen row and verify persisted value",CRID edit UI opens; save succeeds; updated CRID persists in grid after refresh
+FF_LD_007 — Partner End Date column visible in Orders grid (enable-partner-end-date-column),Fulfillment Console > BSD-28459 > Feature Flag Cleanup > Orders View,Test Case (Text),Regression,2 - High,BSD-28459; flag=enable-partner-end-date-column,Java TestNG,com.paramount.test.ff.uitests.tests.featureflag.bsd28459.FF_LD_007_ValidatePartnerEndDateColumnInOrders#validatePartnerEndDateColumnInOrders,UAT or PROD Fulfillment Console build containing BSD-28459 feature-flag cleanup; valid Okta user with FF access; Orders tab; calendar = Yesterday,"1. Log in; navigate to Orders tab
+2. Open Table View → enable Partner End Date if not already visible
+3. Apply changes and locate column in grid
+4. Compare displayed dates to known test order if available",Partner End Date column is present in grid and displays date values in expected format
+FF_LD_008 — UUID displayed in Orders view (enable-display-of-uuid),Fulfillment Console > BSD-28459 > Feature Flag Cleanup > Orders View,Test Case (Text),Regression,2 - High,BSD-28459; flag=enable-display-of-uuid,Java TestNG,com.paramount.test.ff.uitests.tests.featureflag.bsd28459.FF_LD_008_ValidateUuidDisplayedInOrdersView#validateUuidDisplayedInOrdersView,UAT or PROD Fulfillment Console build containing BSD-28459 feature-flag cleanup; valid Okta user with FF access; Orders tab; calendar = Yesterday,"1. Log in; navigate to Orders tab
+2. Open Table View and enable UUID column if available
+3. Apply changes
+4. Locate UUID values in grid or open order Details panel
+5. Verify UUID format (standard UUID pattern)",UUID is visible in Orders grid or Details where feature was previously flag-gated; values match UUID format
+FF_LD_009 — Order History v2 in order Details (enable-order-history-in-the-order-view-v2),Fulfillment Console > BSD-28459 > Feature Flag Cleanup > Orders View,Test Case (Text),Regression,2 - High,BSD-28459; flag=enable-order-history-in-the-order-view-v2,Java TestNG,com.paramount.test.ff.uitests.tests.featureflag.bsd28459.FF_LD_009_ValidateOrderHistoryV2InOrderDetails#validateOrderHistoryV2InOrderDetails,UAT or PROD Fulfillment Console build containing BSD-28459 feature-flag cleanup; valid Okta user with FF access; Orders tab; calendar = Yesterday; order with history exists,"1. On Orders tab select an order with known history
+2. Open order Details / side panel
+3. Navigate to Order History section or tab
+4. Wait for history entries to load
+5. Expand one history entry if collapsible",Order History v2 panel loads; history entries display with expected fields; no fallback to deprecated v1-only layout
+FF_LD_010 — Line Items view loads (enable-line-item-view),Fulfillment Console > BSD-28459 > Feature Flag Cleanup > Line Items View,Test Case (Text),Regression,1 - Critical,BSD-28459; flag=enable-line-item-view,Java TestNG,com.paramount.test.ff.uitests.tests.featureflag.bsd28459.FF_LD_010_ValidateLineItemsViewLoads#validateLineItemsViewLoads,UAT or PROD Fulfillment Console build containing BSD-28459 feature-flag cleanup; valid Okta user with FF access; Line Items tab; calendar = Yesterday,"1. Log in; set calendar to Yesterday
+2. Click Line Items tab
+3. Wait for grid to populate
+4. Verify left filter panel and grid headers render",Line Items view loads without error; grid shows data; no blank page from removed flag branch
+FF_LD_011 — Line Items dynamic GraphQL (enable-dynamic-graphql-generation-for-li-view),Fulfillment Console > BSD-28459 > Feature Flag Cleanup > Line Items View,Test Case (Text),Regression,1 - Critical,BSD-28459; flag=enable-dynamic-graphql-generation-for-li-view,Java TestNG,com.paramount.test.ff.uitests.tests.featureflag.bsd28459.FF_LD_011_ValidateLineItemsDynamicGraphql#validateLineItemsDynamicGraphql,UAT or PROD Fulfillment Console build containing BSD-28459 feature-flag cleanup; valid Okta user with FF access; Line Items tab; calendar = Yesterday,"1. On Line Items tab wait for initial load
+2. Open DevTools → Network → filter GraphQL
+3. Apply Line Item Status filter with one option
+4. Confirm new GraphQL request and grid refresh",Line Items GraphQL query succeeds after filter change; grid updates to match selection
+FF_LD_012 — Material ID column in Line Items grid (add-material-id-to-both-the-views),Fulfillment Console > BSD-28459 > Feature Flag Cleanup > Line Items View,Test Case (Text),Regression,2 - High,BSD-28459; flag=add-material-id-to-both-the-views,Java TestNG,com.paramount.test.ff.uitests.tests.featureflag.bsd28459.FF_LD_012_ValidateMaterialIdInLineItemsGrid#validateMaterialIdInLineItemsGrid,UAT or PROD Fulfillment Console build containing BSD-28459 feature-flag cleanup; valid Okta user with FF access; Line Items tab; calendar = Yesterday,"1. Navigate to Line Items tab
+2. Open Table View → enable Material ID
+3. Apply changes
+4. Verify column header and sample cell values",Material ID column visible on Line Items grid with populated values where data exists
+FF_LD_013 — Edit CRID on Line Items row (add-edit-crid-to-both-the-views),Fulfillment Console > BSD-28459 > Feature Flag Cleanup > Line Items View,Test Case (Text),Regression,2 - High,BSD-28459; flag=add-edit-crid-to-both-the-views,Java TestNG,com.paramount.test.ff.uitests.tests.featureflag.bsd28459.FF_LD_013_ValidateEditCridOnLineItemsRow#validateEditCridOnLineItemsRow,UAT or PROD Fulfillment Console build containing BSD-28459 feature-flag cleanup; valid Okta user with FF access; Line Items tab; calendar = Yesterday; editable CRID row available,"1. On Line Items tab locate editable CRID row
+2. Open CRID edit control
+3. Modify and save CRID
+4. Verify persisted value after grid refresh",CRID edit works on Line Items view; saved value persists
+FF_LD_014 — Open Text ID shown at line item level (show-open-text-id-on-the-line-item-level),Fulfillment Console > BSD-28459 > Feature Flag Cleanup > Line Items View,Test Case (Text),Regression,2 - High,BSD-28459; flag=show-open-text-id-on-the-line-item-level,Java TestNG,com.paramount.test.ff.uitests.tests.featureflag.bsd28459.FF_LD_014_ValidateOpenTextIdOnLineItemLevel#validateOpenTextIdOnLineItemLevel,UAT or PROD Fulfillment Console build containing BSD-28459 feature-flag cleanup; valid Okta user with FF access; Line Items tab; calendar = Yesterday; line item with Open Text ID exists,"1. On Line Items tab filter or search for item with Open Text ID
+2. Enable Open Text ID column in Table View if needed
+3. Locate value at line item row level
+4. Open Details panel for same row and compare",Open Text ID visible at line item level in grid and matches Details panel
+FF_LD_015 — Live filter count updates in Line Items view (enable-live-updates-for-filterables-for-line-item-view),Fulfillment Console > BSD-28459 > Feature Flag Cleanup > Line Items View,Test Case (Text),Regression,3 - Medium,BSD-28459; flag=enable-live-updates-for-filterables-for-line-item-view,Java TestNG,com.paramount.test.ff.uitests.tests.featureflag.bsd28459.FF_LD_015_ValidateLiveFilterCountUpdatesLineItems#validateLiveFilterCountUpdatesLineItems,UAT or PROD Fulfillment Console build containing BSD-28459 feature-flag cleanup; valid Okta user with FF access; Line Items tab; calendar = Yesterday; environment supports live updates,"1. On Line Items tab expand a filter with non-zero counts (e.g. Line Item Status)
+2. Note count on one option
+3. In a second session or via backend trigger, change data affecting that count (if test env supports)
+4. Observe filter option count without full page refresh",Filter option counts update via live subscription/polling without manual page reload (or remain stable if no backend change)
+FF_LD_016 — Live table row updates in Line Items view (enable-live-updates-for-table-in-the-line-item-view),Fulfillment Console > BSD-28459 > Feature Flag Cleanup > Line Items View,Test Case (Text),Regression,3 - Medium,BSD-28459; flag=enable-live-updates-for-table-in-the-line-item-view,Java TestNG,com.paramount.test.ff.uitests.tests.featureflag.bsd28459.FF_LD_016_ValidateLiveTableUpdatesLineItems#validateLiveTableUpdatesLineItems,UAT or PROD Fulfillment Console build containing BSD-28459 feature-flag cleanup; valid Okta user with FF access; Line Items tab; calendar = Yesterday,"1. On Line Items tab load grid with several rows
+2. Note status/value on a visible row
+3. Trigger external update to that line item if test data allows
+4. Observe row update without full refresh",Table row reflects live data changes without requiring full page reload
+FF_LD_017 — Refactored left filter panel renders (use-refactored-filter-panel),Fulfillment Console > BSD-28459 > Feature Flag Cleanup > Filter Panel,Test Case (Text),Regression,1 - Critical,BSD-28459; flag=use-refactored-filter-panel,Java TestNG,com.paramount.test.ff.uitests.tests.featureflag.bsd28459.FF_LD_017_ValidateRefactoredFilterPanelRenders#validateRefactoredFilterPanelRenders,UAT or PROD Fulfillment Console build containing BSD-28459 feature-flag cleanup; valid Okta user with FF access; Orders tab; calendar = Yesterday,"1. Log in; navigate to Orders tab
+2. Locate left filter accordion panel
+3. Expand Order Status and Partner filters
+4. Repeat on Line Items tab with Line Item Status filter",Refactored filter panel UI loads on both tabs; accordions expand; options render without layout break
+FF_LD_018 — Filter category pagination works (enable-pagination-in-the-filter-categories),Fulfillment Console > BSD-28459 > Feature Flag Cleanup > Filter Panel,Test Case (Text),Regression,2 - High,BSD-28459; flag=enable-pagination-in-the-filter-categories,Java TestNG,com.paramount.test.ff.uitests.tests.featureflag.bsd28459.FF_LD_018_ValidateFilterCategoryPagination#validateFilterCategoryPagination,UAT or PROD Fulfillment Console build containing BSD-28459 feature-flag cleanup; valid Okta user with FF access; Orders tab; calendar = Yesterday,"1. On Orders tab expand Partner filter (large option list)
+2. Locate pagination controls at bottom of filter options
+3. Click Next page
+4. Click Previous page
+5. Repeat on Line Items → Partner filter",Pagination navigates additional option pages without error; selections persist when returning to prior page
+FF_LD_019 — Big filter counts updated behaviour (enable-big-filter-counts-updated-behaviour),Fulfillment Console > BSD-28459 > Feature Flag Cleanup > Filter Panel,Test Case (Text),Regression,2 - High,BSD-28459; flag=enable-big-filter-counts-updated-behaviour,Java TestNG,com.paramount.test.ff.uitests.tests.featureflag.bsd28459.FF_LD_019_ValidateBigFilterCountsBehaviour#validateBigFilterCountsBehaviour,UAT or PROD Fulfillment Console build containing BSD-28459 feature-flag cleanup; valid Okta user with FF access; Orders tab; calendar = Yesterday; Yesterday calendar with substantial data volume,"1. On Orders tab expand multiple filters with large counts
+2. Select one filter option and note table total count
+3. Add a second filter selection
+4. Compare filter badge counts and table total",Filter counts and table total stay consistent when applying multiple filters on large datasets; no stale zero counts
+FF_LD_020 — Enhanced date range filtering (enable-enhanced-date-range-filtering),Fulfillment Console > BSD-28459 > Feature Flag Cleanup > Filter Panel,Test Case (Text),Regression,2 - High,BSD-28459; flag=enable-enhanced-date-range-filtering,Java TestNG,com.paramount.test.ff.uitests.tests.featureflag.bsd28459.FF_LD_020_ValidateEnhancedDateRangeFiltering#validateEnhancedDateRangeFiltering,UAT or PROD Fulfillment Console build containing BSD-28459 feature-flag cleanup; valid Okta user with FF access; Orders tab; calendar = Yesterday,"1. On Orders tab open calendar / date range control
+2. Select a custom date range (e.g. last 7 days)
+3. Apply range and wait for grid refresh
+4. Verify rows fall within selected dates",Enhanced date range filter applies correctly; grid shows orders within selected range only
+FF_LD_021 — Date range customization presets (enable-enhanced-date-range-filtering-customization),Fulfillment Console > BSD-28459 > Feature Flag Cleanup > Filter Panel,Test Case (Text),Regression,3 - Medium,BSD-28459; flag=enable-enhanced-date-range-filtering-customization,Java TestNG,com.paramount.test.ff.uitests.tests.featureflag.bsd28459.FF_LD_021_ValidateDateRangeCustomization#validateDateRangeCustomization,UAT or PROD Fulfillment Console build containing BSD-28459 feature-flag cleanup; valid Okta user with FF access; Orders tab; calendar = Yesterday,"1. Open date range picker on Orders tab
+2. Select a preset (e.g. Yesterday, Last 7 days, Custom)
+3. Switch between presets
+4. Apply and verify grid updates each time",Date range presets and customization options work; grid refreshes per selection
+FF_LD_022 — History log in order view (enable-history-log-functionality),Fulfillment Console > BSD-28459 > Feature Flag Cleanup > Order History & Audit,Test Case (Text),Regression,2 - High,BSD-28459; flag=enable-history-log-functionality,Java TestNG,com.paramount.test.ff.uitests.tests.featureflag.bsd28459.FF_LD_022_ValidateHistoryLogFunctionality#validateHistoryLogFunctionality,UAT or PROD Fulfillment Console build containing BSD-28459 feature-flag cleanup; valid Okta user with FF access; Orders tab; calendar = Yesterday; order with history,"1. Open an order with known history on Orders tab
+2. Navigate to History / History Log section
+3. Scroll through entries
+4. Verify timestamp, user, and action fields present",History log entries load and display expected metadata
+FF_LD_023 — Audit log entries visible (enable-audit-log),Fulfillment Console > BSD-28459 > Feature Flag Cleanup > Order History & Audit,Test Case (Text),Regression,2 - High,BSD-28459; flag=enable-audit-log,Java TestNG,com.paramount.test.ff.uitests.tests.featureflag.bsd28459.FF_LD_023_ValidateAuditLogEntries#validateAuditLogEntries,UAT or PROD Fulfillment Console build containing BSD-28459 feature-flag cleanup; valid Okta user with FF access; Orders tab; calendar = Yesterday; order with audit events,"1. Open order Details for order with audit activity
+2. Open Audit Log section
+3. Review latest audit entries
+4. Expand detail on one entry if supported",Audit log section renders entries with correct event types and timestamps
+FF_LD_024 — Revision-wise audit log (order-history-show-revision-wise-audit-log),Fulfillment Console > BSD-28459 > Feature Flag Cleanup > Order History & Audit,Test Case (Text),Regression,2 - High,BSD-28459; flag=order-history-show-revision-wise-audit-log,Java TestNG,com.paramount.test.ff.uitests.tests.featureflag.bsd28459.FF_LD_024_ValidateRevisionWiseAuditLog#validateRevisionWiseAuditLog,UAT or PROD Fulfillment Console build containing BSD-28459 feature-flag cleanup; valid Okta user with FF access; Orders tab; calendar = Yesterday; multi-revision order,"1. Open order with multiple revisions
+2. Navigate to Order History / Audit area
+3. Verify entries grouped or labeled by revision
+4. Compare revision identifiers across entries",Audit/history entries are organized revision-wise as per enabled behaviour
+FF_LD_025 — Older line items differentiated in history (order-history-enable-differentiations-for-older-line-items),Fulfillment Console > BSD-28459 > Feature Flag Cleanup > Order History & Audit,Test Case (Text),Regression,3 - Medium,BSD-28459; flag=order-history-enable-differentiations-for-older-line-items,Java TestNG,com.paramount.test.ff.uitests.tests.featureflag.bsd28459.FF_LD_025_ValidateOlderLineItemDifferentiation#validateOlderLineItemDifferentiation,UAT or PROD Fulfillment Console build containing BSD-28459 feature-flag cleanup; valid Okta user with FF access; Orders tab; calendar = Yesterday; order with older line items,"1. Open order containing older and current line items
+2. Open Order History or line item history view
+3. Compare visual or label treatment of older vs current line items",Older line items are visually or textually differentiated from current line items
+FF_LD_026 — Revised statuses displayed (show-revised-statuses),Fulfillment Console > BSD-28459 > Feature Flag Cleanup > Order History & Audit,Test Case (Text),Regression,2 - High,BSD-28459; flag=show-revised-statuses,Java TestNG,com.paramount.test.ff.uitests.tests.featureflag.bsd28459.FF_LD_026_ValidateRevisedStatusesDisplayed#validateRevisedStatusesDisplayed,UAT or PROD Fulfillment Console build containing BSD-28459 feature-flag cleanup; valid Okta user with FF access; Orders tab; calendar = Yesterday; order with revised status,"1. Locate order with revised status in Orders grid
+2. Review Status column value
+3. Open Details and confirm revised status label/format",Revised statuses display in grid and Details with expected revised-status formatting
+FF_LD_027 — Unified history with approval processing (show-ops-console-unified-history-with-approval-processing),Fulfillment Console > BSD-28459 > Feature Flag Cleanup > Order History & Audit,Test Case (Text),Regression,2 - High,BSD-28459; flag=show-ops-console-unified-history-with-approval-processing,Java TestNG,com.paramount.test.ff.uitests.tests.featureflag.bsd28459.FF_LD_027_ValidateUnifiedHistoryWithApproval#validateUnifiedHistoryWithApproval,UAT or PROD Fulfillment Console build containing BSD-28459 feature-flag cleanup; valid Okta user with FF access; Orders tab; calendar = Yesterday; order with approval workflow history,"1. Open order with approval processing history
+2. Navigate to unified history / ops console history view
+3. Locate approval-related history entries
+4. Verify approval status transitions are listed",Unified history shows approval processing events integrated with other history entries
+FF_LD_028 — GLIM sidecar files load (enable-side-car-files-loading-in-glim),Fulfillment Console > BSD-28459 > Feature Flag Cleanup > GLIM,Test Case (Text),Regression,2 - High,BSD-28459; flag=enable-side-car-files-loading-in-glim,Java TestNG,com.paramount.test.ff.uitests.tests.featureflag.bsd28459.FF_LD_028_ValidateGlimSidecarFilesLoad#validateGlimSidecarFilesLoad,UAT or PROD Fulfillment Console build containing BSD-28459 feature-flag cleanup; valid Okta user with FF access; Line Items tab; calendar = Yesterday; asset with sidecar files,"1. On Line Items tab open row with GLIM / preview available
+2. Launch GLIM player for asset with sidecar files
+3. Open sidecar / associated files panel in GLIM
+4. Attempt to load each listed sidecar file",Sidecar files list appears and each file loads without error in GLIM
+FF_LD_029 — GLIM Play All files (enable-play-all-files-in-glim),Fulfillment Console > BSD-28459 > Feature Flag Cleanup > GLIM,Test Case (Text),Regression,2 - High,BSD-28459; flag=enable-play-all-files-in-glim,Java TestNG,com.paramount.test.ff.uitests.tests.featureflag.bsd28459.FF_LD_029_ValidateGlimPlayAllFiles#validateGlimPlayAllFiles,UAT or PROD Fulfillment Console build containing BSD-28459 feature-flag cleanup; valid Okta user with FF access; Line Items tab; calendar = Yesterday; multi-file GLIM asset,"1. Open GLIM for asset with multiple playable files
+2. Locate Play All control
+3. Click Play All
+4. Observe playback sequence across files",Play All starts sequential playback of all associated files without manual re-selection
+FF_LD_030 — Test endpoint connection feature (enable-test-endpoint-connection-feature),Fulfillment Console > BSD-28459 > Feature Flag Cleanup > Admin,Test Case (Text),Regression,3 - Medium,BSD-28459; flag=enable-test-endpoint-connection-feature,Java TestNG,com.paramount.test.ff.uitests.tests.featureflag.bsd28459.FF_LD_030_ValidateTestEndpointConnection#validateTestEndpointConnection,UAT or PROD Fulfillment Console build containing BSD-28459 feature-flag cleanup; valid Okta user with FF access; admin or settings access,"1. Navigate to Admin / Settings area with endpoint configuration
+2. Locate Test Connection or Test Endpoint action
+3. Run test against configured endpoint
+4. Review success/failure message",Test endpoint connection runs and returns clear pass/fail result without JS error
+"FF_LD_031 — End-to-end smoke — login through Orders, LI, filters, logout",Fulfillment Console > BSD-28459 > Feature Flag Cleanup > Regression Smoke,Test Case (Text),Regression,1 - Critical,BSD-28459; flag=multiple,Java TestNG,com.paramount.test.ff.uitests.tests.featureflag.bsd28459.FF_LD_031_ValidateEndToEndSmoke#validateEndToEndSmoke,UAT or PROD Fulfillment Console build containing BSD-28459 feature-flag cleanup; valid Okta user with FF access,"1. Log in via Okta
+2. Orders tab → apply one filter → open one order Details
+3. Switch to Line Items tab → apply one filter
+4. Open Table View on each tab and close
+5. Log out or close session",Full smoke path completes without blocking errors; both tabs functional after flag cleanup
+FF_LD_032 — No new console errors on primary views,Fulfillment Console > BSD-28459 > Feature Flag Cleanup > Regression Smoke,Test Case (Text),Regression,2 - High,BSD-28459; flag=multiple,Java TestNG,com.paramount.test.ff.uitests.tests.featureflag.bsd28459.FF_LD_032_ValidateNoConsoleErrorsOnPrimaryViews#validateNoConsoleErrorsOnPrimaryViews,UAT or PROD Fulfillment Console build containing BSD-28459 feature-flag cleanup; valid Okta user with FF access,"1. Log in with DevTools Console open
+2. Visit Orders tab — note errors
+3. Visit Line Items tab — note errors
+4. Expand 3 left filters on each tab
+5. Open and close order Details once",No new uncaught JS exceptions or flag-related errors (e.g. undefined feature flag keys) on primary views

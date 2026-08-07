@@ -1,0 +1,84 @@
+<!-- BSD-28459 Feature Flag Cleanup PROD: FF_LD_001 → FF_LD_032 (critical first)
+     mvn test "-DsuiteXmlFile=src/test/resources/FF_LD_BSD28459_ProdServerSuite.xml" -->
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<suite name="FF Feature Flag BSD-28459 PROD" parallel="false" preserve-order="true">
+
+    <parameter name="RunAsFactory" value="false"/>
+    <parameter name="Browser" value="Chrome"/>
+    <parameter name="OS" value="Windows"/>
+    <parameter name="OSVersion" value="11"/>
+    <parameter name="DeviceCategory" value="Desktop"/>
+    <parameter name="TestType" value="Regression"/>
+    <parameter name="GuiType" value="Web"/>
+    <parameter name="SendReportAutoEmails" value="true"/>
+    <parameter name="SendReportEmailAddress" value="Akilandeswari.Sundararajan@paramount.com,Vishnupriya.Arumugam@paramount.com"/>
+    <parameter name="SendChatReport" value="false"/>
+
+    <parameter name="Application" value="Fulfillment Console"/>
+    <parameter name="ApplicationTitle" value="Fulfillment Console"/>
+    <parameter name="TestEnvironment" value="PROD"/>
+
+    <parameter name="LabUrl" value="https://www.synergyserver.tech"/>
+    <parameter name="UserKey" value="af27f06e-2e7e-4c8d-9312-2320423e4641"/>
+    <parameter name="LocalURL" value="http://localhost:39445/synergy"/>
+    <parameter name="LocalExecution" value="false"/>
+    <parameter name="ClientID" value="5CG23257SH"/>
+
+    <parameter name="TargetUrlPROD" value="https://operationsconsole.paramountmsc.com/fulfillment/"/>
+    <parameter name="Username" value="mscbsdqasvc@msc.cbs.net"/>
+    <parameter name="Password" value="dtZHl)5C?;?Z;8R=YDm84$YV"/>
+
+    <parameter name="PathToElements" value="/src/test/resources/elements/"/>
+    <parameter name="PageLoadWaitTime" value="120"/>
+    <parameter name="EmailRelayHost" value="imailrelay.viacom.com"/>
+    <parameter name="EmailRelayPort" value="25"/>
+    <parameter name="EmailSenderAddress" value="NOREPLY@dteqa.com"/>
+    <parameter name="TestRailProjectId" value="223"/>
+    <parameter name="PostDataToTestRail" value="false"/>
+    <parameter name="JiraTicketID" value="BSD-28459"/>
+    <parameter name="JiraStoryTitle" value="Feature flag inventory and cleanup"/>
+
+    <listeners>
+        <listener class-name="com.paramount.test.ff.common.listeners.AllureListeners"/>
+        <listener class-name="com.paramount.test.ff.common.listeners.SuiteListeners"/>
+        <listener class-name="com.paramount.test.ff.common.listeners.FeatureFlagSuiteListener"/>
+    </listeners>
+
+    <test verbose="1" name="BSD-28459 Feature Flag Cleanup" preserve-order="true">
+        <classes>
+            <class name="com.paramount.test.ff.uitests.tests.featureflag.bsd28459.FF_LD_001_ValidateAppBootstrapAfterOktaLogin"/>
+            <class name="com.paramount.test.ff.uitests.tests.featureflag.bsd28459.FF_LD_002_ValidateOktaTokenInHttpHeaders"/>
+            <class name="com.paramount.test.ff.uitests.tests.featureflag.bsd28459.FF_LD_003_ValidateOrdersViewDynamicGraphql"/>
+            <class name="com.paramount.test.ff.uitests.tests.featureflag.bsd28459.FF_LD_004_ValidateMaterialIdAvailableInOrdersTableView"/>
+            <class name="com.paramount.test.ff.uitests.tests.featureflag.bsd28459.FF_LD_005_ValidateMaterialIdVisibleInOrdersGrid"/>
+            <class name="com.paramount.test.ff.uitests.tests.featureflag.bsd28459.FF_LD_010_ValidateLineItemsViewLoads"/>
+            <class name="com.paramount.test.ff.uitests.tests.featureflag.bsd28459.FF_LD_011_ValidateLineItemsDynamicGraphql"/>
+            <class name="com.paramount.test.ff.uitests.tests.featureflag.bsd28459.FF_LD_017_ValidateRefactoredFilterPanelRenders"/>
+            <class name="com.paramount.test.ff.uitests.tests.featureflag.bsd28459.FF_LD_031_ValidateEndToEndSmoke"/>
+            <class name="com.paramount.test.ff.uitests.tests.featureflag.bsd28459.FF_LD_006_ValidateEditCridOnOrdersRow"/>
+            <class name="com.paramount.test.ff.uitests.tests.featureflag.bsd28459.FF_LD_007_ValidatePartnerEndDateColumnInOrders"/>
+            <class name="com.paramount.test.ff.uitests.tests.featureflag.bsd28459.FF_LD_008_ValidateUuidDisplayedInOrdersView"/>
+            <class name="com.paramount.test.ff.uitests.tests.featureflag.bsd28459.FF_LD_009_ValidateOrderHistoryV2InOrderDetails"/>
+            <class name="com.paramount.test.ff.uitests.tests.featureflag.bsd28459.FF_LD_012_ValidateMaterialIdInLineItemsGrid"/>
+            <class name="com.paramount.test.ff.uitests.tests.featureflag.bsd28459.FF_LD_013_ValidateEditCridOnLineItemsRow"/>
+            <class name="com.paramount.test.ff.uitests.tests.featureflag.bsd28459.FF_LD_014_ValidateOpenTextIdOnLineItemLevel"/>
+            <class name="com.paramount.test.ff.uitests.tests.featureflag.bsd28459.FF_LD_015_ValidateLiveFilterCountUpdatesLineItems"/>
+            <class name="com.paramount.test.ff.uitests.tests.featureflag.bsd28459.FF_LD_016_ValidateLiveTableUpdatesLineItems"/>
+            <class name="com.paramount.test.ff.uitests.tests.featureflag.bsd28459.FF_LD_018_ValidateFilterCategoryPagination"/>
+            <class name="com.paramount.test.ff.uitests.tests.featureflag.bsd28459.FF_LD_019_ValidateBigFilterCountsBehaviour"/>
+            <class name="com.paramount.test.ff.uitests.tests.featureflag.bsd28459.FF_LD_020_ValidateEnhancedDateRangeFiltering"/>
+            <class name="com.paramount.test.ff.uitests.tests.featureflag.bsd28459.FF_LD_021_ValidateDateRangeCustomization"/>
+            <class name="com.paramount.test.ff.uitests.tests.featureflag.bsd28459.FF_LD_022_ValidateHistoryLogFunctionality"/>
+            <class name="com.paramount.test.ff.uitests.tests.featureflag.bsd28459.FF_LD_023_ValidateAuditLogEntries"/>
+            <class name="com.paramount.test.ff.uitests.tests.featureflag.bsd28459.FF_LD_024_ValidateRevisionWiseAuditLog"/>
+            <class name="com.paramount.test.ff.uitests.tests.featureflag.bsd28459.FF_LD_025_ValidateOlderLineItemDifferentiation"/>
+            <class name="com.paramount.test.ff.uitests.tests.featureflag.bsd28459.FF_LD_026_ValidateRevisedStatusesDisplayed"/>
+            <class name="com.paramount.test.ff.uitests.tests.featureflag.bsd28459.FF_LD_027_ValidateUnifiedHistoryWithApproval"/>
+            <class name="com.paramount.test.ff.uitests.tests.featureflag.bsd28459.FF_LD_028_ValidateGlimSidecarFilesLoad"/>
+            <class name="com.paramount.test.ff.uitests.tests.featureflag.bsd28459.FF_LD_029_ValidateGlimPlayAllFiles"/>
+            <class name="com.paramount.test.ff.uitests.tests.featureflag.bsd28459.FF_LD_030_ValidateTestEndpointConnection"/>
+            <class name="com.paramount.test.ff.uitests.tests.featureflag.bsd28459.FF_LD_032_ValidateNoConsoleErrorsOnPrimaryViews"/>
+        </classes>
+    </test>
+
+</suite>

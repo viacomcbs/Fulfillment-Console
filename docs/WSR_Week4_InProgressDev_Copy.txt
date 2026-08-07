@@ -1,0 +1,7 @@
+Fulfillment Console — Week 4 (30 Jul–5 Aug 2026) — Column Q: In Progress (Dev)
+
+BSD-24377: OC-FF-QA-Performance issue when we scroll using scroll bar
+BSD-29511: Left filter data becomes blank after applying date filter from table column date picker
+BSD-29586: Assign Button Requires Double Click to Assign Order Item
+BSD-29639: Workflow shows incorrect Inprogress EventUpdating step after EventCompleted
+BSD-29663: FSP orders export blank error messages to Excel for some orders

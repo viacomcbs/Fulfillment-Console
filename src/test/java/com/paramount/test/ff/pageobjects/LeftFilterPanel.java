@@ -12,7 +12,7 @@ import static com.paramount.test.ff.uitests.helpers.leftfilters.LeftFilterConsta
 public class LeftFilterPanel {
 
     private static final String PANEL = "//msc-left-filter-panel[contains(@class,'filter-panel')]";
-    private static final String FILTER_LIST_SECTION = PANEL + "//div[@class='filter-list-section']";
+    private static final String FILTER_LIST_SECTION = PANEL + "//div[contains(@class,'filter-list-section')]";
     private static final String OPTION_LABEL = "label[contains(@class,'form-check-label') and contains(@class,'option-label')]";
     private static final String SELECT_ALL_LABEL_XPATH =
             "normalize-space()='" + SELECT_ALL_LABEL + "'"
@@ -30,6 +30,10 @@ public class LeftFilterPanel {
 
     public By leftFilterPanel() {
         return By.XPath(PANEL);
+    }
+
+    public By filterListSection() {
+        return By.XPath(FILTER_LIST_SECTION);
     }
 
     public By filterPanelHeader() {

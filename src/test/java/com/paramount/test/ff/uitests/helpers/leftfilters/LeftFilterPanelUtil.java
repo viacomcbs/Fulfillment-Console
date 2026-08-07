@@ -171,20 +171,39 @@ public class LeftFilterPanelUtil extends BaseTest {
      */
     public void ensureLeftFilterPanelOpen() throws InterruptedException {
         if (isLeftFilterPanelOpenViaDom()) {
+            waitForFilterListSection(DEFAULT_WAIT_SECONDS);
             return;
         }
 
         Logger.logMessage("Left filter panel is collapsed — clicking filter icon to expand");
-        for (int attempt = 1; attempt <= 2; attempt++) {
+        for (int attempt = 1; attempt <= 3; attempt++) {
             if (clickFilterPanelExpandViaScript() || clickFilterPanelExpandViaLocator()) {
                 Thread.sleep(FILTER_EXPAND_WAIT_MS);
             }
-            if (isLeftFilterPanelOpenViaDom()) {
+            if (isLeftFilterPanelOpenViaDom() && waitForFilterListSection(8)) {
                 Logger.logMessage("Left filter panel expanded");
                 return;
             }
             Thread.sleep(500);
         }
+    }
+
+    /** Polls for accordion headers after side nav opens — avoids blocking on Synergy 60s findElement. */
+    public boolean waitForFilterHeaderVisible(String filterName, int waitSec) throws InterruptedException {
+        By header = leftFilterPanel.leftFilterByName(filterName);
+        long deadline = System.currentTimeMillis() + (waitSec * 1000L);
+        while (System.currentTimeMillis() < deadline) {
+            if (WaitUtil.isDisplayFast(header, 1)) {
+                return true;
+            }
+            ensureLeftFilterPanelOpen();
+            Thread.sleep(500);
+        }
+        return WaitUtil.isDisplayFast(header, 1);
+    }
+
+    private boolean waitForFilterListSection(int waitSec) {
+        return WaitUtil.isDisplayFast(leftFilterPanel.filterListSection(), waitSec);
     }
 
     /** Reads {@code filter-panel-open} / visible Filters label — reliable when funnel icon stays in DOM. */
@@ -402,8 +421,8 @@ public class LeftFilterPanelUtil extends BaseTest {
         By optionsContainer = leftFilterPanel.filterOptionsContainer(filterName);
         By searchInput = leftFilterPanel.filterSearchInput(filterName);
 
-        if (!WaitUtil.isDisplay(leftFilterPanel.leftFilterByName(filterName), DEFAULT_WAIT_SECONDS)) {
-            Verify.softAssert(false, "Filter header found for: " + filterName);
+        if (!waitForFilterHeaderVisible(filterName, DEFAULT_WAIT_SECONDS)) {
+            Verify.softAssert(false, "Filter header not found for: " + filterName);
             return;
         }
 
@@ -1060,6 +1079,10 @@ public class LeftFilterPanelUtil extends BaseTest {
     public void validateOrderStatusTableSyncSmoke(SoftAssert softAssert, String filterName) throws InterruptedException {
         ensureOrdersDataLoaded(softAssert);
         expandFilter(filterName);
+        if (!isFilterExpanded(filterName)) {
+            Verify.softAssert(false, filterName + " filter could not be expanded for TC601");
+            return;
+        }
         ensureNoOptionsSelected(filterName);
 
         String optionLabel = ORDER_STATUS_DELIVERED_OPTION;
@@ -1124,6 +1147,10 @@ public class LeftFilterPanelUtil extends BaseTest {
     }
 
     private void ensureNoOptionsSelected(String filterName) throws InterruptedException {
+        if (!isFilterExpanded(filterName)) {
+            Logger.logMessage(filterName + " not expanded — skipping ensureNoOptionsSelected");
+            return;
+        }
         if (isSelectAllChecked(filterName) || areAnyVisibleOptionsSelected(filterName)
                 || isSelectAllIndeterminate(filterName) || isSelectAllPartialSelectionState(filterName, 0)) {
             clickSelectAll(filterName);
@@ -1286,7 +1313,16 @@ public class LeftFilterPanelUtil extends BaseTest {
     }
 
     public boolean isSelectAllChecked(String filterName) {
-        return DriverUtil.isSelectedCheckbox(leftFilterPanel.selectAllCheckbox(filterName));
+        if (!isElementDisplayedQuick(leftFilterPanel.selectAllCheckbox(filterName))) {
+            return false;
+        }
+        return runWithQuickElementTimeout(() -> {
+            try {
+                return DriverUtil.isSelectedCheckbox(leftFilterPanel.selectAllCheckbox(filterName));
+            } catch (Exception e) {
+                return false;
+            }
+        });
     }
 
     public boolean isSelectAllIndeterminate(String filterName) {

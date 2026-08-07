@@ -5,6 +5,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import com.paramount.test.ff.common.util.props.IProps.ConfigProps;
+import com.paramount.test.ff.uitests.helpers.leftfilters.LeftFilterEmailReport;
 import com.paramount.test.ff.uitests.helpers.ptspackaging.PtsPackagingEmailReport;
 import com.synergy.core.reporting.Emailer;
 
@@ -95,6 +96,10 @@ public class EmailUtil {
 			summaryPass = PtsPackagingEmailReport.getPassedCount();
 			summaryFail = PtsPackagingEmailReport.getFailedCount();
 			summarySkip = PtsPackagingEmailReport.getSkippedCount();
+		} else if (LeftFilterEmailReport.isEnabled()) {
+			summaryPass = LeftFilterEmailReport.getPassedCount();
+			summaryFail = LeftFilterEmailReport.getFailedCount();
+			summarySkip = LeftFilterEmailReport.getSkippedCount();
 		}
 
 		String subject = applicationTitle + " : Test Execution Report: " + appEnv
@@ -103,15 +108,23 @@ public class EmailUtil {
 			subject = applicationTitle + " — " + PtsPackagingEmailReport.FEATURE_TITLE + " ("
 					+ PtsPackagingEmailReport.JIRA_KEY + "): " + appEnv
 					+ (summaryFail == 0 ? " - Passed" : " - Failed");
+		} else if (LeftFilterEmailReport.isEnabled()) {
+			subject = applicationTitle + " — Left Filter Validation: " + appEnv
+					+ (summaryFail == 0 ? " - Passed" : " - Failed");
 		}
 
 		String reportAttachmentTxt = jenkinsReportURL.isEmpty() ? "The test report was not uploaded."
 				: "<a href='" + jenkinsReportURL + "'>Report link</a>";
 		String env = Config.getString("TestEnvironment");
-		String ptsSection = PtsPackagingEmailReport.isEnabled() ? PtsPackagingEmailReport.buildHtmlSection() : "";
+		String scenarioSection = "";
+		if (PtsPackagingEmailReport.isEnabled()) {
+			scenarioSection = PtsPackagingEmailReport.buildHtmlSection();
+		} else if (LeftFilterEmailReport.isEnabled()) {
+			scenarioSection = LeftFilterEmailReport.buildHtmlSection();
+		}
 
 		String messageContent = buildExecutionEmailBody(applicationTitle, env, summaryPass, summarySkip, summaryFail,
-				reportAttachmentTxt, ptsSection, dateFormat.format(date));
+				reportAttachmentTxt, scenarioSection, dateFormat.format(date));
 
 		String sender = Config.getString("EmailSenderAddress");
 		String recipient = Config.getString("SendReportEmailAddress");

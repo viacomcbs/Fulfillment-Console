@@ -1,0 +1,15 @@
+WSR Week 4 (30 Jul - 5 Aug 2026) — MSC Fulfillment performance metrics row
+Jira component: MSC Fulfillment Performance
+Tab: July 2026 → Week 4
+
+=== COLUMN O — Bug ID ===
+BSD-29694
+
+=== COLUMN P — Completed activities ===
+BSD-29298: On-Time Delivery Performance percentage is displayed in green despite the metric indicating poor performance - Verified UAT & PROD
+
+=== COLUMN Q — In Progress activities ===
+(none)
+
+Notes:
+- BSD-29694: MFP shows 20 on-time deliveries when Salesforce has zero for MPD RTL NLD FSP (Jul 2024) — filed 31 Jul, To Do
