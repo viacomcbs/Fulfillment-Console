@@ -4,15 +4,20 @@ import com.paramount.test.ff.common.base.BaseTest;
 import com.paramount.test.ff.common.loginUtil.DriverUtil;
 import com.paramount.test.ff.common.loginUtil.Verify;
 import com.paramount.test.ff.common.loginUtil.WaitUtil;
+import com.paramount.test.ff.common.util.Config;
 import com.paramount.test.ff.common.util.Logger;
 import com.paramount.test.ff.common.util.SoftAssert;
 import com.paramount.test.ff.common.util.WaitUtils;
 import com.paramount.test.ff.pageobjects.LeftFilterPanel;
 import com.paramount.test.ff.pageobjects.NavigationPage;
+import com.paramount.test.ff.pageobjects.OrdersMainTablePage;
+import com.paramount.test.ff.pageobjects.PtsPackagingIdPage;
+import com.paramount.test.ff.pageobjects.TableView;
 import com.paramount.test.ff.uitests.helpers.duplicatefilteroptions.DuplicateFilterOptionsCollectionHelper;
 import com.paramount.test.ff.uitests.helpers.orders.OrdersDataRecoveryHelper;
 import com.paramount.test.ff.uitests.helpers.partneroptions.PartnerOptionsDuplicateAnalyzer;
 import com.paramount.test.ff.uitests.helpers.partneroptions.PartnerOptionsGraphqlResponseParser;
+import com.paramount.test.ff.uitests.helpers.managecolumns.ManageColumnOptions;
 import com.paramount.test.ff.uitests.helpers.partneroptions.PartnerOptionsNetworkCaptureHelper;
 import com.synergy.core.driver.By;
 import com.synergy.core.driver.elements.DesktopBrowserElement;
@@ -39,6 +44,9 @@ public class LeftFilterPanelUtil extends BaseTest {
 
     private final LeftFilterPanel leftFilterPanel = new LeftFilterPanel();
     private final NavigationPage navigationPage = new NavigationPage();
+    private final OrdersMainTablePage ordersMainTablePage = new OrdersMainTablePage();
+    private final TableView tableView = new TableView();
+    private final PtsPackagingIdPage ptsPackagingIdPage = new PtsPackagingIdPage();
     private final WaitUtils waitUtils = new WaitUtils();
 
     public LeftFilterPanel getLeftFilterPanel() {
@@ -188,18 +196,53 @@ public class LeftFilterPanelUtil extends BaseTest {
         }
     }
 
-    /** Polls for accordion headers after side nav opens — avoids blocking on Synergy 60s findElement. */
+    /** Polls for accordion headers after side nav opens — scrolls filter list when header is below fold. */
     public boolean waitForFilterHeaderVisible(String filterName, int waitSec) throws InterruptedException {
         By header = leftFilterPanel.leftFilterByName(filterName);
         long deadline = System.currentTimeMillis() + (waitSec * 1000L);
         while (System.currentTimeMillis() < deadline) {
+            scrollFilterListTowardFilter(filterName);
             if (WaitUtil.isDisplayFast(header, 1)) {
+                DriverUtil.scrollToElement(header);
                 return true;
             }
             ensureLeftFilterPanelOpen();
             Thread.sleep(500);
         }
+        scrollFilterListTowardFilter(filterName);
         return WaitUtil.isDisplayFast(header, 1);
+    }
+
+    private void scrollFilterListTowardFilter(String filterName) {
+        try {
+            String escapedName = filterName.replace("\\", "\\\\").replace("'", "\\'");
+            driver.get().browser().executeScript(
+                    "(function(){"
+                            + "var name='" + escapedName + "';"
+                            + "function findLabel(){"
+                            + "  var labels=document.querySelectorAll('msc-left-filter-panel span.accordion-label');"
+                            + "  for(var i=0;i<labels.length;i++){"
+                            + "    var t=(labels[i].textContent||'').trim();"
+                            + "    if(t===name||t.indexOf(name)>=0){return labels[i];}"
+                            + "  }"
+                            + "  return null;"
+                            + "}"
+                            + "var el=findLabel();"
+                            + "if(el){el.scrollIntoView({block:'center'});return;}"
+                            + "var scrollables=document.querySelectorAll("
+                            + "'msc-left-filter-panel .filter-list-section,"
+                            + " msc-left-filter-panel cdk-virtual-scroll-viewport,"
+                            + " msc-left-filter-panel .sideNav,"
+                            + " msc-left-filter-panel .filter-panel-body');"
+                            + "for(var s=0;s<scrollables.length;s++){"
+                            + "  var node=scrollables[s];"
+                            + "  node.scrollTop=Math.min(node.scrollTop+300,node.scrollHeight);"
+                            + "}"
+                            + "})();");
+            Thread.sleep(300);
+        } catch (Exception e) {
+            Logger.logConsoleMessage("Could not scroll filter list toward " + filterName + ": " + e.getMessage());
+        }
     }
 
     private boolean waitForFilterListSection(int waitSec) {
@@ -1144,6 +1187,396 @@ public class LeftFilterPanelUtil extends BaseTest {
         }
 
         collapseFilter(filterName);
+    }
+
+    private static final int ACTIVITY_TYPE_EXPAND_WAIT_MS = 1500;
+
+    private int activityTypeValuesPollSeconds() {
+        return Config.isLocalExecution() ? 25 : 45;
+    }
+
+    private int expandedGridWaitSeconds() {
+        return Config.isLocalExecution() ? 30 : 45;
+    }
+
+    /**
+     * TC620 for Activity Type on Orders view: Activity Type is a line-item-level column — not shown at order level.
+     * Filter option count reflects line items, not orders, so table order count is not compared to filter count.
+     * Flow: select option → verify orders returned → expand first order → verify at least one line item
+     * shows the selected activity type. {@link AutomationTableViewSetupUtil#AUTOMATION_VIEW_NAME} view
+     * (all columns) is applied in {@code LeftFilterOrdersTabBaseTest} before each test.
+     */
+    public void validateActivityTypeTableSyncSmoke(SoftAssert softAssert, String filterName) throws InterruptedException {
+        ensureLeftFilterPanelOpen();
+        if (!waitForFilterHeaderVisible(filterName, 30)) {
+            Verify.softAssert(false, filterName + " filter header not found in left panel (scroll/filter load)");
+            return;
+        }
+        expandFilter(filterName);
+        if (!isFilterExpanded(filterName)) {
+            Verify.softAssert(false, filterName + " filter could not be expanded for TC620");
+            return;
+        }
+        ensureNoOptionsSelected(filterName);
+
+        String optionLabel = resolveFirstNonZeroFilterOption(filterName);
+        if (optionLabel == null) {
+            Logger.logMessage(filterName + " has no options with count > 0 — skipping TC620 line-item validation");
+            collapseFilter(filterName);
+            return;
+        }
+
+        int filterOptionCount = getFilterOptionCount(filterName, optionLabel);
+        Verify.softAssert(filterOptionCount > 0,
+                filterName + " option '" + optionLabel + "' has count > 0 (actual=" + filterOptionCount + ")");
+        Logger.logMessage(filterName + " TC620 option='" + optionLabel + "' filterCount=" + filterOptionCount);
+
+        selectFilterOption(filterName, optionLabel);
+        waitUtils.waitForVisibilityOfElement(leftFilterPanel.tableRecordCountLabel(), DEFAULT_WAIT_SECONDS);
+        Thread.sleep(FILTER_EXPAND_WAIT_MS * 2);
+
+        int tableRecordCount = getTableRecordCount();
+        Verify.softAssert(tableRecordCount >= 0,
+                filterName + " results count is available after selecting " + optionLabel + " (actual=" + tableRecordCount + ")");
+        Verify.softAssert(tableRecordCount > 0,
+                filterName + " Orders table shows at least one order after selecting " + optionLabel
+                        + " (filter line-item count=" + filterOptionCount + ", order rows=" + tableRecordCount + ")");
+
+        Logger.logMessage("Using " + AutomationTableViewSetupUtil.AUTOMATION_VIEW_NAME
+                + " table view (all columns enabled via suite setup)");
+        boolean matchFound = expandOrdersUntilActivityTypeFound(softAssert, optionLabel);
+        Verify.softAssert(matchFound,
+                filterName + " at least one expanded order line item shows " + ManageColumnOptions.ACTIVITY_TYPE + "='"
+                        + optionLabel + "'");
+
+        collapseFilter(filterName);
+    }
+
+    private String resolveFirstNonZeroFilterOption(String filterName) throws InterruptedException {
+        for (FilterOption option : getFilterOptions(filterName)) {
+            if (option.getCount() > 0) {
+                return option.getLabel();
+            }
+        }
+        return null;
+    }
+
+    private void scrollOrdersGridToCollapseColumn() {
+        try {
+            driver.get().browser().executeScript(
+                    "var wrappers=document.querySelectorAll("
+                            + "\"app-fulfillment-main-table-container .custom-table-wrapper,"
+                            + " app-fulfillment-main-table-container .table-container,"
+                            + " msc-custom-table .custom-table-wrapper\");"
+                            + "for(var i=0;i<wrappers.length;i++){"
+                            + "  wrappers[i].scrollLeft=wrappers[i].scrollWidth;"
+                            + "}");
+            Thread.sleep(300);
+        } catch (Exception e) {
+            Logger.logConsoleMessage("Could not scroll Orders grid: " + e.getMessage());
+        }
+    }
+
+    private static final String SCROLL_EXPANDED_INNER_TABLE_FOR_ACTIVITY_TYPE_JS =
+            "function headerLabel(th){"
+                    + "return (th.getAttribute('title')||th.textContent||'').replace(/\\s+/g,' ').trim().toLowerCase();"
+                    + "}"
+                    + "function isActivityTypeHeader(th){"
+                    + "if(!th)return false;"
+                    + "if((th.className||'').indexOf('activity-type')>=0)return true;"
+                    + "return headerLabel(th)==='activity type';"
+                    + "}"
+                    + "function collectScrollables(root, out){"
+                    + "if(!root)return;"
+                    + "if(root.scrollWidth>root.clientWidth+2)out.push(root);"
+                    + "for(var i=0;i<root.children.length;i++){collectScrollables(root.children[i],out);}"
+                    + "}"
+                    + "function findVisibleHeaderRow(){"
+                    + "var rows=[].slice.call(document.querySelectorAll("
+                    + "\"table[id*='orderTable'] tr.row-horizontal-scroll\"));"
+                    + "for(var i=0;i<rows.length;i++){"
+                    + "  if(rows[i].getBoundingClientRect().height>0)return rows[i];"
+                    + "}"
+                    + "return null;"
+                    + "}"
+                    + "function findActivityTypeHeader(headerRow){"
+                    + "if(!headerRow)return null;"
+                    + "var ths=headerRow.querySelectorAll('th');"
+                    + "for(var i=0;i<ths.length;i++){if(isActivityTypeHeader(ths[i]))return ths[i];}"
+                    + "return null;"
+                    + "}"
+                    + "var headerRow=findVisibleHeaderRow();"
+                    + "if(!headerRow){return false;}"
+                    + "var scrollables=[];"
+                    + "collectScrollables(headerRow,scrollables);"
+                    + "var wrapper=headerRow.closest('.inner-table-wrapper');"
+                    + "if(wrapper){collectScrollables(wrapper,scrollables);}"
+                    + "var header=null;"
+                    + "for(var step=0;step<24&&!header;step++){"
+                    + "  header=findActivityTypeHeader(headerRow);"
+                    + "  if(header&&header.getBoundingClientRect().width>0){break;}"
+                    + "  header=null;"
+                    + "  for(var s=0;s<scrollables.length;s++){"
+                    + "    var el=scrollables[s];"
+                    + "    el.scrollLeft=Math.min(el.scrollLeft+250,el.scrollWidth-el.clientWidth);"
+                    + "    el.dispatchEvent(new Event('scroll',{bubbles:true}));"
+                    + "  }"
+                    + "}"
+                    + "for(var s=0;s<scrollables.length;s++){"
+                    + "  var el=scrollables[s];"
+                    + "  el.scrollLeft=el.scrollWidth-el.clientWidth;"
+                    + "  el.dispatchEvent(new Event('scroll',{bubbles:true}));"
+                    + "}"
+                    + "header=findActivityTypeHeader(headerRow);"
+                    + "if(header){header.scrollIntoView({block:'nearest',inline:'center'});return true;}"
+                    + "return false;";
+
+    private void scrollExpandedInnerTableForActivityType() {
+        try {
+            driver.get().browser().executeScript(SCROLL_EXPANDED_INNER_TABLE_FOR_ACTIVITY_TYPE_JS);
+            Thread.sleep(600);
+        } catch (Exception e) {
+            Logger.logConsoleMessage("Could not scroll expanded order line-item row: " + e.getMessage());
+        }
+    }
+
+    private static final int MAX_ORDERS_TO_EXPAND = 3;
+
+    /**
+     * Expands up to three visible orders — filter matches orders that contain
+     * at least one matching line item, which may not be the first row.
+     */
+    private boolean expandOrdersUntilActivityTypeFound(SoftAssert softAssert, String optionLabel)
+            throws InterruptedException {
+        String optionLower = optionLabel.toLowerCase(Locale.ROOT);
+        int visibleRows = countVisibleOrderRows();
+        int rowsToTry = Math.min(MAX_ORDERS_TO_EXPAND, Math.max(visibleRows, 1));
+        Logger.logMessage("TC620 scanning up to " + rowsToTry + " order row(s) (visible=" + visibleRows + ")");
+
+        for (int row = 1; row <= rowsToTry; row++) {
+            collapseExpandedOrders();
+            if (!expandOrderRow(softAssert, row)) {
+                Logger.logMessage("Could not expand order row " + row + " — stopping scan");
+                break;
+            }
+            if (!waitForOrderRowExpanded(row, expandedGridWaitSeconds())) {
+                Logger.logMessage("Order row " + row + " did not show expanded line-item grid");
+                continue;
+            }
+
+            List<String> activityTypeValues = waitForExpandedLineItemActivityTypeValues(
+                    activityTypeValuesPollSeconds());
+            Logger.logMessage("Order row " + row + " line-item Activity Type values: " + activityTypeValues);
+
+            if (activityTypeValues.isEmpty()) {
+                continue;
+            }
+
+            Verify.softAssert(WaitUtil.isDisplayFast(ordersMainTablePage.lineItemActivityTypeColumnHeader(), 5),
+                    ManageColumnOptions.ACTIVITY_TYPE + " column header visible in expanded order line-item table (row " + row + ")");
+
+            boolean match = activityTypeValues.stream()
+                    .anyMatch(value -> value.toLowerCase(Locale.ROOT).contains(optionLower));
+            if (match) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private int countVisibleOrderRows() {
+        try {
+            driver.get().options().setElementTimeout(QUICK_ELEMENT_TIMEOUT_MS);
+            return driver.get().finder().findElements(
+                    By.XPath("//table[contains(@id,'orderTable')]//tbody//tr"
+                            + "[(contains(@class,'row') or contains(@class,'clickable-row'))"
+                            + " and not(contains(@class,'inner'))]")).size();
+        } catch (Exception e) {
+            Logger.logConsoleMessage("Could not count visible order rows: " + e.getMessage());
+            return MAX_ORDERS_TO_EXPAND;
+        } finally {
+            try {
+                driver.get().options().setElementTimeout(
+                        com.paramount.test.ff.common.driver.LocalCapabilityFactory.DEFAULT_ELEMENT_TIMEOUT);
+            } catch (Exception ignored) {
+                // session may be closing
+            }
+        }
+    }
+
+    private boolean expandOrderRow(SoftAssert softAssert, int rowIndexOneBased) throws InterruptedException {
+        By expandControl = ordersMainTablePage.orderRowExpandChevron(rowIndexOneBased);
+        scrollOrdersGridToCollapseColumn();
+        if (!WaitUtil.isDisplayFast(expandControl, 5)) {
+            if (!clickExpandViaScript(rowIndexOneBased)) {
+                return false;
+            }
+        } else {
+            DriverUtil.scrollToElement(expandControl);
+            if (!DriverUtil.clickOnElement(expandControl, DEFAULT_WAIT_SECONDS)) {
+                if (!clickExpandViaScript(rowIndexOneBased)) {
+                    return false;
+                }
+            }
+        }
+        Thread.sleep(Config.isLocalExecution() ? ACTIVITY_TYPE_EXPAND_WAIT_MS : ACTIVITY_TYPE_EXPAND_WAIT_MS * 2);
+        return waitForOrderRowExpanded(rowIndexOneBased, 8);
+    }
+
+    private boolean waitForOrderRowExpanded(int rowIndexOneBased, int timeoutSeconds) throws InterruptedException {
+        long deadline = System.currentTimeMillis() + (timeoutSeconds * 1000L);
+        By expandedChevron = ordersMainTablePage.orderRowExpandedChevronDown(rowIndexOneBased);
+        while (System.currentTimeMillis() < deadline) {
+            if (WaitUtil.isDisplayFast(expandedChevron, 1)
+                    || WaitUtil.isDisplayFast(ordersMainTablePage.expandedInnerTableMarker(), 1)) {
+                return true;
+            }
+            Thread.sleep(400);
+        }
+        return WaitUtil.isDisplayFast(expandedChevron, 1)
+                || WaitUtil.isDisplayFast(ordersMainTablePage.expandedInnerTableMarker(), 1);
+    }
+
+    private boolean clickExpandViaScript(int rowIndexOneBased) {
+        try {
+            Object result = driver.get().browser().executeScript(
+                    "var idx=" + (rowIndexOneBased - 1) + ";"
+                            + "var rows=[].slice.call(document.querySelectorAll("
+                            + "\"table[id*='orderTable'] tbody tr\")).filter(function(tr){"
+                            + "  return !tr.className.match(/\\binner\\b/)"
+                            + "    && (tr.className.match(/\\brow\\b/) || tr.className.match(/clickable-row/));"
+                            + "});"
+                            + "var row=rows[idx];"
+                            + "if(!row){return false;}"
+                            + "row.scrollIntoView({block:'center'});"
+                            + "var chevron=row.querySelector("
+                            + "\"td[class*='collapse'] i.bi-chevron-right, td[class*='collapse'] i.bi-chevron-down\");"
+                            + "if(chevron){chevron.click();return true;}"
+                            + "var cell=row.querySelector(\"td[class*='collapse'], td[class*='collapse-all']\");"
+                            + "if(cell){cell.click();return true;}"
+                            + "return false;");
+            return Boolean.TRUE.equals(result) || "true".equals(String.valueOf(result));
+        } catch (Exception e) {
+            Logger.logConsoleMessage("JS expand failed for row " + rowIndexOneBased + ": " + e.getMessage());
+            return false;
+        }
+    }
+
+    private void collapseExpandedOrders() {
+        try {
+            driver.get().browser().executeScript(
+                    "document.querySelectorAll("
+                            + "\"table[id*='orderTable'] tbody tr.row i.bi-chevron-down\""
+                            + ").forEach(function(el){el.click();});");
+            Thread.sleep(300);
+        } catch (Exception ignored) {
+            // best effort
+        }
+    }
+
+    private List<String> waitForExpandedLineItemActivityTypeValues(int timeoutSeconds) throws InterruptedException {
+        long deadline = System.currentTimeMillis() + (timeoutSeconds * 1000L);
+        while (System.currentTimeMillis() < deadline) {
+            scrollExpandedInnerTableForActivityType();
+            List<String> values = getExpandedLineItemActivityTypeValues();
+            if (!values.isEmpty()) {
+                return values;
+            }
+            Thread.sleep(500);
+        }
+        scrollExpandedInnerTableForActivityType();
+        return getExpandedLineItemActivityTypeValues();
+    }
+
+    private List<String> getExpandedLineItemActivityTypeValues() {
+        List<String> values = readExpandedActivityTypeValuesViaScript();
+        if (!values.isEmpty()) {
+            return values;
+        }
+        try {
+            List<DesktopBrowserElement> cells = driver.get().finder()
+                    .findElements(ordersMainTablePage.expandedLineItemActivityTypeCells());
+            for (DesktopBrowserElement cell : cells) {
+                String text = cell.getText().trim();
+                if (!text.isEmpty()) {
+                    values.add(text);
+                }
+            }
+        } catch (Exception e) {
+            Logger.logConsoleMessage("Could not read expanded line-item Activity Type values: " + e.getMessage());
+        }
+        return values;
+    }
+
+    private List<String> readExpandedActivityTypeValuesViaScript() {
+        List<String> values = new ArrayList<>();
+        try {
+            Object result = driver.get().browser().executeScript(
+                    "function cellText(td){"
+                            + "var inner=td.querySelector('.default-cell');"
+                            + "return ((inner||td).textContent||'').replace(/\\s+/g,' ').trim();"
+                            + "}"
+                            + "function headerLabel(th){"
+                            + "return (th.getAttribute('title')||th.textContent||'').replace(/\\s+/g,' ').trim().toLowerCase();"
+                            + "}"
+                            + "function isActivityTypeHeader(th){"
+                            + "if(!th)return false;"
+                            + "if((th.className||'').indexOf('activity-type')>=0)return true;"
+                            + "return headerLabel(th)==='activity type';"
+                            + "}"
+                            + "function findVisibleHeaderRow(){"
+                            + "var rows=[].slice.call(document.querySelectorAll("
+                            + "\"table[id*='orderTable'] tr.row-horizontal-scroll\"));"
+                            + "for(var i=0;i<rows.length;i++){"
+                            + "  if(rows[i].getBoundingClientRect().height>0)return rows[i];"
+                            + "}"
+                            + "return null;"
+                            + "}"
+                            + "var values=[];"
+                            + "var headerRow=findVisibleHeaderRow();"
+                            + "if(!headerRow){return values;}"
+                            + "var headers=[].slice.call(headerRow.querySelectorAll('th'));"
+                            + "var colIdx=-1;"
+                            + "for(var h=0;h<headers.length;h++){"
+                            + "  if(isActivityTypeHeader(headers[h])){colIdx=h;break;}"
+                            + "}"
+                            + "if(colIdx<0){"
+                            + "  [].slice.call(document.querySelectorAll("
+                            + "    \"table[id*='orderTable'] tr.row-horizontal-scroll td[class*='activity-type'] .default-cell,"
+                            + "    table[id*='orderTable'] tr.inner td[class*='activity-type'] .default-cell,"
+                            + "    table[id*='orderTable'] .inner-table-wrapper td[class*='activity-type'] .default-cell\""
+                            + "  )).forEach(function(el){"
+                            + "    var t=(el.textContent||'').replace(/\\s+/g,' ').trim();"
+                            + "    if(t){values.push(t);}"
+                            + "  });"
+                            + "  return values;"
+                            + "}"
+                            + "var tr=headerRow.nextElementSibling;"
+                            + "while(tr&&tr.classList.contains('inner')){"
+                            + "  if(tr.getBoundingClientRect().height>0){"
+                            + "    var tds=tr.querySelectorAll('td');"
+                            + "    if(tds[colIdx]){"
+                            + "      var text=cellText(tds[colIdx]);"
+                            + "      if(text){values.push(text);}"
+                            + "    }"
+                            + "  }"
+                            + "  tr=tr.nextElementSibling;"
+                            + "}"
+                            + "return values;");
+            if (result instanceof List) {
+                for (Object item : (List<?>) result) {
+                    if (item != null) {
+                        String text = String.valueOf(item).trim();
+                        if (!text.isEmpty()) {
+                            values.add(text);
+                        }
+                    }
+                }
+            }
+        } catch (Exception e) {
+            Logger.logConsoleMessage("JS Activity Type read failed: " + e.getMessage());
+        }
+        return values;
     }
 
     private void ensureNoOptionsSelected(String filterName) throws InterruptedException {

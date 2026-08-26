@@ -12,6 +12,8 @@ public final class LeftFilterSessionHelper {
     private static volatile boolean loggedIn;
     private static volatile boolean sharedSessionEnabled;
     private static volatile boolean calendarSetToYesterday;
+    private static volatile boolean aAutomationViewReadyOrders;
+    private static volatile boolean aAutomationViewReadyLineItems;
 
     private LeftFilterSessionHelper() {
     }
@@ -44,10 +46,24 @@ public final class LeftFilterSessionHelper {
         calendarSetToYesterday = false;
     }
 
+    public static boolean isAAutomationViewReady(ConsoleTab tab) {
+        return tab == ConsoleTab.ORDERS ? aAutomationViewReadyOrders : aAutomationViewReadyLineItems;
+    }
+
+    public static void markAAutomationViewReady(ConsoleTab tab) {
+        if (tab == ConsoleTab.ORDERS) {
+            aAutomationViewReadyOrders = true;
+        } else {
+            aAutomationViewReadyLineItems = true;
+        }
+    }
+
     public static void reset() {
         loggedIn = false;
         sharedSessionEnabled = false;
         calendarSetToYesterday = false;
+        aAutomationViewReadyOrders = false;
+        aAutomationViewReadyLineItems = false;
     }
 
     public static void stopSharedDriver() {
