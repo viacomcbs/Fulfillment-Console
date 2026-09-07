@@ -1,0 +1,5 @@
+<!-- Add inside maven-surefire-plugin <configuration><properties> -->
+<property>
+    <name>listener</name>
+    <value>com.paramount.test.ff.common.listeners.AllureListeners,com.paramount.test.ff.common.listeners.SuiteListeners,com.paramount.test.ff.common.listeners.LeftFilterSuiteListener</value>
+</property>

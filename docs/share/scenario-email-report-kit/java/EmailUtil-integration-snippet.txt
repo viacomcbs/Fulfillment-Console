@@ -1,0 +1,25 @@
+// --- Add import ---
+import com.yourteam.test.helpers.email.LeftFilterEmailReport;  // adjust package
+
+// --- In sendResultEmail(), summary counts (add before generic pass/fail/skip) ---
+} else if (LeftFilterEmailReport.isEnabled()) {
+    summaryPass = LeftFilterEmailReport.getPassedCount();
+    summaryFail = LeftFilterEmailReport.getFailedCount();
+    summarySkip = LeftFilterEmailReport.getSkippedCount();
+}
+
+// --- Email subject (optional) ---
+} else if (LeftFilterEmailReport.isEnabled()) {
+    subject = applicationTitle + " — Test Scenarios: " + appEnv
+            + (summaryFail == 0 ? " - Passed" : " - Failed");
+}
+
+// --- HTML body section ---
+} else if (LeftFilterEmailReport.isEnabled()) {
+    scenarioSection = LeftFilterEmailReport.buildHtmlSection();
+}
+
+// --- Before send, capture Synergy session (optional) ---
+} else if (LeftFilterEmailReport.isEnabled()) {
+    LeftFilterEmailReport.captureSynergySessionId();
+}

@@ -46,7 +46,7 @@ public final class OrdersDataRecoveryHelper extends BaseTest {
             return true;
         }
 
-        if (isOrdersGridEmpty(panelUtil, orderStatusFilter)) {
+        if (isOrdersGridEmpty(panelUtil)) {
             Logger.logMessage("Orders recovery needed — no records / filter options loaded");
             return true;
         }
@@ -63,23 +63,18 @@ public final class OrdersDataRecoveryHelper extends BaseTest {
         LeftFilterSessionHelper.markCalendarSetToYesterday();
         LeftFilterPanelUtil panelUtil = new LeftFilterPanelUtil();
         panelUtil.ensureLeftFilterPanelOpen();
-        panelUtil.waitForFilterHeaderVisible(OrdersLeftFilter.ORDER_STATUS.getDisplayName(), 30);
+        panelUtil.waitForFilterHeaderVisible(OrdersLeftFilter.ACTIVITY_TYPE.getDisplayName(), 30);
         Logger.logReportMessage("Orders page recovery complete after hard refresh");
     }
 
-    private boolean isOrdersGridEmpty(LeftFilterPanelUtil panelUtil, String orderStatusFilter)
-            throws InterruptedException {
+    private boolean isOrdersGridEmpty(LeftFilterPanelUtil panelUtil) {
         int tableCount = panelUtil.getTableRecordCount();
         if (tableCount < 0) {
+            Logger.logMessage("Orders recovery — table record count label not available");
             return true;
         }
-
-        panelUtil.expandFilter(orderStatusFilter);
-        boolean hasOptions = panelUtil.hasFilterOptions(orderStatusFilter);
-        if (panelUtil.isFilterExpanded(orderStatusFilter)) {
-            panelUtil.collapseFilter(orderStatusFilter);
-        }
-
-        return tableCount == 0 && !hasOptions;
+        // Do not expand Order Status (or any filter) during recovery — TC620 and others only need
+        // their target filter expanded. Zero rows with a valid count label is acceptable.
+        return false;
     }
 }

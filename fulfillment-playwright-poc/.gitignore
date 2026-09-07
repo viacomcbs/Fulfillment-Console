@@ -1,0 +1,9 @@
+# PoC — do not commit secrets
+.env
+auth/
+.venv/
+__pycache__/
+.pytest_cache/
+allure-results/
+test-results/
+playwright-report/

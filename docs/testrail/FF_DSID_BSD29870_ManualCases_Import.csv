@@ -1,0 +1,18 @@
+Title,Section,Template,Type,Priority,References,Automation Type,Automation ID,Preconditions,Steps,Expected Result
+FF_DSID_001 — Orders: At least one MetadataOnlyDelivery order shows DSID in grid,Fulfillment Console > BSD-29870 > Orders > DSID,Test Case (Text),Functional,1 - Critical,BSD-29870,Java TestNG,com.paramount.test.ff.uitests.tests.tablevalidation.dsid.FF_DSID_O_001_ValidateAtLeastOneOrderShowsDsid#validateAtLeastOneOrderShowsDsid,"PROD Fulfillment Console; calendar = Today (default); Job type = MetadataOnlyDelivery; Partner = PP YT FSP UK","1. Log in to Fulfillment Console
+2. Set Today as the default date range
+3. Left filter → Job type → MetadataOnlyDelivery
+4. Left filter → Partner → PP YT FSP UK
+5. Open Table View (Manage columns) on Orders tab
+6. Enable DSID column and apply/save
+7. Starting from the first order row, check the DSID column; if blank, check the next rows","At least one order row displays a populated DSID value in the Orders grid"
+FF_DSID_002 — Orders: Table DSID matches last DSID in Details panel,Fulfillment Console > BSD-29870 > Orders > DSID,Test Case (Text),Functional,1 - Critical,BSD-29870,Java TestNG,com.paramount.test.ff.uitests.tests.tablevalidation.dsid.FF_DSID_O_002_ValidateTableDsidMatchesDetailsPanelLastDsid#validateTableDsidMatchesDetailsPanelLastDsid,"Same as FF_DSID_001; at least one order with DSID visible in grid","1. From FF_DSID_001, click the order row that shows DSID
+2. Open the Details panel (Details button if not auto-opened)
+3. Locate DSID in the Details panel (multiple DSID values may be listed)
+4. Compare the table DSID with the last DSID shown in the Details panel","The DSID value in the Orders grid matches the last DSID value displayed in the Details panel"
+FF_DSID_003 — Line Items: Table DSID matches last DSID in Details panel,Fulfillment Console > BSD-29870 > Line Items > DSID,Test Case (Text),Functional,1 - Critical,BSD-29870,Java TestNG,com.paramount.test.ff.uitests.tests.tablevalidation.dsid.FF_DSID_LI_001_ValidateLineItemsDsidTableMatchesDetails#validateLineItemsDsidTableMatchesDetails,"PROD; Today default; Job type = MetadataOnlyDelivery; Partner = PP YT FSP UK","1. Switch to Line Items tab
+2. Apply Job type = MetadataOnlyDelivery and Partner = PP YT FSP UK
+3. Open Table View and enable DSID column
+4. Find at least one line item row with populated DSID (skip blank rows)
+5. Open Details panel for that row
+6. Compare grid DSID with the last DSID in Details panel","Line Items grid DSID matches the last DSID value in the Details panel"

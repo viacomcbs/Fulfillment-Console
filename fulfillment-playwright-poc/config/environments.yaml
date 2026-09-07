@@ -1,0 +1,8 @@
+# Fulfillment Console target URLs (mirrors TestNG suite XML params)
+environments:
+  DEV: https://dev-operationsconsole.paramountmsc.com/fulfillment/
+  UAT: https://uat-operationsconsole.paramountmsc.com/fulfillment/
+  PROD: https://operationsconsole.paramountmsc.com/fulfillment/
+
+default_timeout_ms: 60000
+filter_expand_wait_ms: 2000

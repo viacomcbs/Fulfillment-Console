@@ -1,0 +1,10 @@
+Admin Console - Add Gating to Ops Console Landing Page,,,,,,,,,
+Application ,Admin,Edit,Read ,No access,,,,,
+Media Ingest Console,Pass,Pass,BSD-30090,Pass,,,,,
+Fulfillment,Pass,Pass,BSD-30087,Pass,,,,,
+Library Manager,Pass,Pass,BSD-30091,Pass,,,,,
+C3 linear Monitoring,Pending ,Pass,Pending ,BSD-30098,,,,,
+Partner Console,Pass,Pass,Pass,Pass,,,,,
+MTS,BSD-30089,BSD-30089,BSD-30089,BSD-30089,,,,,Not available in Admin console
+Order Orchestrator,Pass,Pass,BSD-30099,Pass,,,,,Admin access required
+Media Ingest Portal,BSD-30092,BSD-30092,BSD-30092,Pass,,,,,

@@ -1,0 +1,30 @@
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<!-- Left-filter regression suite — scenario email report example.
+     Maven: mvn test "-DsuiteXmlFile=src/test/resources/regression/left-filters/orders-view/LF_O_OrderStatus_All_ProdServerSuite.xml" -->
+<suite name="LF_O OrderStatus All PROD Server" parallel="false" preserve-order="true">
+
+    <parameter name="SendReportAutoEmails" value="true"/>
+    <parameter name="SendReportEmailAddress" value="your.name@paramount.com"/>
+
+    <!-- Scenario table title in email (optional; defaults to suite name) -->
+    <parameter name="LeftFilterEmailSuiteTitle" value="Orders Tab — Order Status all per-filter tests (PROD)"/>
+
+    <!-- Scenario report is ON globally; set false to disable for this suite -->
+    <!-- <parameter name="LeftFilterEmailReport" value="false"/> -->
+
+    <parameter name="ApplicationTitle" value="Fulfillment Console"/>
+    <parameter name="TestEnvironment" value="PROD"/>
+    <parameter name="LocalExecution" value="false"/>
+
+    <listeners>
+        <listener class-name="com.paramount.test.ff.common.listeners.AllureListeners"/>
+        <listener class-name="com.paramount.test.ff.common.listeners.SuiteListeners"/>
+        <listener class-name="com.paramount.test.ff.common.listeners.LeftFilterSuiteListener"/>
+    </listeners>
+
+    <test name="Order Status per-filter" preserve-order="true">
+        <classes>
+            <!-- Example: LF_O_TC601_OrderStatus_TableSyncTest, LF_O_TC401_OrderStatus_SelectAllTest, ... -->
+        </classes>
+    </test>
+</suite>

@@ -1,0 +1,28 @@
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<!-- FF Login only — Playwright Python PoC (service account, no Okta push).
+     IntelliJ: Run configuration "FF Login Service Account (Playwright)"
+     Terminal:  pytest tests/test_login_service_account.py -headed -s
+     Credentials mirror TR_TableRefresh_All_ProdServerSuite.xml (Synergy server mode). -->
+<suite name="FF Login PROD Server Playwright PoC" parallel="false" preserve-order="true">
+
+    <parameter name="Application" value="Fulfillment Console"/>
+    <parameter name="TestEnvironment" value="PROD"/>
+    <parameter name="LoginMode" value="server"/>
+    <parameter name="LocalExecution" value="false"/>
+
+    <parameter name="TargetUrlDEV" value="https://dev-operationsconsole.paramountmsc.com/fulfillment/"/>
+    <parameter name="TargetUrlUAT" value="https://uat-operationsconsole.paramountmsc.com/fulfillment/"/>
+    <parameter name="TargetUrlPROD" value="https://operationsconsole.paramountmsc.com/fulfillment/"/>
+
+    <parameter name="Username" value="mscbsdqasvc@msc.cbs.net"/>
+    <parameter name="Password" value="dtZHl)5C?;?Z;8R=YDm84$YV"/>
+
+    <parameter name="Headless" value="false"/>
+    <parameter name="PageLoadWaitTime" value="120"/>
+
+    <test verbose="1" name="Login — Service account PROD (no Okta push)" preserve-order="true">
+        <classes>
+            <class name="tests.test_login_service_account"/>
+        </classes>
+    </test>
+</suite>

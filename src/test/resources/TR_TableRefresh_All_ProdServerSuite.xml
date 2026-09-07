@@ -1,0 +1,71 @@
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<!-- BSD-29582 Table Header Refresh — Orders + Line Items (PROD, Synergy server).
+     Maven: mvn test "-DsuiteXmlFile=src/test/resources/TR_TableRefresh_All_ProdServerSuite.xml"
+     UAT: use TR_TableRefresh_All_UATServerSuite.xml -->
+<suite name="TR Table Header Refresh BSD-29582 PROD Server" parallel="false" preserve-order="true">
+
+    <parameter name="RunAsFactory" value="false"/>
+    <parameter name="Browser" value="Chrome"/>
+    <parameter name="OS" value="Windows"/>
+    <parameter name="OSVersion" value="11"/>
+    <parameter name="DeviceCategory" value="Desktop"/>
+    <parameter name="TestType" value="Regression"/>
+    <parameter name="GuiType" value="Web"/>
+    <parameter name="SendReportAutoEmails" value="true"/>
+    <parameter name="SendReportEmailAddress" value="Akilandeswari.Sundararajan@paramount.com"/>
+    <parameter name="SendChatReport" value="false"/>
+
+    <parameter name="LeftFilterEmailReport" value="true"/>
+    <parameter name="LeftFilterEmailSuiteTitle" value="BSD-29582 Table Header Refresh — Orders + Line Items (PROD)"/>
+
+    <parameter name="Application" value="Fulfillment Console"/>
+    <parameter name="ApplicationTitle" value="Fulfillment Console"/>
+    <parameter name="TestEnvironment" value="PROD"/>
+
+    <parameter name="LabUrl" value="https://www.synergyserver.tech"/>
+    <parameter name="UserKey" value="af27f06e-2e7e-4c8d-9312-2320423e4641"/>
+    <parameter name="LocalURL" value="http://localhost:39445/synergy"/>
+    <parameter name="LocalExecution" value="false"/>
+    <parameter name="ClientID" value="5CG23257SH"/>
+
+    <parameter name="TargetUrlDEV" value="https://dev-operationsconsole.paramountmsc.com/fulfillment/"/>
+    <parameter name="TargetUrlUAT" value="https://uat-operationsconsole.paramountmsc.com/fulfillment/"/>
+    <parameter name="TargetUrlPROD" value="https://operationsconsole.paramountmsc.com/fulfillment/"/>
+
+    <parameter name="Username" value="mscbsdqasvc@msc.cbs.net"/>
+    <parameter name="Password" value="dtZHl)5C?;?Z;8R=YDm84$YV"/>
+
+    <parameter name="PathToElements" value="/src/test/resources/elements/"/>
+    <parameter name="PathToReports" value="/test-output/reports/"/>
+    <parameter name="PathToAllureResults" value="/Testreports/"/>
+    <parameter name="PageLoadWaitTime" value="120"/>
+    <parameter name="sendExecutionReport" value="true"/>
+    <parameter name="authenticationReqd" value="true"/>
+    <parameter name="recipientAddress" value="Akilandeswari.Sundararajan@paramount.com"/>
+    <parameter name="senderAddress" value="mqe.automation@viacomcontractor.com"/>
+    <parameter name="EmailRelayHost" value="imailrelay.viacom.com"/>
+    <parameter name="EmailRelayPort" value="25"/>
+    <parameter name="EmailSenderAddress" value="NOREPLY@dteqa.com"/>
+
+    <listeners>
+        <listener class-name="com.paramount.test.ff.common.listeners.AllureListeners"/>
+        <listener class-name="com.paramount.test.ff.common.listeners.SuiteListeners"/>
+        <listener class-name="com.paramount.test.ff.common.listeners.LeftFilterSuiteListener"/>
+    </listeners>
+
+    <test verbose="1" name="Orders Tab — Table Refresh (PROD)" preserve-order="true">
+        <classes>
+            <class name="com.paramount.test.ff.uitests.tests.tablerefresh.orders.TR_O_001_ValidateRefreshButtonVisible"/>
+            <class name="com.paramount.test.ff.uitests.tests.tablerefresh.orders.TR_O_002_ValidateRefreshCallsFilterOrderApi"/>
+            <class name="com.paramount.test.ff.uitests.tests.tablerefresh.orders.TR_O_003_ValidateRefreshNoDuplicateRows"/>
+        </classes>
+    </test>
+
+    <test verbose="1" name="Line Items Tab — Table Refresh (PROD)" preserve-order="true">
+        <classes>
+            <class name="com.paramount.test.ff.uitests.tests.tablerefresh.lineitems.TR_LI_001_ValidateRefreshButtonVisible"/>
+            <class name="com.paramount.test.ff.uitests.tests.tablerefresh.lineitems.TR_LI_002_ValidateRefreshCallsLineItemViewLandingApi"/>
+            <class name="com.paramount.test.ff.uitests.tests.tablerefresh.lineitems.TR_LI_003_ValidateRefreshNoDuplicateRows"/>
+        </classes>
+    </test>
+</suite>

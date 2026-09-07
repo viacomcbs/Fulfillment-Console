@@ -5,7 +5,7 @@ import com.paramount.test.ff.uitests.helpers.leftfilters.ConsoleTab;
 import com.paramount.test.ff.uitests.helpers.leftfilters.LeftFilterPerFilterTestRunner;
 import com.paramount.test.ff.uitests.helpers.leftfilters.LeftFilterTestCategory;
 import com.paramount.test.ff.uitests.helpers.leftfilters.OrdersLeftFilter;
-import com.paramount.test.ff.uitests.tests.leftfiltersvalidation.orders.LeftFilterOrdersTabBaseTest;
+
 import io.qameta.allure.Description;
 import org.testng.annotations.Test;
 
@@ -13,7 +13,7 @@ import org.testng.annotations.Test;
  * TC801 — Order Status virtual scroll.
  * Run with {@code LF_O_TC801_OrderStatus_Scroll_DevServerSuite.xml} (TestEnvironment=DEV).
  */
-public class LF_O_TC801_OrderStatus_ScrollTest extends LeftFilterOrdersTabBaseTest {
+public class LF_O_TC801_OrderStatus_ScrollTest extends LeftFilterOrderStatusOrdersTabBaseTest {
 
     private static final String FILTER = OrdersLeftFilter.ORDER_STATUS.getDisplayName();
     private static final int FILTER_INDEX = 1;

@@ -1,0 +1,30 @@
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<!-- FF Home smoke — Playwright Python PoC (personal login, local, session saved).
+     First run: Okta Verify push on your phone, then session saved to auth/.
+     Next runs: reuse saved session until Okta expires.
+     IntelliJ: Run "FF Home Personal (Playwright)"
+     Terminal: pytest tests/test_home_page_personal.py -headed -s -v -->
+<suite name="FF Home Personal Local Playwright PoC" parallel="false" preserve-order="true">
+
+    <parameter name="Application" value="Fulfillment Console"/>
+    <parameter name="TestEnvironment" value="PROD"/>
+    <parameter name="LoginMode" value="local"/>
+    <parameter name="LocalExecution" value="true"/>
+
+    <parameter name="TargetUrlDEV" value="https://dev-operationsconsole.paramountmsc.com/fulfillment/"/>
+    <parameter name="TargetUrlUAT" value="https://uat-operationsconsole.paramountmsc.com/fulfillment/"/>
+    <parameter name="TargetUrlPROD" value="https://operationsconsole.paramountmsc.com/fulfillment/"/>
+
+    <parameter name="Username" value="Akilandeswari.Sundararajan@paramount.com"/>
+    <parameter name="Password" value="Powerautomate@1103"/>
+
+    <parameter name="Headless" value="false"/>
+    <parameter name="PageLoadWaitTime" value="120"/>
+    <parameter name="StorageStatePath" value="auth/ff_prod_personal_state.json"/>
+
+    <test verbose="1" name="Home — Fulfillment Console shell visible after login" preserve-order="true">
+        <classes>
+            <class name="tests.test_home_page_personal"/>
+        </classes>
+    </test>
+</suite>

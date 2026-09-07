@@ -1,0 +1,25 @@
+Title,Section,Template,Type,Priority,References,Automation Type,Automation ID,Preconditions,Steps,Expected Result
+FF_TR_001 — Orders: Refresh table button visible near Export,Fulfillment Console > BSD-29582 > Table Header Refresh > Orders,Test Case (Text),Functional,1 - Critical,BSD-29582,Java TestNG,com.paramount.test.ff.uitests.tests.tablerefresh.orders.TR_O_001_ValidateRefreshButtonVisible#validateRefreshButtonVisible,"PROD Fulfillment Console; user logged in; Orders tab active; grid loaded","1. Log in to Fulfillment Console
+2. Confirm Orders tab is active and table data is loaded
+3. Locate the table toolbar above the grid (button-section with Export)
+4. Observe the Refresh table button next to Export","Refresh table button with refresh icon and label 'Refresh table' is visible in the table toolbar next to the Export button"
+FF_TR_002 — Orders: Click Refresh table calls filterOrder API,Fulfillment Console > BSD-29582 > Table Header Refresh > Orders,Test Case (Text),Functional,1 - Critical,BSD-29582,Java TestNG,com.paramount.test.ff.uitests.tests.tablerefresh.orders.TR_O_002_ValidateRefreshCallsFilterOrderApi#validateRefreshCallsFilterOrderApi,"PROD Fulfillment Console; Orders tab active; network tab or dev tools available","1. Open Orders tab with data loaded
+2. Open browser network / GraphQL monitor
+3. Click the Refresh table button
+4. Inspect network requests","filterOrder GraphQL/API request is triggered and completes successfully; Orders grid refreshes"
+FF_TR_003 — Orders: Refresh table does not duplicate table rows,Fulfillment Console > BSD-29582 > Table Header Refresh > Orders,Test Case (Text),Functional,1 - Critical,BSD-29582,Java TestNG,com.paramount.test.ff.uitests.tests.tablerefresh.orders.TR_O_003_ValidateRefreshNoDuplicateRows#validateRefreshNoDuplicateRows,"PROD Fulfillment Console; Orders tab with multiple rows visible","1. Note total results count and first-page row identifiers on Orders tab
+2. Click Refresh table once and wait for grid to settle
+3. Click Refresh table again (or trigger while live update may occur)
+4. Compare total count and row identifiers","Total results count does not double; no duplicate Order ID rows appear in the grid"
+FF_TR_004 — Line Items: Refresh table button visible near Export,Fulfillment Console > BSD-29582 > Table Header Refresh > Line Items,Test Case (Text),Functional,1 - Critical,BSD-29582,Java TestNG,com.paramount.test.ff.uitests.tests.tablerefresh.lineitems.TR_LI_001_ValidateRefreshButtonVisible#validateRefreshButtonVisible,"PROD Fulfillment Console; Line Items tab active; grid loaded","1. Log in to Fulfillment Console
+2. Switch to Line Items tab and wait for data to load
+3. Locate the table toolbar above the grid (button-section with Export)
+4. Observe the Refresh table button next to Export","Refresh table button with refresh icon and label 'Refresh table' is visible next to Export on Line Items tab"
+FF_TR_005 — Line Items: Click Refresh table calls LineItemViewLanding API,Fulfillment Console > BSD-29582 > Table Header Refresh > Line Items,Test Case (Text),Functional,1 - Critical,BSD-29582,Java TestNG,com.paramount.test.ff.uitests.tests.tablerefresh.lineitems.TR_LI_002_ValidateRefreshCallsLineItemViewLandingApi#validateRefreshCallsLineItemViewLandingApi,"PROD Fulfillment Console; Line Items tab active","1. Open Line Items tab with data loaded
+2. Monitor network / GraphQL traffic
+3. Click Refresh table button
+4. Inspect requests","LineItemViewLanding GraphQL/API request is triggered and completes successfully; Line Items grid refreshes"
+FF_TR_006 — Line Items: Refresh table does not duplicate table rows,Fulfillment Console > BSD-29582 > Table Header Refresh > Line Items,Test Case (Text),Functional,1 - Critical,BSD-29582,Java TestNG,com.paramount.test.ff.uitests.tests.tablerefresh.lineitems.TR_LI_003_ValidateRefreshNoDuplicateRows#validateRefreshNoDuplicateRows,"PROD Fulfillment Console; Line Items tab with multiple rows visible","1. Note total results count and first-page row identifiers on Line Items tab
+2. Click Refresh table once and wait for grid to settle
+3. Click Refresh table again
+4. Compare total count and row identifiers","Total results count does not double; no duplicate line item rows appear in the grid"

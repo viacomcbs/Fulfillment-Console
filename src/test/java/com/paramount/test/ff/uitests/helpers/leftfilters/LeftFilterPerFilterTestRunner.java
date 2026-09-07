@@ -83,9 +83,11 @@ public final class LeftFilterPerFilterTestRunner {
             return;
         }
         panelUtil.expandFilter(filterName);
-        List<String> labels = panelUtil.getFilterOptionLabels(filterName);
-        Verify.softAssert(!labels.isEmpty(), filterName + " has at least one option for search test");
-        String searchText = labels.get(0);
+        String searchText = panelUtil.resolveFirstSelectableFilterOption(filterName);
+        if (searchText == null) {
+            Verify.softAssert(false, filterName + " has at least one option for search test");
+            return;
+        }
         Logger.logMessage(filterName + " search using first option: " + searchText);
         panelUtil.validateSearchInsideFilter(softAssert, filterName, searchText);
         panelUtil.clearFilterSearchInput(filterName);
@@ -100,7 +102,9 @@ public final class LeftFilterPerFilterTestRunner {
         panelUtil.validateSelectAllAtTop(softAssert, filterName);
         panelUtil.validateSelectAllSelectsAll(softAssert, filterName);
 
-        final int optionsToPartiallySelect = 2;
+        // Flag: Is flagged cascades to all children — use 1 partial option (see FlagFilterConstants).
+        final int optionsToPartiallySelect = FlagFilterConstants.FILTER_DISPLAY_NAME.equalsIgnoreCase(filterName)
+                ? 1 : 2;
         panelUtil.validateSelectAllIndeterminateAndDeselect(softAssert, filterName, optionsToPartiallySelect);
 
         String firstOption = resolveSampleOption(panelUtil, filterName, spec);
@@ -111,20 +115,17 @@ public final class LeftFilterPerFilterTestRunner {
                                      LeftFilterPerFilterConfig.FilterSpec spec) throws InterruptedException {
         String option = resolveSampleOption(panelUtil, filterName, spec);
         panelUtil.validateTableRecordCountReflectsFilter(softAssert, filterName, option);
-        panelUtil.validateTableRecordsMatchFilter(softAssert, filterName, option, spec.getTableColumn());
+        String tableColumn = spec.getTableColumn();
+        if (tableColumn != null && !tableColumn.isBlank()) {
+            panelUtil.validateTableRecordsMatchFilter(softAssert, filterName, option, tableColumn);
+        } else {
+            Logger.logMessage(filterName + " has no table column — skipping row/cell value checks (count-only sync)");
+        }
     }
 
     private static void runActiveFilters(SoftAssert softAssert, LeftFilterPanelUtil panelUtil, String filterName,
                                          LeftFilterPerFilterConfig.FilterSpec spec) throws InterruptedException {
-        String first = resolveSampleOption(panelUtil, filterName, spec);
-        panelUtil.validateSelectedOptionsInActiveFilters(softAssert, filterName, first);
-
-        if (spec.getSecondSampleOption() != null) {
-            panelUtil.selectFilterOption(filterName, spec.getSecondSampleOption());
-            Thread.sleep(FILTER_EXPAND_WAIT_MS);
-            panelUtil.validateMultipleActiveFilterChips(softAssert, filterName,
-                    Arrays.asList(first, spec.getSecondSampleOption()));
-        }
+        panelUtil.validateActiveFiltersTwoOptions(softAssert, filterName);
     }
 
     private static String resolveSampleOption(LeftFilterPanelUtil panelUtil, String filterName,
@@ -133,8 +134,8 @@ public final class LeftFilterPerFilterTestRunner {
             return spec.getSampleOption();
         }
         panelUtil.expandFilter(filterName);
-        List<String> labels = panelUtil.getFilterOptionLabels(filterName);
-        Verify.softAssert(!labels.isEmpty(), filterName + " has at least one option for dynamic sample selection");
-        return labels.get(0);
+        String option = panelUtil.resolveFirstSelectableFilterOption(filterName);
+        Verify.softAssert(option != null, filterName + " has at least one selectable option for dynamic sample");
+        return option;
     }
 }
