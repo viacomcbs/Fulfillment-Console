@@ -3,6 +3,7 @@ package com.paramount.test.ff.uitests.helpers.featureflag;
 import com.paramount.test.ff.common.base.BaseTest;
 import com.paramount.test.ff.common.util.Logger;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -11,7 +12,8 @@ public class FeatureFlagNetworkUtil extends BaseTest {
 
     private static final String INSTALL_SCRIPT =
             "if (!window.__ffLdCapture) {"
-                    + "window.__ffLdCapture = {graphql: 0, authed: 0, errors: []};"
+                    + "window.__ffLdCapture = {graphql: 0, authed: 0, failures: []};"
+                    + "}"
                     + "function note(url, headers) {"
                     + "  if (!url) return;"
                     + "  var u = String(url);"
@@ -23,12 +25,23 @@ public class FeatureFlagNetworkUtil extends BaseTest {
                     + "  }"
                     + "  if (auth && auth.length > 10) window.__ffLdCapture.authed++;"
                     + "}"
+                    + "function noteFailure(url, status, detail) {"
+                    + "  try { window.__ffLdCapture.failures.push(String(url) + ' | HTTP ' + status"
+                    + "    + (detail ? ' | ' + detail : '')); } catch (e) {}"
+                    + "}"
+                    + "if (window.__ffLdFetchPatched) { return; }"
+                    + "window.__ffLdFetchPatched = true;"
                     + "var origFetch = window.fetch;"
                     + "window.fetch = function() {"
-                    + "  try { note(arguments[0] && arguments[0].url ? arguments[0].url : arguments[0],"
-                    + "    arguments[1] && arguments[1].headers); } catch (e) {}"
-                    + "  return origFetch.apply(this, arguments);"
+                    + "  var reqUrl = arguments[0] && arguments[0].url ? arguments[0].url : arguments[0];"
+                    + "  try { note(reqUrl, arguments[1] && arguments[1].headers); } catch (e) {}"
+                    + "  return origFetch.apply(this, arguments).then(function(resp) {"
+                    + "    try { if (resp && !resp.ok) noteFailure(resp.url || reqUrl, resp.status, resp.statusText); }"
+                    + "    catch (e) {} return resp;"
+                    + "  });"
                     + "};"
+                    + "if (!window.__ffXhrPatched) {"
+                    + "window.__ffXhrPatched = true;"
                     + "var origOpen = XMLHttpRequest.prototype.open;"
                     + "var origSend = XMLHttpRequest.prototype.send;"
                     + "var origSetHeader = XMLHttpRequest.prototype.setRequestHeader;"
@@ -41,13 +54,22 @@ public class FeatureFlagNetworkUtil extends BaseTest {
                     + "  return origSetHeader.apply(this, arguments);"
                     + "};"
                     + "XMLHttpRequest.prototype.send = function() {"
-                    + "  try { note(this.__ffUrl, this.__ffHeaders); } catch (e) {}"
+                    + "  var xhr = this;"
+                    + "  try { note(xhr.__ffUrl, xhr.__ffHeaders); } catch (e) {}"
+                    + "  xhr.addEventListener('load', function() {"
+                    + "    try { if (xhr.status >= 400) noteFailure(xhr.__ffUrl, xhr.status, xhr.statusText); }"
+                    + "    catch (e) {}"
+                    + "  });"
                     + "  return origSend.apply(this, arguments);"
                     + "};"
                     + "}";
 
     private static final String CLEAR_SCRIPT =
-            "if (window.__ffLdCapture) { window.__ffLdCapture.graphql = 0; window.__ffLdCapture.authed = 0; }";
+            "if (window.__ffLdCapture) {"
+                    + " window.__ffLdCapture.graphql = 0;"
+                    + " window.__ffLdCapture.authed = 0;"
+                    + " window.__ffLdCapture.failures = [];"
+                    + " }";
 
     private static final String READ_SCRIPT =
             "return window.__ffLdCapture ? JSON.stringify(window.__ffLdCapture) : '{\"graphql\":0,\"authed\":0}';";
@@ -68,8 +90,19 @@ public class FeatureFlagNetworkUtil extends BaseTest {
     private static final String CONSOLE_ERROR_READ =
             "return window.__ffConsoleErrors ? JSON.stringify(window.__ffConsoleErrors) : '[]';";
 
+    private static final String FAILURE_READ =
+            "return window.__ffLdCapture && window.__ffLdCapture.failures"
+                    + " ? JSON.stringify(window.__ffLdCapture.failures) : '[]';";
+
     public void installCaptureHook() {
         execute(INSTALL_SCRIPT);
+    }
+
+    /** Installs network + console hooks on the current SPA page (after login). */
+    public void installDiagnosticHooksOnCurrentPage() {
+        execute("delete window.__ffLdFetchPatched; delete window.__ffXhrPatched;");
+        installCaptureHook();
+        installConsoleErrorHook();
     }
 
     public void clearCapture() {
@@ -103,9 +136,31 @@ public class FeatureFlagNetworkUtil extends BaseTest {
             if (json.trim().isEmpty()) {
                 return Collections.emptyList();
             }
-            return List.of(json.split(","));
+            return Arrays.asList(json.split(","));
         } catch (Exception e) {
             Logger.logMessage("Could not read console errors: " + e.getMessage());
+            return Collections.emptyList();
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    public List<String> readApiFailures() {
+        try {
+            Object result = driver.get().browser().executeScript(FAILURE_READ);
+            if (result == null) {
+                return Collections.emptyList();
+            }
+            String json = String.valueOf(result);
+            if (json.length() < 3) {
+                return Collections.emptyList();
+            }
+            json = json.replace("[", "").replace("]", "").replace("\"", "");
+            if (json.trim().isEmpty()) {
+                return Collections.emptyList();
+            }
+            return Arrays.asList(json.split(","));
+        } catch (Exception e) {
+            Logger.logMessage("Could not read API failures: " + e.getMessage());
             return Collections.emptyList();
         }
     }

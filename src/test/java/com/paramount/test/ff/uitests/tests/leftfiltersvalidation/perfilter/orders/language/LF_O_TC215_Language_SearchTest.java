@@ -3,7 +3,7 @@ package com.paramount.test.ff.uitests.tests.leftfiltersvalidation.perfilter.orde
 import com.paramount.test.ff.common.util.SoftAssert;
 import com.paramount.test.ff.uitests.helpers.leftfilters.ConsoleTab;
 import com.paramount.test.ff.uitests.helpers.leftfilters.OrdersLeftFilter;
-import com.paramount.test.ff.uitests.tests.leftfiltersvalidation.orders.LeftFilterOrdersTabBaseTest;
+import com.paramount.test.ff.uitests.tests.leftfiltersvalidation.perfilter.orders.LeftFilterOrdersTabBaseTest;
 import io.qameta.allure.Description;
 import org.testng.annotations.Test;
 

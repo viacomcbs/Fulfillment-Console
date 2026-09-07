@@ -40,6 +40,22 @@ public class PtsPackagingIdPage {
         return tableView.tableViewDropdownOption(viewName);
     }
 
+    public By tableViewRowContextMenuButton(String viewName) {
+        return tableView.tableViewRowContextMenuButton(viewName);
+    }
+
+    public By firstTableViewDropdownOptionRow() {
+        return tableView.firstTableViewDropdownOptionRow();
+    }
+
+    public By firstTableViewRowContextMenuButton() {
+        return tableView.firstTableViewRowContextMenuButton();
+    }
+
+    public By setTableViewAsDefaultMenuItem() {
+        return tableView.setTableViewAsDefaultMenuItem();
+    }
+
     public By saveNewViewButton() {
         return tableView.saveNewButtonTableView();
     }
@@ -67,6 +83,10 @@ public class PtsPackagingIdPage {
 
     public By activeTableViewLabel(String viewName) {
         return tableView.activeTableViewInDropdown(viewName);
+    }
+
+    public By tableViewDefaultMarker(String viewName) {
+        return tableView.tableViewDefaultMarker(viewName);
     }
 
     public By tableViewButton() {
@@ -138,12 +158,19 @@ public class PtsPackagingIdPage {
     }
 
     public By saveChangesButtonInPanel() {
-        return By.XPath("//span[contains(normalize-space(),'Manage columns')]"
+        String saveChangesBtn = "//button[contains(@class,'save-button') and not(@disabled)]"
+                + "[.//span[normalize-space()='Save changes']]";
+        return By.XPath("//msc-custom-wrapper-dropdown[contains(@class,'lineitem-column-selector')]"
+                + saveChangesBtn
+                + " | //div[contains(@class,'cdk-overlay-pane')]"
+                + "//msc-custom-wrapper-dropdown[contains(@class,'lineitem-column-selector')]"
+                + saveChangesBtn
+                + " | //div[contains(@class,'btn-container')]" + saveChangesBtn
+                + " | //span[contains(normalize-space(),'Manage columns')]"
                 + "/ancestor::div[contains(@class,'table-view') or contains(@class,'manage-column')][1]"
-                + "//button[contains(normalize-space(),'Save changes') and not(@disabled)]"
+                + saveChangesBtn
                 + " | //div[contains(@class,'manage-column') or contains(@class,'table-view')]"
-                + "//button[contains(normalize-space(),'Save changes') and not(@disabled)]"
-                + " | //button[contains(@class,'btn') and contains(normalize-space(),'Save changes') and not(@disabled)]");
+                + saveChangesBtn);
     }
 
     public By saveChangesConfirmDialog() {
@@ -163,6 +190,22 @@ public class PtsPackagingIdPage {
                 + " or contains(normalize-space(),'Removed Columns')"
                 + " or contains(normalize-space(),'save the following changes')]]"
                 + "//button[normalize-space()='Save changes']");
+    }
+
+    /** Save-changes modal bullet listing a newly added column (e.g. Added Columns: "Brand"). */
+    public By saveChangesConfirmAddedColumn(String columnLabel) {
+        return By.XPath("//div[contains(@class,'modal-content')]"
+                + "[.//*[contains(normalize-space(),'Added Columns')]]"
+                + "//*[contains(normalize-space(),'Added Columns')]"
+                + "/following::*[contains(normalize-space(),'" + columnLabel + "')][1]"
+                + " | //div[contains(@class,'modal-content')]"
+                + "[.//*[contains(normalize-space(),'Added Columns')]]"
+                + "//*[contains(normalize-space(),'Added Columns') and contains(normalize-space(),'"
+                + columnLabel + "')]"
+                + " | //div[contains(@class,'modal-content')]"
+                + "[.//*[contains(normalize-space(),'Added Columns')]]"
+                + "//li[contains(normalize-space(),'" + columnLabel + "')]"
+                + " | //ngb-modal-window//ul//li[contains(normalize-space(),'" + columnLabel + "')]");
     }
 
     public By firstGridRow() {

@@ -1,0 +1,7 @@
+# Additional report directories to scan when building the perfilter tracker.
+# One path per line. Lines starting with # are ignored.
+#
+# Old project location (before move to C:\FulfillmentConsole):
+C:\Users\10747125\OneDrive - LTIMindtree\Desktop\Automation\Fulfillment console\FF_Console_Automation\target\surefire-reports
+C:\Users\10747125\OneDrive - LTIMindtree\Desktop\Automation\Fulfillment console\FF_Console_Automation\test-output
+C:\Users\10747125\OneDrive - LTIMindtree\Desktop\Automation\Fulfillment console - Copy\FF_Console_Automation\target\surefire-reports

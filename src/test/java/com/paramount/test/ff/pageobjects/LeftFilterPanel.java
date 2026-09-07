@@ -48,9 +48,19 @@ public class LeftFilterPanel {
         return By.XPath("//msc-left-filter-panel[contains(@class,'filter-panel-open')]");
     }
 
-    /** Click target for expanding collapsed side nav (container + icon). */
+    /**
+     * Collapsed vertical left wall — {@code div.main-body} on {@code filter-panel-closed}.
+     * Click anywhere on this strip (not only the funnel icon) expands the filter side nav.
+     */
+    public By filterPanelCollapsedWall() {
+        return By.XPath("//msc-left-filter-panel[contains(@class,'filter-panel-closed')]//div[contains(@class,'main-body')]"
+                + " | //msc-left-filter-panel[contains(@class,'filter-panel-closed')]");
+    }
+
+    /** Click target for expanding collapsed side nav (wall + icon container). */
     public By filterPanelExpandContainer() {
-        return By.XPath("//msc-left-filter-panel//div[contains(@class,'filterIconDivClosed') and contains(@class,'show-block')]"
+        return By.XPath("//msc-left-filter-panel[contains(@class,'filter-panel-closed')]//div[contains(@class,'main-body')]"
+                + " | //msc-left-filter-panel//div[contains(@class,'filterIconDivClosed') and contains(@class,'show-block')]"
                 + " | //msc-left-filter-panel[contains(@class,'filter-panel-closed')]"
                 + "//div[contains(@class,'filterIcon')]");
     }
@@ -80,7 +90,9 @@ public class LeftFilterPanel {
 
     public By leftFilterByName(String filterName) {
         return By.XPath(FILTER_LIST_SECTION
-                + "//span[contains(@class,'accordion-label') and normalize-space()='" + filterName + "']");
+                + "//span[contains(@class,'accordion-label') and normalize-space()='" + filterName + "']"
+                + " | " + FILTER_LIST_SECTION
+                + "//span[contains(@class,'accordion-label') and contains(normalize-space(),'" + filterName + "')]");
     }
 
     /** Accordion header button (contains label, count, chevron). */
@@ -283,26 +295,150 @@ public class LeftFilterPanel {
                 + "//span[contains(@class,'selection-count')]");
     }
 
+    private static final String ACTIVE_FILTER_LEFT_GROUP =
+            "//*[@id='leftButtonGroupContainer' or @id='leftButtongroupContainer']";
+
+    private static final String ACTIVE_FILTER_CHIP_SCOPES =
+            "//*[@id='collapsePanel']"
+                    + " | //app-fulfillment-main-table-container"
+                    + " | //div[contains(@class,'table-top')]";
+
+    /** {@code msc-ui-chip-tag} on PROD left panel; {@code msc-ui-chip-tag-themed} on some views. */
+    private static final String ACTIVE_FILTER_CHIP =
+            "*[self::msc-ui-chip-tag or self::msc-ui-chip-tag-themed]";
+
+    private static String escapeXPathLiteral(String value) {
+        if (value == null) {
+            return "''";
+        }
+        if (!value.contains("'")) {
+            return "'" + value + "'";
+        }
+        if (!value.contains("\"")) {
+            return "\"" + value + "\"";
+        }
+        String[] parts = value.split("'");
+        StringBuilder sb = new StringBuilder("concat(");
+        for (int i = 0; i < parts.length; i++) {
+            if (i > 0) {
+                sb.append(", \"'\", ");
+            }
+            sb.append("'").append(parts[i]).append("'");
+        }
+        sb.append(")");
+        return sb.toString();
+    }
+
+    /**
+     * Left {@code Active filters} toggle button only (PROD: {@code button.btn-active-filters[data-bs-target='#collapsePanel']}).
+     * Does not target the nested chevron {@code i.bi-chevron-up/down} — click this button via JS.
+     */
+    public By activeFiltersLeftToggleButton() {
+        return By.XPath(ACTIVE_FILTER_LEFT_GROUP
+                + "//button[contains(@class,'btn-active-filters') and @data-bs-target='#collapsePanel']"
+                + " | " + ACTIVE_FILTER_LEFT_GROUP
+                + "//button[contains(@class,'btn-active_filters') and @data-bs-target='#collapsePanel']");
+    }
+
+    /** Badge on Active filters toggle, e.g. count {@code 1}. */
+    public By activeFiltersToggleBadgeCount(int count) {
+        String countText = String.valueOf(count);
+        return By.XPath(ACTIVE_FILTER_LEFT_GROUP
+                + "//button[(contains(@class,'btn-active-filters') or contains(@class,'btn-active_filters'))"
+                + " and @data-bs-target='#collapsePanel']"
+                + "//span[contains(@class,'badge') and normalize-space()=" + escapeXPathLiteral(countText) + "]");
+    }
+
+    /** Visible Active filters toggle in the left button group (not table header / not chevron icon). */
+    public By activeFiltersToggleButton() {
+        return activeFiltersLeftToggleButton();
+    }
+
+    /** Expanded chip area below the left Active filters toggle (Scriptless {@code #collapsePanel}). */
+    public By activeFiltersPanel() {
+        return By.XPath("//*[@id='collapsePanel']");
+    }
+
+    /** Category label in collapse panel, e.g. {@code Brand:}. */
+    public By activeFilterCategoryLabel(String filterName) {
+        return By.XPath("//*[@id='collapsePanel']//span[contains(@class,'category')"
+                + " and normalize-space()=" + escapeXPathLiteral(filterName + ":") + "]");
+    }
+
+    public By activeFiltersPanelContent() {
+        return By.XPath("//*[@id='collapsePanel']//" + ACTIVE_FILTER_CHIP
+                + " | //*[@id='collapsePanel']//span[contains(@class,'chip-tag-label')]"
+                + " | //*[@id='collapsePanel']//span[contains(@class,'category')]");
+    }
+
+    /** Active filters panel is open — toggle {@code aria-expanded=true} or chips visible in {@code #collapsePanel}. */
+    public By activeFiltersPanelExpanded() {
+        return By.XPath(ACTIVE_FILTER_LEFT_GROUP
+                + "//button[(contains(@class,'btn-active-filters') or contains(@class,'btn-active_filters'))"
+                + " and @data-bs-target='#collapsePanel' and @aria-expanded='true']"
+                + " | //*[@id='collapsePanel' and contains(@class,'show')]");
+    }
+
     public By activeFiltersSection() {
-        return By.XPath("//div[contains(@class,'active-filter') or contains(@class,'applied-filter')]");
+        return activeFiltersToggleButton();
     }
 
     public By activeFilterChip(String optionLabel) {
-        return By.XPath("//div[contains(@class,'active-filter') or contains(@class,'applied-filter')]"
-                + "//span[contains(normalize-space(),'" + optionLabel + "')]");
+        return activeFilterChip(null, optionLabel);
+    }
+
+    /**
+     * Matches chip value text, e.g. {@code BET} under {@code Brand:} in {@code #collapsePanel},
+     * or {@code Activity Type: Asset Selection} on the main table header.
+     */
+    public By activeFilterChip(String filterName, String optionLabel) {
+        return By.XPath(activeFilterChipXPath(filterName, optionLabel));
+    }
+
+    private static String activeFilterChipXPath(String filterName, String optionLabel) {
+        String option = escapeXPathLiteral(optionLabel);
+        String scopedChip = "(" + ACTIVE_FILTER_CHIP_SCOPES + ")//" + ACTIVE_FILTER_CHIP;
+        StringBuilder xpath = new StringBuilder();
+        if (filterName != null && !filterName.trim().isEmpty()) {
+            String category = escapeXPathLiteral(filterName + ":");
+            String combined = escapeXPathLiteral(filterName + ": " + optionLabel);
+            xpath.append("//*[@id='collapsePanel']//span[contains(@class,'category') and normalize-space()=")
+                    .append(category).append("]/following-sibling::msc-ui-chip-tag")
+                    .append("[.//span[contains(@class,'chip-tag-label') and normalize-space()=").append(option)
+                    .append("]]");
+            xpath.append(" | ").append(scopedChip).append("[.//*[contains(normalize-space(),")
+                    .append(combined).append(")]]");
+            xpath.append(" | ");
+        }
+        xpath.append(scopedChip).append("[.//span[contains(@class,'chip-tag-label')"
+                + " and normalize-space()=").append(option).append("]]")
+                .append(" | (").append(ACTIVE_FILTER_CHIP_SCOPES).append(")//span[contains(@class,'chip-tag-label')"
+                + " and normalize-space()=").append(option).append("]");
+        return xpath.toString();
     }
 
     public By activeFilterChipRemoveButton(String optionLabel) {
-        return By.XPath("//div[contains(@class,'active-filter') or contains(@class,'applied-filter')]"
-                + "//span[contains(normalize-space(),'" + optionLabel + "')]"
-                + "/following-sibling::button | "
-                + "//div[contains(@class,'active-filter') or contains(@class,'applied-filter')]"
-                + "//span[contains(normalize-space(),'" + optionLabel + "')]/ancestor::*[contains(@class,'chip') or contains(@class,'tag')]"
-                + "//button[contains(@class,'close') or contains(@class,'remove') or contains(@class,'clear')]");
+        return activeFilterChipRemoveButton(null, optionLabel);
     }
 
+    /** Chip {@code X} — PROD uses {@code span.bi-x-lg chip-tag-close-hover}, not a {@code button}. */
+    public By activeFilterChipRemoveButton(String filterName, String optionLabel) {
+        String chip = activeFilterChipXPath(filterName, optionLabel);
+        return By.XPath("(" + chip + ")/ancestor::msc-ui-chip-tag[1]"
+                + "//span[contains(@class,'chip-tag-close-hover') or contains(@class,'bi-x-lg')]"
+                + " | (" + chip + ")/ancestor::msc-ui-chip-tag-themed[1]"
+                + "//span[contains(@class,'chip-tag-close-hover') or contains(@class,'bi-x-lg')]"
+                + " | (" + chip + ")/ancestor::" + ACTIVE_FILTER_CHIP + "[1]//button");
+    }
+
+    /** Standalone Clear chip beside active filter chips in expanded {@code #collapsePanel} (TC1120 — not chip X). */
     public By activeFiltersClearButton() {
-        return By.XPath("//span[contains(@class,'chip-tag-label') and normalize-space()='Clear']");
+        return By.XPath("//*[@id='collapsePanel']//msc-ui-chip-tag[@label='Clear']"
+                + " | //*[@id='collapsePanel']//msc-ui-chip-tag"
+                + "[.//span[contains(@class,'chip-tag-label') and normalize-space()='Clear']]"
+                + " | //*[@id='collapsePanel']//msc-ui-chip-tag-themed[@label='Clear']"
+                + " | //*[@id='collapsePanel']//msc-ui-chip-tag-themed"
+                + "[.//span[contains(@class,'chip-tag-label') and normalize-space()='Clear']]");
     }
 
     public By leftFilterPanelClearButton() {
@@ -331,8 +467,10 @@ public class LeftFilterPanel {
     }
 
     public By activeFiltersBadge() {
-        return By.XPath("//*[contains(normalize-space(),'Active filters')]"
-                + "//*[contains(@class,'badge') or contains(@class,'count')]");
+        return By.XPath(ACTIVE_FILTER_LEFT_GROUP
+                + "//button[(contains(@class,'btn-active-filters') or contains(@class,'btn-active_filters'))"
+                + " and @data-bs-target='#collapsePanel']"
+                + "//span[contains(@class,'badge')]");
     }
 
     public By tableRows() {
@@ -358,6 +496,7 @@ public class LeftFilterPanel {
         }
         switch (columnName.trim().toLowerCase(Locale.ROOT)) {
             case "status":
+            case "line item status":
                 return "revised-status-col";
             case "brand":
                 return "brand-col";

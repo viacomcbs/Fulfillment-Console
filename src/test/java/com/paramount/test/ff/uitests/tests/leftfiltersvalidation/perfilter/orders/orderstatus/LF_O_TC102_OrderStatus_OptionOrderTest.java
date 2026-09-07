@@ -3,7 +3,7 @@ package com.paramount.test.ff.uitests.tests.leftfiltersvalidation.perfilter.orde
 import com.paramount.test.ff.common.util.SoftAssert;
 import com.paramount.test.ff.uitests.helpers.leftfilters.ConsoleTab;
 import com.paramount.test.ff.uitests.helpers.leftfilters.OrdersLeftFilter;
-import com.paramount.test.ff.uitests.tests.leftfiltersvalidation.orders.LeftFilterOrdersTabBaseTest;
+
 import io.qameta.allure.Description;
 import org.testng.annotations.Test;
 
@@ -11,7 +11,7 @@ import org.testng.annotations.Test;
  * TC102 — Order Status option list order (first visible viewport):
  * Select All first → non-zero A-Z → divider → zero-count A-Z.
  */
-public class LF_O_TC102_OrderStatus_OptionOrderTest extends LeftFilterOrdersTabBaseTest {
+public class LF_O_TC102_OrderStatus_OptionOrderTest extends LeftFilterOrderStatusOrdersTabBaseTest {
 
     private static final String FILTER = OrdersLeftFilter.ORDER_STATUS.getDisplayName();
 

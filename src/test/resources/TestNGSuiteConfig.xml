@@ -1,4 +1,7 @@
-<!--DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd"-->
+<!-- Default TestNG suite — TC620 Activity Type PROD Synergy server (service account).
+     Maven (default): mvn test
+     Override suite: mvn test "-DsuiteXmlFile=src/test/resources/regression/left-filters/orders-view/LF_O_ActivityType_All_ProdServerSuite.xml"
+     IntelliJ: TestNG Default Suite (PROD Server) run configuration -->
 <suite name="Fulfillment Console" parallel="false" preserve-order="true">
 
     <!-- RUNTIME CONFIG -->
@@ -36,14 +39,12 @@
     <parameter name="SendReportEmailAddress"
                value="Akilandeswari.Sundararajan@paramount.com"/>
     <!--<parameter name="SendReportEmailAddress"
-               value="Akilandeswari.Sundararajan@paramount.com,Vishnupriya.Arumugam@paramount.com"/>-->
-    <!--<parameter name="SendReportEmailAddress"
-               value="Tejaswini.Shinde@paramount.com,Vishnupriya.Arumugam@paramount.com,qa_automation_status_-aaaagmcoe366b6jbhgse77jupu@viacomcbs.org.slack.com"/>
--->   <parameter name="ProxyHost" value="localhost"/>
+               value="Akilandeswari.Sundararajan@paramount.com"/>-->
+    <parameter name="ProxyHost" value="localhost"/>
     <parameter name="ProxyDebugPort" value="9099"/> <!--//8089-->
     <parameter name="ProxyPort" value="9097"/>
 
-    <parameter name="SendChatReport" value="true"/>
+    <parameter name="SendChatReport" value="false"/>
     <parameter name="SendSplunkData" value="false"/>
     <parameter name="SetHueLights" value="false"/>
 
@@ -71,10 +72,15 @@
 
 
 
-    <parameter name="Username" value="mscbsdqasvc@msc.cbs.net"/>
-    <parameter name="Password" value="dtZHl)5C?;?Z;8R=YDm84$YV"/>
-    <!--<parameter name="Username" value="Akilandeswari.Sundararajan@paramount.com"/>
-    <parameter name="Password" value="Powerautomate@1103"/>-->
+    <!--  <parameter name="Username" value="mscbsdqasvc@msc.cbs.net"/>
+      <parameter name="Password" value="dtZHl)5C?;?Z;8R=YDm84$YV"/>
+      <parameter name="Username" value="Akilandeswari.Sundararajan@paramount.com"/>
+      <parameter name="Password" value="Powerautomate@1103"/>-->
+    <parameter name="Username" value="svc-msc_bsd_qa_svc@paramount.com"/>
+    <parameter name="Password" value="D7h3M3Bo9SH4vJowwCXku2737!"/>
+
+    <parameter name="LeftFilterEmailReport" value="true"/>
+    <parameter name="LeftFilterEmailSuiteTitle" value="Orders Tab — Activity Type filter vs line-item table sync (TC620)"/>
 
     <!-- APP CONFIG-->
     <parameter name="ApplicationTitle" value="Fulfillment Console"/>
@@ -146,6 +152,7 @@
     <listeners>
         <listener class-name="com.paramount.test.ff.common.listeners.AllureListeners"/>
         <listener class-name="com.paramount.test.ff.common.listeners.SuiteListeners"/>
+        <listener class-name="com.paramount.test.ff.common.listeners.LeftFilterSuiteListener"/>
 
          <!--<listener class-name="com.paramount.test.mip.common.listeners.SuiteListeners"/>
         <listener class-name="com.paramount.test.mip.common.listeners.TestAnnotationTransformer"/>-->
@@ -153,27 +160,13 @@
 
     <!-- TEST EXECUTION QUEUE -->
 
-    <test verbose="1" name="Fulfillment" annotations="JDK" preserve-order="true">
-        <!--     -->
-
+    <test verbose="1" name="TC620 Activity Type Table Sync PROD Server" annotations="JDK" preserve-order="true">
         <classes>
-<!--            <class name="com.paramount.test.ff.uitests.tests.ValidateHomePage"/>-->
-<!--            <class name="com.paramount.test.ff.uitests.tests.TC_003_ValidateStandardViewModeManageColumn_OrderTab"/>-->
-            <class name="com.paramount.test.ff.uitests.tests.duplicatefilteroptionscheck.orders.DFOC_O_Partner_ValidateNoDuplicateFilterOptionsOnSearch"/>
-<!--            <class name="com.paramount.test.ff.uitests.tests.TC_002_ValidateOpenManageColumn_Ordertab"/>-->
-<!--            <class name="com.paramount.test.ff.uitests.tests.TC_003_ValidateStandardViewModeManageColumn_OrderTab"/>-->
-<!--            <class name="com.paramount.test.ff.uitests.tests.TC_004_ValidateCreateNewTableView_Ordertab"/>-->
-<!--            <class name="com.paramount.test.ff.uitests.tests.TC_005_ValidatingNewCreatedTableViewSelectedbydefault"/>-->
-
-            <!--<class name="com.paramount.test.ff.uitests.tests.FilterPanelTests"/>-->
-            <!--<methods>
-
-                <include name="validateGlobalSearch"/>
-            </methods>-->
+            <class name="com.paramount.test.ff.uitests.tests.leftfiltersvalidation.perfilter.orders.activitytype.LF_O_TC620_ActivityType_TableSyncTest">
+                <methods>
+                    <include name="tc620_activityTypeTableSync"/>
+                </methods>
+            </class>
         </classes>
-
-         <!--<packages>
-            <package name="com.paramount.test.ff.uitests.tests" />
-        </packages>-->
     </test>
 </suite>

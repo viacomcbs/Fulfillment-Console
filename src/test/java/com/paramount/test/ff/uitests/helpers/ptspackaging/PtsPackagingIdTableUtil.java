@@ -9,6 +9,7 @@ import com.paramount.test.ff.common.util.SoftAssert;
 import com.paramount.test.ff.pageobjects.LeftFilterPanel;
 import com.paramount.test.ff.pageobjects.PtsPackagingIdPage;
 import com.paramount.test.ff.uitests.helpers.leftfilters.LeftFilterPanelUtil;
+import com.paramount.test.ff.uitests.helpers.managecolumns.ManageColumnsUtil;
 import com.synergy.core.driver.By;
 import com.synergy.core.driver.elements.DesktopBrowserElement;
 
@@ -241,6 +242,7 @@ public class PtsPackagingIdTableUtil {
         }
     }
     private final PtsPackagingIdPage ptsPage = new PtsPackagingIdPage();
+    private final ManageColumnsUtil manageColumns = new ManageColumnsUtil();
     private final LeftFilterPanel leftFilterPanel = new LeftFilterPanel();
 
     public enum ColumnSection {
@@ -266,74 +268,15 @@ public class PtsPackagingIdTableUtil {
     }
 
     public boolean isManageColumnsPanelOpen() throws InterruptedException {
-        return isManageColumnsPanelOpen(2);
-    }
-
-    private boolean isManageColumnsPanelOpen(int waitSec) throws InterruptedException {
-        long endTime = System.currentTimeMillis() + (waitSec * 1000L);
-        while (System.currentTimeMillis() < endTime) {
-            if (isManageColumnsPanelOpenInDom()) {
-                return true;
-            }
-            Thread.sleep(200);
-        }
-        return isManageColumnsPanelOpenInDom();
-    }
-
-    private boolean isManageColumnsPanelOpenInDom() {
-        try {
-            Object result = driver.get().browser().executeScript(
-                    "var spans = document.querySelectorAll('span');"
-                            + "for (var i = 0; i < spans.length; i++) {"
-                            + "  if ((spans[i].textContent || '').indexOf('Manage columns') < 0) continue;"
-                            + "  var node = spans[i];"
-                            + "  while (node) {"
-                            + "    var r = node.getBoundingClientRect();"
-                            + "    if (r.width > 0 && r.height > 0) return true;"
-                            + "    node = node.parentElement;"
-                            + "  }"
-                            + "}"
-                            + "return false;");
-            return Boolean.TRUE.equals(result) || "true".equals(String.valueOf(result));
-        } catch (Exception e) {
-            return WaitUtil.isDisplayFast(ptsPage.manageColumnsPanelHeading(), 1);
-        }
+        return manageColumns.isPanelOpen(2);
     }
 
     public void openManageColumnsPanel(SoftAssert softAssert) throws InterruptedException {
-        if (isManageColumnsPanelOpen(1)) {
-            Logger.logReportMessage("Manage columns panel already open — skipping Table View click");
-            return;
-        }
-        DriverUtil.scrollToElement(ptsPage.tableViewButton());
-        for (int attempt = 1; attempt <= 2; attempt++) {
-            Verify.softAssert1(DriverUtil.clickOnElement(ptsPage.tableViewButton(), 5),
-                    "Clicked Table View button (attempt " + attempt + ", id=tableViewButton)", softAssert);
-            Thread.sleep(PANEL_SETTLE_MS);
-            if (isManageColumnsPanelOpen(PANEL_WAIT_S)) {
-                Verify.softAssert1(true, "Manage columns panel is open", softAssert);
-                return;
-            }
-            Logger.logReportMessage("Manage columns panel not open after Table View click attempt " + attempt);
-        }
-        Verify.softAssert1(false, "Manage columns panel is open", softAssert);
+        manageColumns.openPanel(softAssert, 2);
     }
 
     public void closeManageColumnsPanel(SoftAssert softAssert) throws InterruptedException {
-        if (!isManageColumnsPanelOpenInDom()) {
-            return;
-        }
-        DriverUtil.clickOnElement(ptsPage.tableViewButton(), 5);
-        Thread.sleep(PANEL_SETTLE_MS);
-        if (isManageColumnsPanelOpenInDom()) {
-            try {
-                driver.get().browser().executeScript(
-                        "document.dispatchEvent(new KeyboardEvent('keydown', {key:'Escape', keyCode:27, bubbles:true}));");
-                Thread.sleep(300);
-            } catch (Exception ignored) {
-                // fallback only
-            }
-        }
+        manageColumns.closePanel(softAssert);
     }
 
     public void validateColumnListedInManagePanel(ColumnSection section, SoftAssert softAssert)
@@ -1181,7 +1124,7 @@ public class PtsPackagingIdTableUtil {
     /** Uncheck every Order column except PTS Packaging ID on Automation view and save. */
     private boolean minimizeOrderColumnsToPtsOnly(SoftAssert softAssert) throws InterruptedException {
         openManageColumnsPanel(softAssert);
-        if (!isManageColumnsPanelOpen(3)) {
+        if (!manageColumns.isPanelOpen(3)) {
             return false;
         }
         if (!WaitUtil.isDisplayFast(ptsPage.activeTableViewLabel(PtsPackagingIdPage.AUTOMATION_TABLE_VIEW), 2)) {

@@ -1,0 +1,20 @@
+{
+  "folders": [
+    {
+      "name": "Fulfillment Console",
+      "path": "."
+    }
+  ],
+  "settings": {
+    "java.configuration.updateBuildConfiguration": "automatic",
+    "java.import.maven.enabled": true,
+    "maven.executable.path": "mvn"
+  },
+  "extensions": {
+    "recommendations": [
+      "vscjava.vscode-java-pack",
+      "vscjava.vscode-maven",
+      "vscjava.vscode-java-test"
+    ]
+  }
+}

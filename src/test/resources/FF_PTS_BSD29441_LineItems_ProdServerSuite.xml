@@ -13,7 +13,7 @@
     <parameter name="GuiType" value="Web"/>
     <parameter name="SendReportAutoEmails" value="true"/>
     <parameter name="SendReportEmailAddress" value="Akilandeswari.Sundararajan@paramount.com"/>
-    <!--<parameter name="SendReportEmailAddress" value="Akilandeswari.Sundararajan@paramount.com,Vishnupriya.Arumugam@paramount.com"/>-->
+    <!--<parameter name="SendReportEmailAddress" value="Akilandeswari.Sundararajan@paramount.com"/>-->
     <parameter name="SendChatReport" value="false"/>
 
     <parameter name="Application" value="Fulfillment Console"/>

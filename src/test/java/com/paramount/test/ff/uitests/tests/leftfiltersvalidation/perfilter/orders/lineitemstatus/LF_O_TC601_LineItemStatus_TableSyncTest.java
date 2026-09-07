@@ -3,24 +3,30 @@ package com.paramount.test.ff.uitests.tests.leftfiltersvalidation.perfilter.orde
 import com.paramount.test.ff.common.util.SoftAssert;
 import com.paramount.test.ff.uitests.helpers.leftfilters.ConsoleTab;
 import com.paramount.test.ff.uitests.helpers.leftfilters.OrdersLeftFilter;
-import com.paramount.test.ff.uitests.helpers.leftfilters.LeftFilterPerFilterTestRunner;
-import com.paramount.test.ff.uitests.helpers.leftfilters.LeftFilterTestCategory;
-import com.paramount.test.ff.uitests.tests.leftfiltersvalidation.orders.LeftFilterOrdersTabBaseTest;
+import com.paramount.test.ff.uitests.tests.leftfiltersvalidation.perfilter.orders.lineitemstatus.LeftFilterLineItemStatusOrdersTabBaseTest;
 import io.qameta.allure.Description;
 import org.testng.annotations.Test;
 
-/** TC601 — LineItemStatus Table sync. */
-public class LF_O_TC601_LineItemStatus_TableSyncTest extends LeftFilterOrdersTabBaseTest {
+/**
+ * TC601 — Line Item Status table sync on Orders view.
+ *
+ * <ol>
+ *   <li>Login + Yesterday calendar (suite {@code @BeforeMethod})</li>
+ *   <li>Line Item Status left filter — first option with count &gt; 0</li>
+ *   <li>Expand order → wait for line-item grid → verify at least one Line Item Status matches filter</li>
+ *   <li>Filter count vs table record count is not checked on Orders view</li>
+ * </ol>
+ */
+public class LF_O_TC601_LineItemStatus_TableSyncTest extends LeftFilterLineItemStatusOrdersTabBaseTest {
 
     private static final String FILTER = OrdersLeftFilter.LINE_ITEM_STATUS.getDisplayName();
-    private static final int FILTER_INDEX = 1;
 
     @Test(priority = 1)
-    @Description("TC601: LineItemStatus — Table sync")
+    @Description("TC601: Line Item Status — expand order row; at least one line item status matches filter")
     public void tc601_lineItemStatusTableSync() throws InterruptedException {
         softAssert = new SoftAssert("tc601_lineItemStatusTableSync", getClass().getSimpleName());
-        LeftFilterPerFilterTestRunner.run(softAssert, leftFilterPanelUtil, ConsoleTab.ORDERS,
-                FILTER, LeftFilterTestCategory.TABLE_SYNC, FILTER_INDEX);
+        leftFilterPanelUtil.navigateToTab(ConsoleTab.ORDERS);
+        leftFilterPanelUtil.validateLineItemStatusTableSyncSmoke(softAssert, FILTER);
         softAssert.assertAll();
     }
 }
