@@ -1,0 +1,183 @@
+# Run Orders-view left-filter regression suites (one suite or all 8 in parallel).
+# Start with run_mode=single and one suite (e.g. Flag), then switch to all_parallel.
+#
+# Prerequisites: self-hosted runner [self-hosted, linux, synergy] — see docs/github-actions.md
+
+name: Left Filter Regression — Orders View
+
+on:
+  workflow_dispatch:
+    inputs:
+      run_mode:
+        description: Run one suite first, or all Orders-view regression suites in parallel
+        required: true
+        default: single
+        type: choice
+        options:
+          - single
+          - all_parallel
+      suite_xml:
+        description: Suite file (used when run_mode = single)
+        required: true
+        default: regression/left-filters/orders-view/LF_O_Flag_All_ProdServerSuite.xml
+        type: choice
+        options:
+          - regression/left-filters/orders-view/LF_O_ActivityType_All_ProdServerSuite.xml
+          - regression/left-filters/orders-view/LF_O_AssignedTo_All_ProdServerSuite.xml
+          - regression/left-filters/orders-view/LF_O_Brand_All_ProdServerSuite.xml
+          - regression/left-filters/orders-view/LF_O_Environment_All_ProdServerSuite.xml
+          - regression/left-filters/orders-view/LF_O_Flag_All_ProdServerSuite.xml
+          - regression/left-filters/orders-view/LF_O_LineItemStatus_All_ProdServerSuite.xml
+          - regression/left-filters/orders-view/LF_O_OrderStatus_All_ProdServerSuite.xml
+          - regression/left-filters/orders-view/LF_O_SubmittedBy_All_ProdServerSuite.xml
+      test_environment:
+        description: Target environment
+        required: true
+        default: PROD
+        type: choice
+        options:
+          - PROD
+          - UAT
+          - DEV
+      email:
+        description: Report email recipient
+        required: true
+        default: Akilandeswari.Sundararajan@paramount.com
+
+concurrency:
+  group: lf-regression-orders-${{ github.ref }}-${{ github.event.inputs.run_mode || 'single' }}
+  cancel-in-progress: false
+
+jobs:
+  single-suite:
+    name: Single — ${{ github.event.inputs.suite_xml }}
+    if: github.event.inputs.run_mode == 'single'
+    runs-on: [self-hosted, linux, synergy]
+    timeout-minutes: 180
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up JDK 11
+        uses: actions/setup-java@v4
+        with:
+          distribution: corretto
+          java-version: '11'
+          cache: maven
+
+      - name: Compile tests
+        run: mvn -B test-compile
+
+      - name: Run TestNG suite
+        env:
+          SUITE: src/test/resources/${{ github.event.inputs.suite_xml }}
+          TEST_ENV: ${{ github.event.inputs.test_environment }}
+          REPORT_EMAIL: ${{ github.event.inputs.email }}
+        run: |
+          echo "Running suite: ${SUITE}"
+          mvn -B test \
+            "-DsuiteXmlFile=${SUITE}" \
+            "-Dsystem.test.testenvironment=${TEST_ENV}" \
+            "-Dsystem.test.sendreportautoemails=true" \
+            "-Dsystem.test.sendreportemailaddress=${REPORT_EMAIL}"
+
+      - name: Upload Allure results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: allure-${{ github.event.inputs.suite_xml }}
+          path: |
+            allure-results/
+            target/surefire-reports/
+            test-output/screenshots/
+          if-no-files-found: warn
+
+      - name: Publish job summary
+        if: always()
+        run: |
+          echo "## Single suite run" >> "$GITHUB_STEP_SUMMARY"
+          echo "Suite: \`${{ github.event.inputs.suite_xml }}\`" >> "$GITHUB_STEP_SUMMARY"
+          if [ -f target/surefire-reports/testng-results.xml ]; then
+            grep -o 'passed="[0-9]*"' target/surefire-reports/testng-results.xml | head -1 >> "$GITHUB_STEP_SUMMARY" || true
+            grep -o 'failed="[0-9]*"' target/surefire-reports/testng-results.xml | head -1 >> "$GITHUB_STEP_SUMMARY" || true
+          fi
+
+  all-suites-parallel:
+    name: ${{ matrix.job_name }}
+    if: github.event.inputs.run_mode == 'all_parallel'
+    runs-on: [self-hosted, linux, synergy]
+    timeout-minutes: 180
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - job_name: Activity Type
+            suite_xml: regression/left-filters/orders-view/LF_O_ActivityType_All_ProdServerSuite.xml
+            artifact: allure-lf-o-activity-type
+          - job_name: Assigned To
+            suite_xml: regression/left-filters/orders-view/LF_O_AssignedTo_All_ProdServerSuite.xml
+            artifact: allure-lf-o-assigned-to
+          - job_name: Brand
+            suite_xml: regression/left-filters/orders-view/LF_O_Brand_All_ProdServerSuite.xml
+            artifact: allure-lf-o-brand
+          - job_name: Environment
+            suite_xml: regression/left-filters/orders-view/LF_O_Environment_All_ProdServerSuite.xml
+            artifact: allure-lf-o-environment
+          - job_name: Flag
+            suite_xml: regression/left-filters/orders-view/LF_O_Flag_All_ProdServerSuite.xml
+            artifact: allure-lf-o-flag
+          - job_name: Line Item Status
+            suite_xml: regression/left-filters/orders-view/LF_O_LineItemStatus_All_ProdServerSuite.xml
+            artifact: allure-lf-o-line-item-status
+          - job_name: Order Status
+            suite_xml: regression/left-filters/orders-view/LF_O_OrderStatus_All_ProdServerSuite.xml
+            artifact: allure-lf-o-order-status
+          - job_name: Submitted By
+            suite_xml: regression/left-filters/orders-view/LF_O_SubmittedBy_All_ProdServerSuite.xml
+            artifact: allure-lf-o-submitted-by
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up JDK 11
+        uses: actions/setup-java@v4
+        with:
+          distribution: corretto
+          java-version: '11'
+          cache: maven
+
+      - name: Compile tests
+        run: mvn -B test-compile
+
+      - name: Run TestNG suite
+        env:
+          SUITE: src/test/resources/${{ matrix.suite_xml }}
+          TEST_ENV: ${{ github.event.inputs.test_environment }}
+          REPORT_EMAIL: ${{ github.event.inputs.email }}
+        run: |
+          echo "Running suite: ${SUITE}"
+          mvn -B test \
+            "-DsuiteXmlFile=${SUITE}" \
+            "-Dsystem.test.testenvironment=${TEST_ENV}" \
+            "-Dsystem.test.sendreportautoemails=true" \
+            "-Dsystem.test.sendreportemailaddress=${REPORT_EMAIL}"
+
+      - name: Upload Allure results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.artifact }}
+          path: |
+            allure-results/
+            target/surefire-reports/
+            test-output/screenshots/
+          if-no-files-found: warn
+
+      - name: Publish job summary
+        if: always()
+        run: |
+          echo "## ${{ matrix.job_name }}" >> "$GITHUB_STEP_SUMMARY"
+          echo "Suite: \`${{ matrix.suite_xml }}\`" >> "$GITHUB_STEP_SUMMARY"
+          if [ -f target/surefire-reports/testng-results.xml ]; then
+            grep -o 'passed="[0-9]*"' target/surefire-reports/testng-results.xml | head -1 >> "$GITHUB_STEP_SUMMARY" || true
+            grep -o 'failed="[0-9]*"' target/surefire-reports/testng-results.xml | head -1 >> "$GITHUB_STEP_SUMMARY" || true
+          fi

@@ -45,6 +45,43 @@ Workflow file: `.github/workflows/order-status-left-filter-prod.yml`
 
 After push to `main`/`master`, open **Actions** tab in GitHub.
 
+## Run Orders-view left-filter regression (8 suite XMLs)
+
+Workflow: **Left Filter Regression — Orders View**  
+File: `.github/workflows/left-filter-regression-orders-prod.yml`
+
+Suites under `src/test/resources/regression/left-filters/orders-view/`:
+
+| Filter | Suite XML |
+|--------|-----------|
+| Activity Type | `LF_O_ActivityType_All_ProdServerSuite.xml` |
+| Assigned To | `LF_O_AssignedTo_All_ProdServerSuite.xml` |
+| Brand | `LF_O_Brand_All_ProdServerSuite.xml` |
+| Environment | `LF_O_Environment_All_ProdServerSuite.xml` |
+| Flag | `LF_O_Flag_All_ProdServerSuite.xml` |
+| Line Item Status | `LF_O_LineItemStatus_All_ProdServerSuite.xml` |
+| Order Status | `LF_O_OrderStatus_All_ProdServerSuite.xml` |
+| Submitted By | `LF_O_SubmittedBy_All_ProdServerSuite.xml` |
+
+### Step 1 — run one suite first (recommended)
+
+1. **Actions** → **Left Filter Regression — Orders View** → **Run workflow**
+2. Branch: **`Akila_FulfillmentConsole`** (or your feature branch)
+3. **run_mode:** `single`
+4. **suite_xml:** pick one filter, e.g. `LF_O_Flag_All_ProdServerSuite.xml`
+5. **test_environment:** `PROD`
+6. **email:** your report address
+7. **Run workflow**
+
+You get one job, one email with scenario table, one Allure artifact.
+
+### Step 2 — run all 8 suites in parallel
+
+Same workflow, set **run_mode:** `all_parallel`.  
+GitHub starts **8 jobs** (one JVM per filter — safe for shared left-filter session).
+
+Each job needs a self-hosted runner with label `synergy`. If you only have **one** runner, jobs queue and run one after another (still works, just slower).
+
 ## Run Order Status left-filter tests (parallel)
 
 The workflow **Order Status Left Filter PROD** runs **two jobs in parallel**:
