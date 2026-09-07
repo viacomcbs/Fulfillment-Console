@@ -1,0 +1,95 @@
+# Run Orders + Line Items Order Status left-filter suites in parallel (two JVMs).
+# Similar to Jenkins: pick branch, environment, suite; Maven test; upload Allure artifacts.
+#
+# Prerequisites (team setup):
+#   1. Self-hosted runner with network to nexus.mtvi.com, synergyserver.tech, and FF PROD URL
+#   2. JDK 11+ and Maven 3.6+ on the runner
+#   3. Optional repo secrets for overriding credentials (see docs/github-actions.md)
+
+name: Order Status Left Filter PROD
+
+on:
+  workflow_dispatch:
+    inputs:
+      test_environment:
+        description: Target environment
+        required: true
+        default: PROD
+        type: choice
+        options:
+          - PROD
+          - UAT
+          - DEV
+      email:
+        description: Report email recipient
+        required: true
+        default: Akilandeswari.Sundararajan@paramount.com
+  schedule:
+    # Optional nightly PROD smoke — adjust cron to team preference
+    - cron: '0 3 * * 1-5'
+
+concurrency:
+  group: order-status-lf-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  order-status-parallel:
+    name: ${{ matrix.job_name }}
+    runs-on: [self-hosted, linux, synergy]
+    timeout-minutes: 180
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - job_name: Orders Order Status
+            suite_xml: src/test/resources/regression/left-filters/orders-view/LF_O_OrderStatus_All_ProdServerSuite.xml
+            artifact: allure-results-orders-order-status
+          - job_name: Line Items Order Status
+            suite_xml: src/test/resources/LF_LI_OrderStatus_All_ProdServerSuite.xml
+            artifact: allure-results-lineitems-order-status
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 11
+        uses: actions/setup-java@v4
+        with:
+          distribution: corretto
+          java-version: '11'
+          cache: maven
+
+      - name: Compile tests
+        run: mvn -B test-compile
+
+      - name: Run TestNG suite
+        env:
+          TEST_ENV: ${{ github.event.inputs.test_environment || 'PROD' }}
+          REPORT_EMAIL: ${{ github.event.inputs.email || 'Akilandeswari.Sundararajan@paramount.com' }}
+        run: |
+          mvn -B test \
+            "-DsuiteXmlFile=${{ matrix.suite_xml }}" \
+            "-Dsystem.test.testenvironment=${TEST_ENV}" \
+            "-Dsystem.test.sendreportautoemails=true" \
+            "-Dsystem.test.sendreportemailaddress=${REPORT_EMAIL}"
+
+      - name: Upload Allure results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.artifact }}
+          path: |
+            allure-results/
+            target/surefire-reports/
+            test-output/screenshots/
+          if-no-files-found: warn
+
+      - name: Publish job summary
+        if: always()
+        run: |
+          echo "## ${{ matrix.job_name }}" >> "$GITHUB_STEP_SUMMARY"
+          echo "Suite: \`${{ matrix.suite_xml }}\`" >> "$GITHUB_STEP_SUMMARY"
+          if [ -f target/surefire-reports/testng-results.xml ]; then
+            grep -o 'passed="[0-9]*"' target/surefire-reports/testng-results.xml | head -1 >> "$GITHUB_STEP_SUMMARY" || true
+            grep -o 'failed="[0-9]*"' target/surefire-reports/testng-results.xml | head -1 >> "$GITHUB_STEP_SUMMARY" || true
+          fi

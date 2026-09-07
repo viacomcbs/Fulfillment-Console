@@ -1,0 +1,40 @@
+// --- Add imports ---
+import com.paramount.test.ff.uitests.helpers.leftfilters.LeftFilterEmailReport;
+import org.testng.ITestListener;
+import org.testng.ITestResult;
+
+// --- Class: implement ITestListener ---
+public class SuiteListeners implements ISuiteListener, ITestListener {
+
+    @Override
+    public void onStart(ISuite testSuite) {
+        Config.applySuiteParameters(testSuite.getXmlSuite().getAllParameters());
+        LeftFilterEmailReport.configureForSuite(testSuite);  // scenario report ON by default
+        // ... rest of onStart
+    }
+
+    @Override
+    public void onTestSuccess(ITestResult result) {
+        LeftFilterEmailReport.recordResult(result);
+    }
+
+    @Override
+    public void onTestFailure(ITestResult result) {
+        LeftFilterEmailReport.recordResult(result);
+    }
+
+    @Override
+    public void onTestSkipped(ITestResult result) {
+        LeftFilterEmailReport.recordResult(result);
+    }
+
+    @Override
+    public void onFinish(ISuite suite) {
+        // Send email BEFORE slow Allure upload (recommended)
+        if (LeftFilterEmailReport.isEnabled()) {
+            LeftFilterEmailReport.captureSynergySessionId();
+        }
+        EmailUtil.sendResultEmail(...);
+        // ... Allure generateReport after email
+    }
+}

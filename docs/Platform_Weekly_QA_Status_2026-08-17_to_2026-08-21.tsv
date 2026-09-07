@@ -1,0 +1,70 @@
+Application	Name	Jira ID	Status	QA action this week	Summary	Notes	Environment	Type
+Fulfillment Console	Akilandeswari Sundararajan	BSD-27316	Complete	Verified in PROD	[Backend] - Fulfillment - correct status for metadataDelivery and metadataOnly Delivery orders and fix metadata content for them		PROD	Story
+Fulfillment Console	Akilandeswari Sundararajan	BSD-29582	Complete	Verified in PROD	[Frontend] Add a refresh button on the table header		PROD	Story
+Fulfillment Console	Akilandeswari Sundararajan	BSD-29587	In Progress (DEV)	Sent to dev	OC-FF-QA : Bulk selection Apply button disabled when selecting any jobs and any status	QA sent back to dev during week	PROD	Bug
+Fulfillment Console	Shubham Zurang	BSD-29685	Complete	Sent to dev	Concurrent Assignment Allows Multiple Successful Responses for the Same Order Instead of Showing "Already Assigned" Message	QA sent back to dev during week	UAT	Bug
+Fulfillment Console	Babloo Kumar	BSD-29791	Complete	Verified & closed	[Frontend] - Fulfillment - Bind tarSize in package details panel		Dev	Story
+Fulfillment Console	Akilandeswari Sundararajan	BSD-29844	Complete	Verified & closed	OC-FF-QA : Some user name is not available in Assign To dropdown list 		Dev	Bug
+Fulfillment Console	Akilandeswari Sundararajan	BSD-29870	Complete	Sent to dev	OC-FF-QA : DSID is blank in Order table for MetadataOnlyDelivery orders (Specific partner)	QA sent back to dev during week	PROD	Bug
+Fulfillment Console	Babloo Kumar	BSD-29883	In Progress (DEV)	Sent to dev	OC-FF-QA : Line items and Orders grid data load exceeds 30 seconds on fast scroll with 1 year date range	QA sent back to dev during week	PROD	Bug
+Fulfillment Console	Babloo Kumar	BSD-29886	Complete	Verified & closed	OC-FF-QA : Edit Metadata editor inserts two lines instead of one on Enter key press		Dev	Bug
+Fulfillment Console	Babloo Kumar	BSD-29887	Complete	Verified & closed	OC-FF-QA : Downloaded metadata file is invalid XML after update and save		Dev	Bug
+MSC Fulfillment Performance Metrics	Babloo Kumar	BSD-27950	Complete	Verified & closed	FFP-QA: UI incorrectly showing “SLA Launch – Broke Partner SLA: No” when it should be Yes		Dev	Bug
+MSC Fulfillment Performance Metrics	Akilandeswari Sundararajan	BSD-29823	Complete	Verified & closed	MFP-FE: Add metrics universe group dropdown to dashboard filter bar		Dev	Story
+MSC Fulfillment Performance Metrics	Akilandeswari Sundararajan	BSD-29911	To Do	Newly created	OC-FP-QA : View Exclusion shows always 1000 count when Global Group option is selected 		Dev	Bug
+Admin Console	Shubham Zurang	BSD-29862	Complete	Verified & closed	Read Only user receives Access Denied message instead of being granted read-only access to Admin Console		Dev	Bug
+Admin Console	Shubham Zurang	BSD-29869	Complete	Verified & closed	Request Access button is not displayed for user with No Access on Admin Console access denied page		Dev	Bug
+Admin Console	Babloo Kumar	BSD-29900	To Do	Newly created	OC-AC-QA: Requests to Manage section is visible for Read-only user on Users and Permissions page		UAT	Bug
+Admin Console	Babloo Kumar	BSD-29937	To Do	Newly created	OC-AC-QA: Dark theme - "+" icon color should be black and counter design/background color mismatch in CSP Applies until controls		PROD	Bug
+Admin Console	Babloo Kumar	BSD-29939	To Do	Newly created	OC-AC-QA: Blocker icon cursor briefly displayed when clicking Update policy on CSP Policy Form		PROD	Bug
+AI Chatbot	Akilandeswari Sundararajan	ADX-4977	Done	Verified & closed	AI-OC-QA : AI Chatbot is not giving response 		Dev	Bug
+AI Chatbot	Babloo Kumar	ADX-5054	Done	Verified & closed	V2-AI-QA- Chatbox remains disabled after session closure in Agent Chatbot but correctly enabled in AI Chatbot		Dev	Bug
+Partner Console	Alekya Byneni	BSD-28523	Complete	Verified & closed	PC -ADMIN - UI [PCA-04][Story] Tree navigation - dynamic leaf selection		Dev	Story
+Partner Console	Sheetal Aware	BSD-28532	Complete	Verified & closed	PC -ADMIN - UI [PCA-13][Story] Mapping Tables editor		Dev	Story
+Partner Console	Rucha Pawar	BSD-28606	In Analysis	Reopened	OC-PC-QA: Notifications can't be saved as dropdown field isn't retaining values	QA reopened during week	UAT	Bug
+Partner Console	Anjan Dutta	BSD-28919	Complete	Verified in UAT	OC-PC-QA: In Draft count of material is not matching with data present.		UAT	Bug
+Partner Console	Rucha Pawar	BSD-29043	In Progress (DEV)	Verified in UAT	OC-PC-QA: Draft name is not showing		UAT	Bug
+Partner Console	Rucha Pawar	BSD-29376	In Progress (DEV)	Sent to dev	OC-PC-QA: Saved filters dropdown overlay blocks interaction with main directory content	QA sent back to dev during week	UAT	Bug
+Partner Console	Anjan Dutta	BSD-29436	Complete	Verified in UAT	OC-PC-QA: Materials count not updating after Save		UAT	Bug
+Partner Console	Anjan Dutta	BSD-29701	In Progress (DEV)	Sent to dev	User reported UI bugs	QA sent back to dev during week		Bug
+Partner Console	Anjan Dutta	BSD-29908	To Do	Newly created	OC-PC-QA: All Package Structure Selection in Audio TAB for individual audio material is not working		UAT	Bug
+Partner Console	Alekya Byneni	BSD-29909	To Do	Newly created	OC-PC-QA: White patches observed while adding new data 		Dev	Bug
+Partner Console	Alekya Byneni	BSD-29910	To Do	Newly created	OC-PC-QA: Column Search functionality is not working		Dev	Bug
+Partner Console	Alekya Byneni	BSD-29912	To Do	Newly created	OC-PC-QA: Unable to duplicate newly created Auth Method		Dev	Bug
+Partner Console	Rucha Pawar	BSD-29936	In Progress (DEV)	Newly created	OC-PC-QA: Few blank values displaying in Package Structure dropdown filter		UAT	Bug
+Partner Console	Alekya Byneni	BSD-29961	To Do	Newly created	OC-PC-QA: Unable to create new Manage values -> Partner Settings -> Brand		Dev	Bug
+Media Ingest Console	Ravi Balasundaram	BSD-29355	In Progress (DEV)	Sent to dev	OC-MIC-QA-Uploader Email when selected the columns are mis aligned	QA sent back to dev during week	UAT	Bug
+Media Ingest Console	Rahul J	BSD-29358	Complete	Verified in PROD	OC-MIC-QA-Record count for 'Select All' changes and mismatches total filter count after selection		PROD	Bug
+Media Ingest Console	Ravi Balasundaram	BSD-29387	To Do	Sent to dev	OC-MIC-QA-Uploader Email column not updated/populated for Dub cards orders in MIC	QA sent back to dev during week	PROD	Bug
+Media Ingest Console	Dhamodharan K	BSD-29440	Complete	Verified in PROD	OC-MIC-QA-Filter "Title" category incorrectly displays Episode Numbers instead of Title suggestions		PROD	Bug
+Media Ingest Console	Ravi Balasundaram	BSD-29502	Complete	Verified in PROD	OC-MIC-QA-Document details are not updated in MIC Console		PROD	Bug
+Media Ingest Console	Rahul J	BSD-29531	Complete	Verified in PROD	OC-MIC-QA-Internal Search: Filter selection does not persist and resets to default "Show All" state		PROD	Bug
+Media Ingest Console	Kaustubh Vedpathak	BSD-29741	Complete	Verified & closed	MIC - FE - Integrate total alert counts for the alerts		Dev	Story
+Media Ingest Console	Rahul J	BSD-29743	In Progress (DEV)	Sent to dev	OC-MIC-QA- History logs status in right detail panel mismatch with the main table status	QA sent back to dev during week	PROD	Bug
+Media Ingest Console	Rahul J	BSD-29877	Complete	Sent to dev	OC-MIC-QA- Copy Clipboard Icons Incorrectly Displayed in Language and Sub Type Columns	QA sent back to dev during week	UAT	Bug
+Media Ingest Console	Rahul J	BSD-29879	Complete	Verified & closed	OC-MIC-QA-Select all is not selecting all the task in flagged filter. only yes option count is selected		Dev	Bug
+Media Ingest Console	Rahul J	BSD-29882	Complete	Sent to dev	OC-MIC-QA-Filter count shows total records and previously selected values disappear from Active Filters after searching and selecting a new value	QA sent back to dev during week		Bug
+Media Ingest Console	Rahul J	BSD-29941	In Progress (QA)	Newly created	OC-MIC-QA: Selected Big Filter is duplicated 2x in the Active Filters section		PROD	Bug
+Media Ingest Console	Ravi Balasundaram	BSD-29959	To Do	Newly created	OC-MIC-QA-Flagged Filtering is not working		PROD	Bug
+Media Ingest Console	Ravi Balasundaram	BSD-29960	To Do	Newly created	OC-MIC-QA-Filtering took more than 20 seconds to load Data in UI		PROD	Bug
+Media Ingest Console	Ravi Balasundaram	BSD-29980	To Do	Newly created	OC-MIC-QA-DSID is missing for few workorders		PROD	Bug
+Media Ingest Console	Ravi Balasundaram	BSD-29981	In Progress (DEV)	Newly created	OC-MIC-QA-Air Date filtering is failing in PROD		PROD	Bug
+QC Workbench	Rahul J	BSD-28748	Complete	Verified in PROD	QCWB - FE - Prioritization and cleanup of unnecessary calls on load and on idle		PROD	Story
+QC Workbench	Rahul J	BSD-29753	Complete	Verified in PROD	OC-QCWB-QA-Tooltip not showing for long titles in the Details panel		PROD	Bug
+QC Workbench	Rahul J	BSD-29756	Complete	Verified & closed	OC-QCWB-QA-Operator tab is not displaying all operator details in QCWB admin page		Dev	Bug
+QC Workbench	Rahul J	BSD-29836	Complete	Verified & closed	[Frontend] Implement  Relaunch Initiation Failed event audit log 		Dev	Story
+QC Workbench	Shankhadeep Das	BSD-29842	Complete	Verified & closed	[Backend] Task List Columns – Remove temporary Real Data column		Dev	Story
+Library Manager	Bhawna Kaushik	BSD-28828	Complete	Verified & closed	[LMv2 PROD] Filter Received At is present but column is not present for that filter		Dev	Bug
+Library Manager	Bhawna Kaushik	BSD-29578	Complete	Verified & closed	LM2.0 DEV: Value of column Received At is not correct in exported file		Dev	Bug
+Library Manager	Bhawna Kaushik	BSD-29636	Complete	Verified & closed	[LM2.0 DEV]: Materials are not displaying even when active filter for Upmix filter is clearing		Dev	Bug
+Library Manager	Pedro Rodriguez	BSD-29736	Complete	Verified & closed	LMv2 - Calculated Columns seem empty at the rendition level		Dev	Bug
+Library Manager	Bhawna Kaushik	BSD-29738	Complete	Verified in UAT	[LM2.0 UAT] Acts filter is not working.		UAT	Bug
+Library Manager	Bhawna Kaushik	BSD-29739	Complete	Verified in UAT	[LM2.0 UAT] API error is returned when user sort column Series CRID and scroll down.		UAT	Bug
+Library Manager	Bhawna Kaushik	BSD-29751	Complete	Verified in UAT	[LM2.0 UAT] Brand and Franchise levels are not present in Export window dropdown.		UAT	Bug
+Library Manager	Krishna Suryavanshi	BSD-29758	Complete	Verified in UAT	[LM2.0 UAT] Reset Filter button does not restore saved filter settings in Saved Filters.		UAT	Bug
+Library Manager	Bhawna Kaushik	BSD-29905	Complete	Newly created	[LM2.0 Dev] Rendition/Materials are not opening in CRMAM		Dev	Bug
+Library Manager	Bhawna Kaushik	BSD-29928	To Do	Newly created	[LM2.0 Dev] Changes made in saved filter are not persisting in new session even when user save those changes		Dev	Bug
+Central Repository	Krishna Suryavanshi	BSD-29594	Complete	Verified & closed	CR MAM Player: Playhead bar overlaps Trigger Workflow dropdown during SD playback		Dev	Bug
+Central Repository	Bhawna Kaushik	BSD-29615	Complete	Verified & closed	CR MAM: Season/Series/Title and Rendition "inactive" flags not respected in UI - renditions/materials remain visible		Dev	
+Central Repository	Krishna Suryavanshi	BSD-29856	Complete	Verified & closed	Suppressed Sessions Are Also Unselectable When Viewing Segment Sessions in CR Tab View		Dev	Bug
+Archives	Krishna Suryavanshi	BSD-29515	Complete	Verified & closed	[Archive DEV] Additional API errors during Edit Material retest — Invalid User Interaction action and S3 MethodNotAllowed		Dev	Bug

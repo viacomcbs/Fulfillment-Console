@@ -36,7 +36,7 @@
     <parameter name="SendReportEmailAddress"
                value="Akilandeswari.Sundararajan@paramount.com"/>
     <!--<parameter name="SendReportEmailAddress"
-               value="Tejaswini.Shinde@paramount.com,Vishnupriya.Arumugam@paramount.com,qa_automation_status_-aaaagmcoe366b6jbhgse77jupu@viacomcbs.org.slack.com"/>
+               value="Akilandeswari.Sundararajan@paramount.com"/>
 -->   <parameter name="ProxyHost" value="localhost"/>
     <parameter name="ProxyDebugPort" value="9099"/> <!--//8089-->
     <parameter name="ProxyPort" value="9097"/>

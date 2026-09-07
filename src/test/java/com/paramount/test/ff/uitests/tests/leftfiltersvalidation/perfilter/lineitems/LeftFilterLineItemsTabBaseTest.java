@@ -75,12 +75,19 @@ public abstract class LeftFilterLineItemsTabBaseTest extends BaseTest {
         }
 
         lineItemsTabSetup.prepareLineItemsTab(softAssert);
-        automationTableViewSetup.ensureAAutomationView(softAssert, ConsoleTab.LINE_ITEMS);
+        if (requiresAutomationViewSetup()) {
+            automationTableViewSetup.ensureAAutomationView(softAssert, ConsoleTab.LINE_ITEMS);
+        }
+    }
+
+    /** Override to {@code false} only for Order Status and Line Item Status (mandatory grid columns, not in Manage columns). */
+    protected boolean requiresAutomationViewSetup() {
+        return true;
     }
 
     private void setCalendarToYesterdayOnce() throws InterruptedException {
         if (!LeftFilterSessionHelper.isCalendarSetToYesterday()) {
-            new CalendarSetupUtil().setDateRangeToYesterday(softAssert);
+            new CalendarSetupUtil().setYesterdayDefaultBookmarkOnce(softAssert);
             LeftFilterSessionHelper.markCalendarSetToYesterday();
         }
     }

@@ -3,12 +3,12 @@ package com.paramount.test.ff.uitests.tests.leftfiltersvalidation.perfilter.orde
 import com.paramount.test.ff.common.util.SoftAssert;
 import com.paramount.test.ff.uitests.helpers.leftfilters.ConsoleTab;
 import com.paramount.test.ff.uitests.helpers.leftfilters.OrdersLeftFilter;
-import com.paramount.test.ff.uitests.tests.leftfiltersvalidation.orders.LeftFilterOrdersTabBaseTest;
+
 import io.qameta.allure.Description;
 import org.testng.annotations.Test;
 
 /** TC101 — Order Status Basic: visible, expand, options, Select All, collapse. */
-public class LF_O_TC101_OrderStatus_BasicTest extends LeftFilterOrdersTabBaseTest {
+public class LF_O_TC101_OrderStatus_BasicTest extends LeftFilterOrderStatusOrdersTabBaseTest {
 
     private static final String FILTER = OrdersLeftFilter.ORDER_STATUS.getDisplayName();
 

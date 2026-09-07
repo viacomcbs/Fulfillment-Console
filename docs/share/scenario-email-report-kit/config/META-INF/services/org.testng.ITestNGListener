@@ -1,0 +1,3 @@
+com.yourteam.test.listeners.AllureListeners
+com.yourteam.test.listeners.SuiteListeners
+com.yourteam.test.listeners.ScenarioEmailSuiteListener

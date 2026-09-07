@@ -1,0 +1,21 @@
+Environment : UAT
+
+URL : https://uat-operationsconsole.paramountmsc.com/msc-fulfillment-performance/
+
+Filter section : View Exclusion — Group option
+
+1. Open Fulfillment Performance Metrics application (UAT)
+2. Navigate to the View Exclusion section
+3. Select Global Group option from the Group dropdown
+4. Observe the View Exclusion count displayed
+5. Change Group option to Paramount and note the View Exclusion count
+6. Change Group option to GCD Group and note the View Exclusion count
+7. Compare Global Group count vs Paramount + GCD Group counts
+
+Expected :
+When Global Group is selected, View Exclusion count should reflect the combined total of Paramount option and GCD Group option (aggregate of both group selections).
+
+Issue 1 :
+When Global Group option is selected, View Exclusion always shows 1000 regardless of the actual exclusion data. Selecting Paramount and GCD Group individually shows the correct exclusion counts, but Global Group does not aggregate them and instead displays a fixed value of 1000.
+
+Recording : 20260818-1238-17.3393535.mp4 (attached)

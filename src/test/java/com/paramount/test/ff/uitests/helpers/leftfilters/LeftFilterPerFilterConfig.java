@@ -1,5 +1,7 @@
 package com.paramount.test.ff.uitests.helpers.leftfilters;
 
+import com.paramount.test.ff.uitests.helpers.managecolumns.ManageColumnOptions;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -111,33 +113,40 @@ public final class LeftFilterPerFilterConfig {
     }
 
     private static void registerOrdersDefaults(Map<String, FilterSpec> specs) {
-        putCheckbox(specs, OrdersLeftFilter.LINE_ITEM_STATUS.getDisplayName(), "Delivering", null, "Delivery Complete");
-        putCheckbox(specs, OrdersLeftFilter.ORDER_STATUS.getDisplayName(), "Done: Delivered", null, "Done: Failed");
+        putCheckbox(specs, OrdersLeftFilter.LINE_ITEM_STATUS.getDisplayName(), "Delivering", "Status",
+                "Delivery Complete");
+        putCheckbox(specs, OrdersLeftFilter.ORDER_STATUS.getDisplayName(), null, "Status", null, "Done: Failed");
         putLargeList(specs, OrdersLeftFilter.PARTNER.getDisplayName());
-        putCheckbox(specs, OrdersLeftFilter.ENVIRONMENT.getDisplayName(), "Production", "prod", "Staging");
+        putCheckbox(specs, OrdersLeftFilter.ENVIRONMENT.getDisplayName(), null, null, null, null);
         putCheckbox(specs, OrdersLeftFilter.JOB_TYPE.getDisplayName(), "Fulfillment", "fulfill", null);
-        putCheckbox(specs, OrdersLeftFilter.SUBMITTED_BY.getDisplayName(), "System", "sys", null);
+        putCheckbox(specs, OrdersLeftFilter.SUBMITTED_BY.getDisplayName(), null, ManageColumnOptions.SUBMITTED_BY, null, null);
         putCheckbox(specs, OrdersLeftFilter.SERIES_TITLE.getDisplayName(), "Survivor", "surv", null);
-        putCheckbox(specs, OrdersLeftFilter.FLAG.getDisplayName(), "Priority", "prio", null);
-        putCheckbox(specs, OrdersLeftFilter.ASSIGNED_TO.getDisplayName(), "Unassigned", "unassign", null);
+        putCheckbox(specs, OrdersLeftFilter.FLAG.getDisplayName(), null, null, "flag", null);
+        putCheckbox(specs, OrdersLeftFilter.ASSIGNED_TO.getDisplayName(), null, ManageColumnOptions.ASSIGNED_TO, "unassign", null);
         putRange(specs, OrdersLeftFilter.SEASON_NUMBER.getDisplayName());
         putCheckbox(specs, OrdersLeftFilter.REGION.getDisplayName(), "US", "us", null);
         putRange(specs, OrdersLeftFilter.EPISODE_NUMBER.getDisplayName());
-        putCheckbox(specs, OrdersLeftFilter.BRAND.getDisplayName(), "Paramount", "param", null);
+        putCheckbox(specs, OrdersLeftFilter.BRAND.getDisplayName(), null, null, null);
         putCheckbox(specs, OrdersLeftFilter.SYSTEM_NAME.getDisplayName(), "VMS", "vms", null);
         putCheckbox(specs, OrdersLeftFilter.LANGUAGE.getDisplayName(), "English", "eng", null);
         putCheckbox(specs, OrdersLeftFilter.DEMAND_SYSTEM.getDisplayName(), "OPC", "opc", null);
         putCheckbox(specs, OrdersLeftFilter.ERROR_MESSAGE.getDisplayName(), "Timeout", "time", null);
         putCheckbox(specs, OrdersLeftFilter.FRANCHISE.getDisplayName(), "Star Trek", "trek", null);
         putCheckbox(specs, OrdersLeftFilter.DELIVERY_PROTOCOL.getDisplayName(), "ASPERA", "asper", null);
-        putCheckbox(specs, OrdersLeftFilter.ACTIVITY_TYPE.getDisplayName(), "Delivery", "deliv", null);
+        putCheckbox(specs, OrdersLeftFilter.ACTIVITY_TYPE.getDisplayName(), null, null, null);
         putCheckbox(specs, OrdersLeftFilter.CONTENT_TYPE.getDisplayName(), "Episode", "epis", null);
     }
 
     private static void putCheckbox(Map<String, FilterSpec> specs, String displayName,
                                     String sampleOption, String searchText, String secondOption) {
+        putCheckbox(specs, displayName, sampleOption, displayName, searchText, secondOption);
+    }
+
+    private static void putCheckbox(Map<String, FilterSpec> specs, String displayName,
+                                    String sampleOption, String tableColumn, String searchText,
+                                    String secondOption) {
         specs.put(displayName, new FilterSpec(
-                displayName, FilterKind.CHECKBOX_LIST, sampleOption, displayName,
+                displayName, FilterKind.CHECKBOX_LIST, sampleOption, tableColumn,
                 searchText, secondOption, EnumSet.noneOf(LeftFilterTestCategory.class)));
     }
 

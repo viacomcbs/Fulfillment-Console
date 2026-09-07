@@ -61,7 +61,7 @@ public final class OrdersTabTestSetupHelper extends BaseTest {
     public boolean isFilterPanelAnchored(int waitSeconds) {
         long endTime = System.currentTimeMillis() + (waitSeconds * 1000L);
         while (System.currentTimeMillis() < endTime) {
-            if (isFilterPanelVisibleFast()) {
+            if (isLeftFilterPanelExpandedFast()) {
                 return true;
             }
             SleepUtils.sleep(500);
@@ -75,24 +75,34 @@ public final class OrdersTabTestSetupHelper extends BaseTest {
     }
 
     private boolean anchorLeftFilterPanel() throws InterruptedException {
-        if (isFilterPanelVisibleFast()) {
+        if (isLeftFilterPanelExpandedFast()) {
             return true;
         }
         if (!isLeftFilterPanelInDom() && !WaitUtil.isDisplayFast(homePage.getHeaderTitle(), 3)) {
             return false;
         }
+        Logger.logReportMessage("Left filter side nav is collapsed — clicking vertical left wall to expand");
         leftFilterPanelUtil.ensureLeftFilterPanelOpen();
         Thread.sleep(1000);
-        return isFilterPanelVisibleFast();
+        return isLeftFilterPanelExpandedFast();
     }
 
-    private boolean isFilterPanelVisibleFast() {
+    /** True only when the filter side nav is expanded (not merely when the collapsed funnel icon is visible). */
+    private boolean isLeftFilterPanelExpandedFast() {
         if (leftFilterPanelUtil.isLeftFilterPanelOpenViaDom()) {
             return true;
         }
         return WaitUtil.isDisplayFast(leftFilterPanel.filterPanelOpen(), 2)
                 || WaitUtil.isDisplayFast(leftFilterPanel.filterPanelHeader(), 3)
-                || WaitUtil.isDisplayFast(leftFilterPanel.filterPanelExpandIcon(), 2)
+                || WaitUtil.isDisplayFast(leftFilterPanel.filterPanelSideNavOpen(), 2);
+    }
+
+    private boolean isFilterPanelVisibleFast() {
+        if (isLeftFilterPanelExpandedFast()) {
+            return true;
+        }
+        // Collapsed funnel icon means panel is in DOM but not expanded yet.
+        return WaitUtil.isDisplayFast(leftFilterPanel.filterPanelExpandIcon(), 2)
                 || WaitUtil.isDisplayFast(leftFilterPanel.leftFilterPanel(), 2)
                 || WaitUtil.isDisplayFast(homePage.filterPanelLabel(), 2);
     }

@@ -1,0 +1,53 @@
+<!-- LF_Diag_001 — Login + capture Console/API errors while left filter loads after login.
+     Dev team request: identify exact Network tab and Console errors when left filter fails to load.
+     IntelliJ: right-click this file -> Run
+     Maven: mvn test "-DsuiteXmlFile=src/test/resources/LF_Diag_001_LeftFilterLoadDiagnostic_ProdServerSuite.xml" -->
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<suite name="LF_Diag_001 Left Filter Load Diagnostic PROD" parallel="false" preserve-order="true">
+
+    <parameter name="RunAsFactory" value="false"/>
+    <parameter name="Browser" value="Chrome"/>
+    <parameter name="OS" value="Windows"/>
+    <parameter name="OSVersion" value="11"/>
+    <parameter name="DeviceCategory" value="Desktop"/>
+    <parameter name="TestType" value="Regression"/>
+    <parameter name="GuiType" value="Web"/>
+    <parameter name="SendReportAutoEmails" value="false"/>
+    <parameter name="SendChatReport" value="false"/>
+
+    <parameter name="Application" value="Fulfillment Console"/>
+    <parameter name="ApplicationTitle" value="Fulfillment Console"/>
+    <parameter name="TestEnvironment" value="PROD"/>
+
+    <parameter name="LabUrl" value="https://www.synergyserver.tech"/>
+    <parameter name="UserKey" value="af27f06e-2e7e-4c8d-9312-2320423e4641"/>
+    <parameter name="LocalURL" value="http://localhost:39445/synergy"/>
+    <parameter name="LocalExecution" value="false"/>
+    <parameter name="ClientID" value="5CG23257SH"/>
+
+    <parameter name="TargetUrlPROD" value="https://operationsconsole.paramountmsc.com/fulfillment/"/>
+    <parameter name="Username" value="Akilandeswari.Sundararajan@paramount.com"/>
+    <parameter name="Password" value="Powerautomate@1103"/>
+    <!-- Service account (access issues):
+    <parameter name="Username" value="mscbsdqasvc@msc.cbs.net"/>
+    <parameter name="Password" value="dtZHl)5C?;?Z;8R=YDm84$YV"/> -->
+
+    <parameter name="PathToElements" value="/src/test/resources/elements/"/>
+    <parameter name="PageLoadWaitTime" value="120"/>
+
+    <listeners>
+        <listener class-name="com.paramount.test.ff.common.listeners.AllureListeners"/>
+        <listener class-name="com.paramount.test.ff.common.listeners.SuiteListeners"/>
+    </listeners>
+
+    <test verbose="1" name="LF_Diag_001 Left filter load diagnostic" preserve-order="true">
+        <classes>
+            <class name="com.paramount.test.ff.uitests.tests.leftfiltersvalidation.diagnostic.LF_Diag_001_CaptureLeftFilterLoadConsoleAndApiErrors">
+                <methods>
+                    <include name="captureLeftFilterLoadConsoleAndApiErrors"/>
+                </methods>
+            </class>
+        </classes>
+    </test>
+
+</suite>

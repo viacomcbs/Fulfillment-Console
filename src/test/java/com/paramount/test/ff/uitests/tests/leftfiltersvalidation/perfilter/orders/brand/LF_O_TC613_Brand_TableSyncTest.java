@@ -3,24 +3,24 @@ package com.paramount.test.ff.uitests.tests.leftfiltersvalidation.perfilter.orde
 import com.paramount.test.ff.common.util.SoftAssert;
 import com.paramount.test.ff.uitests.helpers.leftfilters.ConsoleTab;
 import com.paramount.test.ff.uitests.helpers.leftfilters.OrdersLeftFilter;
-import com.paramount.test.ff.uitests.helpers.leftfilters.LeftFilterPerFilterTestRunner;
-import com.paramount.test.ff.uitests.helpers.leftfilters.LeftFilterTestCategory;
-import com.paramount.test.ff.uitests.tests.leftfiltersvalidation.orders.LeftFilterOrdersTabBaseTest;
 import io.qameta.allure.Description;
 import org.testng.annotations.Test;
 
-/** TC613 — Brand Table sync. */
-public class LF_O_TC613_Brand_TableSyncTest extends LeftFilterOrdersTabBaseTest {
+/**
+ * TC613 — Brand table sync on Orders view (order-level):
+ * first non-zero brand (not literal {@code All}) → filter count = table record count →
+ * every visible Brand column cell matches the selected brand (no row expand).
+ */
+public class LF_O_TC613_Brand_TableSyncTest extends LeftFilterBrandOrdersTabBaseTest {
 
     private static final String FILTER = OrdersLeftFilter.BRAND.getDisplayName();
-    private static final int FILTER_INDEX = 13;
 
     @Test(priority = 1)
-    @Description("TC613: Brand — Table sync")
+    @Description("TC613: Brand — filter count matches table record count; all visible Brand cells match filter")
     public void tc613_brandTableSync() throws InterruptedException {
         softAssert = new SoftAssert("tc613_brandTableSync", getClass().getSimpleName());
-        LeftFilterPerFilterTestRunner.run(softAssert, leftFilterPanelUtil, ConsoleTab.ORDERS,
-                FILTER, LeftFilterTestCategory.TABLE_SYNC, FILTER_INDEX);
+        leftFilterPanelUtil.navigateToTab(ConsoleTab.ORDERS);
+        leftFilterPanelUtil.validateBrandTableSyncSmoke(softAssert, FILTER);
         softAssert.assertAll();
     }
 }

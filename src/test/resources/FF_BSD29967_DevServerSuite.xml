@@ -1,0 +1,60 @@
+<!-- BSD-29967 multi-submission DSID validation on DEV Synergy server.
+     Round-robin 3 non-zero Environment filters + mandatory UWFFSP; Yesterday date; skip envs with no (i) icon;
+     max 2 orders per workflow when DSIDs blank.
+     mvn test "-DsuiteXmlFile=src/test/resources/FF_BSD29967_DevServerSuite.xml" -->
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<suite name="FF BSD-29967 DEV" parallel="false" preserve-order="true">
+
+    <parameter name="RunAsFactory" value="false"/>
+    <parameter name="Browser" value="Chrome"/>
+    <parameter name="OS" value="Windows"/>
+    <parameter name="OSVersion" value="11"/>
+    <parameter name="DeviceCategory" value="Desktop"/>
+    <parameter name="TestType" value="Regression"/>
+    <parameter name="GuiType" value="Web"/>
+    <parameter name="SendReportAutoEmails" value="true"/>
+    <parameter name="SendReportEmailAddress" value="Akilandeswari.Sundararajan@paramount.com"/>
+    <parameter name="SendChatReport" value="false"/>
+
+    <parameter name="Application" value="Fulfillment Console"/>
+    <parameter name="ApplicationTitle" value="Fulfillment Console"/>
+    <parameter name="TestEnvironment" value="DEV"/>
+
+    <parameter name="LabUrl" value="https://www.synergyserver.tech"/>
+    <parameter name="UserKey" value="af27f06e-2e7e-4c8d-9312-2320423e4641"/>
+    <parameter name="LocalURL" value="http://localhost:39445/synergy"/>
+    <parameter name="LocalExecution" value="false"/>
+    <parameter name="ClientID" value="5CG23257SH"/>
+
+    <parameter name="TargetUrlDEV" value="https://dev-operationsconsole.paramountmsc.com/fulfillment/"/>
+    <parameter name="TargetUrlUAT" value="https://uat-operationsconsole.paramountmsc.com/fulfillment/"/>
+    <parameter name="TargetUrlPROD" value="https://operationsconsole.paramountmsc.com/fulfillment/"/>
+
+    <parameter name="Username" value="svc-msc_bsd_qa_svc@paramount.com"/>
+    <parameter name="Password" value="D7h3M3Bo9SH4vJowwCXku2737!"/>
+
+    <parameter name="PathToElements" value="/src/test/resources/elements/"/>
+    <parameter name="PageLoadWaitTime" value="120"/>
+    <parameter name="EmailRelayHost" value="imailrelay.viacom.com"/>
+    <parameter name="EmailRelayPort" value="25"/>
+    <parameter name="EmailSenderAddress" value="NOREPLY@dteqa.com"/>
+    <parameter name="TestRailProjectId" value="223"/>
+    <parameter name="PostDataToTestRail" value="false"/>
+    <parameter name="JiraTicketID" value="BSD-29967"/>
+    <parameter name="JiraStoryTitle" value="Multi-submission orders — FC Details DSID vs ops-console Jobs dsIdList"/>
+    <parameter name="AttachJiraEvidenceOnPass" value="true"/>
+
+    <listeners>
+        <listener class-name="com.paramount.test.ff.common.listeners.AllureListeners"/>
+        <listener class-name="com.paramount.test.ff.common.listeners.SuiteListeners"/>
+        <listener class-name="com.paramount.test.ff.common.listeners.Bsd29967SuiteListener"/>
+    </listeners>
+
+    <test verbose="1" name="BSD-29967 — round-robin 3 non-zero + UWFFSP Environment workflows (max 2 orders when DSIDs blank)" preserve-order="true">
+        <classes>
+            <class name="com.paramount.test.ff.uitests.tests.tablevalidation.bsd29967.FF_BSD29967_O_001_ValidateMultiSubmissionOrderDetailsDsid"/>
+            <class name="com.paramount.test.ff.uitests.tests.tablevalidation.bsd29967.FF_BSD29967_O_002_ValidateDsidMatchesOpsConsoleDsIdList"/>
+        </classes>
+    </test>
+
+</suite>

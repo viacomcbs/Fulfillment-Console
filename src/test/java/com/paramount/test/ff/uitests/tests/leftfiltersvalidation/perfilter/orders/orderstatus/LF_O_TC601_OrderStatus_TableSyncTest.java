@@ -2,31 +2,21 @@ package com.paramount.test.ff.uitests.tests.leftfiltersvalidation.perfilter.orde
 
 import com.paramount.test.ff.common.util.SoftAssert;
 import com.paramount.test.ff.uitests.helpers.leftfilters.ConsoleTab;
-import com.paramount.test.ff.uitests.helpers.leftfilters.LeftFilterEmailScenario;
 import com.paramount.test.ff.uitests.helpers.leftfilters.OrdersLeftFilter;
-import com.paramount.test.ff.uitests.tests.leftfiltersvalidation.orders.LeftFilterOrdersTabBaseTest;
 import io.qameta.allure.Description;
 import org.testng.annotations.Test;
 
 /**
- * TC601 — Order Status table sync (smoke):
- * always select Done: Delivered → table record count matches filter count (or both 0) →
- * first 1–2 visible Status cells show Delivered when count > 0.
- *
- * <p>Run with {@code LF_O_TC601_OrderStatus_TableSync_ProdServerSuite.xml} (PROD) or
- * {@code LF_O_TC601_OrderStatus_TableSync_DevServerSuite.xml} (DEV).
- * Running this class directly from IntelliJ uses {@code TestNGSuiteConfig.xml} defaults (PROD).
+ * TC601 — Order Status table sync on Orders view (Brand-style):
+ * first non-zero option → filter count = table record count →
+ * every visible Status column cell matches the mapped table keyword.
  */
-@LeftFilterEmailScenario(
-        manualId = "LF_O_TC601",
-        scenario = "Order Status left filter — Selected option count matches Orders table record count and Status column values"
-)
-public class LF_O_TC601_OrderStatus_TableSyncTest extends LeftFilterOrdersTabBaseTest {
+public class LF_O_TC601_OrderStatus_TableSyncTest extends LeftFilterOrderStatusOrdersTabBaseTest {
 
     private static final String FILTER = OrdersLeftFilter.ORDER_STATUS.getDisplayName();
 
     @Test(priority = 1)
-    @Description("TC601: Order Status — Done: Delivered count sync + first rows Status = Delivered")
+    @Description("TC601: Order Status — filter count matches table; all visible Status cells match filter")
     public void tc601_orderStatus_tableSync() throws InterruptedException {
         softAssert = new SoftAssert("tc601_orderStatus_tableSync", getClass().getSimpleName());
         leftFilterPanelUtil.navigateToTab(ConsoleTab.ORDERS);

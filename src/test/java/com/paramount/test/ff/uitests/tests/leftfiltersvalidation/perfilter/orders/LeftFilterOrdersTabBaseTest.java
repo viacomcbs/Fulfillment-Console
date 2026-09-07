@@ -15,6 +15,7 @@ import com.paramount.test.ff.uitests.helpers.leftfilters.ConsoleTab;
 import com.paramount.test.ff.uitests.helpers.leftfilters.LeftFilterPanelUtil;
 import com.paramount.test.ff.uitests.helpers.leftfilters.LeftFilterSessionHelper;
 import com.paramount.test.ff.uitests.helpers.leftfilters.OrdersLeftFilter;
+import com.paramount.test.ff.uitests.helpers.managecolumns.ManageColumnOptions;
 import com.paramount.test.ff.common.listeners.PerFilterTestTrackerListener;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
@@ -71,7 +72,7 @@ public abstract class LeftFilterOrdersTabBaseTest extends BaseTest {
             DriverUtil.launchApplicationOnBrowser();
             login.loginToFF();
             WaitUtil.waitForJSToLoad(15);
-            setCalendarToYesterdayOnce();
+            ensureYesterdayCalendar(softAssert);
             Verify.hardAssert(ordersTabSetup.waitForLoginReadyForLeftFilters(),
                     "Login failed — filter panel not visible after login");
             Thread.sleep(FILTER_EXPAND_WAIT_MS);
@@ -81,21 +82,39 @@ public abstract class LeftFilterOrdersTabBaseTest extends BaseTest {
             driver.get().browser().refresh();
             WaitUtil.waitForJSToLoad(45);
             Thread.sleep(FILTER_EXPAND_WAIT_MS);
+            ensureYesterdayCalendar(softAssert);
+            leftFilterPanelUtil.clearAllActiveFiltersIfPresent();
         }
 
         leftFilterPanelUtil.ensureOrdersDataLoaded(softAssert);
         leftFilterPanelUtil.navigateToTab(ConsoleTab.ORDERS);
-        automationTableViewSetup.ensureAAutomationView(softAssert, ConsoleTab.ORDERS);
+        if (requiresAutomationViewSetup()) {
+            automationTableViewSetup.ensureColumnEnabled(softAssert, ConsoleTab.ORDERS, manageColumnsColumnToEnable());
+        }
     }
 
-    protected void setCalendarToYesterdayOnce() throws InterruptedException {
-        if (!LeftFilterSessionHelper.isCalendarSetToYesterday()) {
-            CalendarSetupUtil calendarSetup = new CalendarSetupUtil();
+    /** Override to {@code false} only for Order Status and Line Item Status (mandatory grid columns, not in Manage columns). */
+    protected boolean requiresAutomationViewSetup() {
+        return true;
+    }
+
+    /** Column to enable once per session via Manage columns before filter tests run. */
+    protected String manageColumnsColumnToEnable() {
+        return ManageColumnOptions.ACTIVITY_TYPE;
+    }
+
+    /**
+     * Ensures toolbar date is Yesterday. After a browser refresh the app reloads with the default
+     * range (e.g. Last 7 days) even when {@link LeftFilterSessionHelper} already recorded Yesterday.
+     */
+    protected void ensureYesterdayCalendar(SoftAssert softAssert) throws InterruptedException {
+        CalendarSetupUtil calendarSetup = new CalendarSetupUtil();
+        if (!calendarSetup.isYesterdaySelected()) {
+            Logger.logReportMessage("Calendar is not Yesterday — applying Yesterday bookmark and date");
             calendarSetup.setDateRangeToYesterday(softAssert);
-            if (!calendarSetup.isYesterdaySelected()) {
-                calendarSetup.hardRefreshAndSetYesterday(softAssert);
-            }
-            LeftFilterSessionHelper.markCalendarSetToYesterday();
+        } else {
+            Logger.logReportMessage("Yesterday calendar already on toolbar — skip");
         }
+        LeftFilterSessionHelper.markCalendarSetToYesterday();
     }
 }
