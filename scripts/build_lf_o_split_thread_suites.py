@@ -142,8 +142,8 @@ def session_header(filter_dir: str, filter_label: str, maven_path: str, suite_na
     <parameter name="TargetUrlUAT" value="https://uat-operationsconsole.paramountmsc.com/fulfillment/"/>
     <parameter name="TargetUrlPROD" value="https://operationsconsole.paramountmsc.com/fulfillment/"/>
 
-    <parameter name="Username" value="svc-msc_bsd_qa_svc@paramount.com"/>
-    <parameter name="Password" value="D7h3M3Bo9SH4vJowwCXku2737!"/>
+    <parameter name="Username" value=""/>
+    <parameter name="Password" value=""/>
 
     <parameter name="PathToElements" value="/src/test/resources/elements/"/>
     <parameter name="PageLoadWaitTime" value="120"/>

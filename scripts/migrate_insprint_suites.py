@@ -10,9 +10,6 @@ PROJECT_ROOT = Path(__file__).resolve().parents[1]
 RES = PROJECT_ROOT / "src/test/resources"
 OUT = RES / "insprint-automation"
 
-SVC_USER = "svc-msc_bsd_qa_svc@paramount.com"
-SVC_PASS = "D7h3M3Bo9SH4vJowwCXku2737!"
-
 MIGRATIONS = [
     ("FF_DSID_BSD29870_ProdServerSuite.xml", "BSD-29870_ProdServerSuite.xml"),
     ("FF_BSD29967_DevServerSuite.xml", "BSD-29967_ProdServerSuite.xml"),
@@ -29,8 +26,8 @@ USER_PATTERNS = [
 
 
 def normalize_prod_params(content: str, new_maven_name: str) -> str:
-    content = USER_PATTERNS[0].sub(f'<parameter name="Username" value="{SVC_USER}"/>', content)
-    content = USER_PATTERNS[1].sub(f'<parameter name="Password" value="{SVC_PASS}"/>', content)
+    content = USER_PATTERNS[0].sub('<parameter name="Username" value=""/>', content)
+    content = USER_PATTERNS[1].sub('<parameter name="Password" value=""/>', content)
     content = re.sub(
         r'<parameter name="TestEnvironment" value="[^"]*"/>',
         '<parameter name="TestEnvironment" value="PROD"/>',

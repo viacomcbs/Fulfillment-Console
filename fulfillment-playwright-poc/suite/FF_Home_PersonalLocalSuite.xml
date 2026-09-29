@@ -15,8 +15,8 @@
     <parameter name="TargetUrlUAT" value="https://uat-operationsconsole.paramountmsc.com/fulfillment/"/>
     <parameter name="TargetUrlPROD" value="https://operationsconsole.paramountmsc.com/fulfillment/"/>
 
-    <parameter name="Username" value="Akilandeswari.Sundararajan@paramount.com"/>
-    <parameter name="Password" value="Powerautomate@1103"/>
+    <parameter name="Username" value=""/>
+    <parameter name="Password" value=""/>
 
     <parameter name="Headless" value="false"/>
     <parameter name="PageLoadWaitTime" value="120"/>

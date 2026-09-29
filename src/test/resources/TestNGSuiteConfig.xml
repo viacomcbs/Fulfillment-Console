@@ -82,15 +82,8 @@
     <parameter name="TargetUrlUAT" value="https://uat-operationsconsole.paramountmsc.com/fulfillment/"/>
     <parameter name="TargetUrlPROD" value="https://operationsconsole.paramountmsc.com/fulfillment/"/>
     <parameter name="TargetUrlPR" value="https://pr.paramountmsc.com/pr/Fulfillment/11423"/>
-
-
-
-    <!--  <parameter name="Username" value="mscbsdqasvc@msc.cbs.net"/>
-      <parameter name="Password" value="dtZHl)5C?;?Z;8R=YDm84$YV"/>
-      <parameter name="Username" value="Akilandeswari.Sundararajan@paramount.com"/>
-      <parameter name="Password" value="Powerautomate@1103"/>-->
-    <parameter name="Username" value="svc-msc_bsd_qa_svc@paramount.com"/>
-    <parameter name="Password" value="D7h3M3Bo9SH4vJowwCXku2737!"/>
+    <parameter name="Username" value=""/>
+    <parameter name="Password" value=""/>
 
     <parameter name="LeftFilterEmailReport" value="true"/>
     <parameter name="LeftFilterEmailSuiteTitle" value="Orders Tab — Activity Type filter vs line-item table sync (TC620)"/>

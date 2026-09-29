@@ -14,8 +14,8 @@
     <parameter name="ClientID" value="6a64ce12-aec8-43da-a592-e5485ffe3767"/>
     <parameter name="ApplicationTitle" value="Fulfillment Console"/>
     <parameter name="TargetUrlPROD" value="https://operationsconsole.paramountmsc.com/fulfillment/"/>
-    <parameter name="Username" value="svc-msc_bsd_qa_svc@paramount.com"/>
-    <parameter name="Password" value="D7h3M3Bo9SH4vJowwCXku2737!"/>
+    <parameter name="Username" value=""/>
+    <parameter name="Password" value=""/>
     <parameter name="PathToElements" value="/src/test/resources/elements/"/>
     <parameter name="PathToAppDataConfig" value="/src/test/resources/AppDataConfig.json"/>
     <parameter name="SendReportAutoEmails" value="false"/>

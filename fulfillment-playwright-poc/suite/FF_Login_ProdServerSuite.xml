@@ -14,8 +14,8 @@
     <parameter name="TargetUrlUAT" value="https://uat-operationsconsole.paramountmsc.com/fulfillment/"/>
     <parameter name="TargetUrlPROD" value="https://operationsconsole.paramountmsc.com/fulfillment/"/>
 
-    <parameter name="Username" value="mscbsdqasvc@msc.cbs.net"/>
-    <parameter name="Password" value="dtZHl)5C?;?Z;8R=YDm84$YV"/>
+    <parameter name="Username" value=""/>
+    <parameter name="Password" value=""/>
 
     <parameter name="Headless" value="false"/>
     <parameter name="PageLoadWaitTime" value="120"/>
