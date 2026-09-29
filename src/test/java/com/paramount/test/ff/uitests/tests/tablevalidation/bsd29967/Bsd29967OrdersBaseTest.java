@@ -5,6 +5,7 @@ import com.paramount.test.ff.common.loginUtil.DriverUtil;
 import com.paramount.test.ff.common.loginUtil.Login;
 import com.paramount.test.ff.common.loginUtil.Verify;
 import com.paramount.test.ff.common.loginUtil.WaitUtil;
+import com.paramount.test.ff.common.util.Config;
 import com.paramount.test.ff.common.util.Logger;
 import com.paramount.test.ff.common.util.SoftAssert;
 import com.paramount.test.ff.uitests.helpers.bsd29967.Bsd29967ColumnUtil;
@@ -22,7 +23,7 @@ import org.testng.annotations.BeforeMethod;
 
 import static com.paramount.test.ff.uitests.helpers.leftfilters.LeftFilterConstants.FILTER_EXPAND_WAIT_MS;
 
-/** Base for BSD-29967 — Yesterday, round-robin 3 non-zero + UWFFSP Environment workflows, max 2 orders per workflow when DSIDs blank, shared session. */
+/** Base for BSD-29967 — calendar preset from suite (Yesterday default or Today), Environment workflows from suite or round-robin, shared session. */
 public abstract class Bsd29967OrdersBaseTest extends BaseTest {
 
     protected Login login;
@@ -66,7 +67,7 @@ public abstract class Bsd29967OrdersBaseTest extends BaseTest {
             Verify.hardAssert(ordersTabSetup.waitForLoginReadyForLeftFilters(),
                     "Login failed — filter panel not visible after login");
             Thread.sleep(FILTER_EXPAND_WAIT_MS);
-            setCalendarToYesterdayOnce();
+            setCalendarOncePerSession();
             Bsd29967SessionHelper.markLoggedIn();
         } else {
             Logger.logReportMessage("Reusing session for next BSD-29967 test — no refresh");
@@ -83,10 +84,17 @@ public abstract class Bsd29967OrdersBaseTest extends BaseTest {
         leftFilterPanelUtil.ensureLeftFilterPanelOpen();
     }
 
-    protected void setCalendarToYesterdayOnce() throws InterruptedException {
+    protected void setCalendarOncePerSession() throws InterruptedException {
+        String preset = Config.getString("Bsd29967CalendarPreset");
+        if (preset != null && "Today".equalsIgnoreCase(preset.trim())) {
+            if (!Bsd29967SessionHelper.isCalendarSetToToday()) {
+                new CalendarSetupUtil().setDateRangeToToday(softAssert);
+                Bsd29967SessionHelper.markCalendarSetToToday();
+            }
+            return;
+        }
         if (!Bsd29967SessionHelper.isCalendarSetToYesterday()) {
-            CalendarSetupUtil calendarSetup = new CalendarSetupUtil();
-            calendarSetup.setYesterdayDefaultBookmarkOnce(softAssert);
+            new CalendarSetupUtil().setYesterdayDefaultBookmarkOnce(softAssert);
             Bsd29967SessionHelper.markCalendarSetToYesterday();
         }
     }

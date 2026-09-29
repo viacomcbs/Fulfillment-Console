@@ -3,12 +3,12 @@ package com.paramount.test.ff.uitests.tests.leftfiltersvalidation.perfilter.orde
 import com.paramount.test.ff.common.util.SoftAssert;
 import com.paramount.test.ff.uitests.helpers.leftfilters.ConsoleTab;
 import com.paramount.test.ff.uitests.helpers.leftfilters.OrdersLeftFilter;
-import com.paramount.test.ff.uitests.tests.leftfiltersvalidation.perfilter.orders.LeftFilterOrdersTabBaseTest;
+import com.paramount.test.ff.uitests.tests.leftfiltersvalidation.perfilter.orders.contenttype.LeftFilterContentTypeOrdersTabBaseTest;
 import io.qameta.allure.Description;
 import org.testng.annotations.Test;
 
 /** TC121 — ContentType Basic. */
-public class LF_O_TC121_ContentType_BasicTest extends LeftFilterOrdersTabBaseTest {
+public class LF_O_TC121_ContentType_BasicTest extends LeftFilterContentTypeOrdersTabBaseTest {
 
     private static final String FILTER = OrdersLeftFilter.CONTENT_TYPE.getDisplayName();
     private static final int FILTER_INDEX = 21;

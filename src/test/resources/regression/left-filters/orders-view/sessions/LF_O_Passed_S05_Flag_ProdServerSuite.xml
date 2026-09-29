@@ -1,0 +1,64 @@
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<!-- Orders left-filter session on PROD Synergy (results merged into one report after all sessions).
+     Filter: Flag. Maven: mvn test "-DsuiteXmlFile=src/test/resources/regression/left-filters/orders-view/sessions/LF_O_Passed_S05_Flag_ProdServerSuite.xml" -->
+<suite name="LF Orders Passed S05 Flag PROD" parallel="false" preserve-order="true">
+
+    <parameter name="RunAsFactory" value="false"/>
+    <parameter name="Browser" value="Chrome"/>
+    <parameter name="OS" value="Windows"/>
+    <parameter name="OSVersion" value="11"/>
+    <parameter name="DeviceCategory" value="Desktop"/>
+    <parameter name="TestType" value="Regression"/>
+    <parameter name="GuiType" value="Web"/>
+    <parameter name="SendReportAutoEmails" value="false"/>
+    <parameter name="SendChatReport" value="false"/>
+    <parameter name="LeftFilterEmailReport" value="true"/>
+    <parameter name="LeftFilterEmailSuiteTitle" value="Orders Tab — Left Filters Regression (PROD)"/>
+
+    <parameter name="Application" value="Fulfillment Console"/>
+    <parameter name="ApplicationTitle" value="Fulfillment Console"/>
+    <parameter name="TestEnvironment" value="PROD"/>
+
+    <parameter name="LabUrl" value="https://www.synergyserver.tech"/>
+    <parameter name="UserKey" value="af27f06e-2e7e-4c8d-9312-2320423e4641"/>
+    <parameter name="LocalURL" value="http://localhost:39445/synergy"/>
+    <parameter name="LocalExecution" value="false"/>
+    <parameter name="ClientID" value="5CG23257SH"/>
+
+    <parameter name="TargetUrlDEV" value="https://dev-operationsconsole.paramountmsc.com/fulfillment/"/>
+    <parameter name="TargetUrlUAT" value="https://uat-operationsconsole.paramountmsc.com/fulfillment/"/>
+    <parameter name="TargetUrlPROD" value="https://operationsconsole.paramountmsc.com/fulfillment/"/>
+
+    <parameter name="Username" value="svc-msc_bsd_qa_svc@paramount.com"/>
+    <parameter name="Password" value="D7h3M3Bo9SH4vJowwCXku2737!"/>
+
+    <parameter name="PathToElements" value="/src/test/resources/elements/"/>
+    <parameter name="PageLoadWaitTime" value="120"/>
+    <parameter name="EmailSenderAddress" value="NOREPLY@dteqa.com"/>
+
+    <listeners>
+        <listener class-name="com.paramount.test.ff.common.listeners.AllureListeners"/>
+        <listener class-name="com.paramount.test.ff.common.listeners.SuiteListeners"/>
+        <listener class-name="com.paramount.test.ff.common.listeners.LeftFilterSuiteListener"/>
+    </listeners>
+
+    <test verbose="1" name="Flag — left filters" preserve-order="true">
+        <classes>
+            <class name="com.paramount.test.ff.uitests.tests.leftfiltersvalidation.perfilter.orders.flag.LF_O_TC108_Flag_BasicTest">
+                <methods><include name="tc108_flagBasic"/></methods>
+            </class>
+            <class name="com.paramount.test.ff.uitests.tests.leftfiltersvalidation.perfilter.orders.flag.LF_O_TC109_Flag_OptionOrderTest">
+                <methods><include name="tc109_flagOptionOrder"/></methods>
+            </class>
+            <class name="com.paramount.test.ff.uitests.tests.leftfiltersvalidation.perfilter.orders.flag.LF_O_TC208_Flag_SearchTest">
+                <methods><include name="tc208_flagSearch"/></methods>
+            </class>
+            <class name="com.paramount.test.ff.uitests.tests.leftfiltersvalidation.perfilter.orders.flag.LF_O_TC408_Flag_SelectAllTest">
+                <methods><include name="tc408_flagSelectAll"/></methods>
+            </class>
+            <class name="com.paramount.test.ff.uitests.tests.leftfiltersvalidation.perfilter.orders.flag.LF_O_TC808_Flag_ScrollTest">
+                <methods><include name="tc808_flagScroll"/></methods>
+            </class>
+        </classes>
+    </test>
+</suite>

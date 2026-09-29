@@ -1,0 +1,82 @@
+FIELD: new_string
+FILE: C:\Users\10747125\.cursor\projects\c-FulfillmentConsole-Fulfillment-Console\agent-transcripts\ceffe254-04b0-46bf-8f2f-61bd7213fb6d\ceffe254-04b0-46bf-8f2f-61bd7213fb6d.jsonl
+LINE: 176
+
+        List<String> preservedSelections = LeftFilterSessionHelper.shouldKeepFilterExpanded(filterName)
+                ? resolveAllSelectedNonZeroFilterOptions(filterName) : Collections.emptyList();
+        boolean multiSelectPreserved = preservedSelections.size() > 1;
+
+        String optionLabel;
+        if (multiSelectPreserved) {
+            optionLabel = String.join(" + ", preservedSelections);
+            Logger.logReportMessage("Table sync — preserved multi-select for " + filterName + ": "
+                    + preservedSelections);
+        } else {
+            optionLabel = resolveTableSyncOptionLabel(filterName);
+            if (optionLabel == null) {
+                Logger.logMessage(filterName + " has no options with count > 0 — skipping table sync");
+                if (!LeftFilterSessionHelper.shouldKeepFilterExpanded(filterName)) {
+                    collapseFilter(filterName);
+                }
+                return;
+            }
+        }
+
+        waitUtils.waitForVisibilityOfElement(leftFilterPanel.tableRecordCountLabel(), DEFAULT_WAIT_SECONDS);
+        int tableRecordCount = getTableRecordCount();
+        Verify.softAssert(tableRecordCount >= 0,
+                filterName + " results count available after selecting " + optionLabel
+                        + " (actual=" + tableRecordCount + ")");
+
+        if (multiSelectPreserved) {
+            int combinedFilterCount = 0;
+            for (String sel : preservedSelections) {
+                combinedFilterCount += getFilterOptionCount(filterName, sel);
+            }
+            Logger.logMessage(filterName + " multi-select table sync selections=" + preservedSelections
+                    + " combinedFilterCount=" + combinedFilterCount + " table=" + tableRecordCount
+                    + " column='" + tableColumnName + "'");
+            Verify.softAssert(tableRecordCount == combinedFilterCount,
+                    filterName + " table record count matches combined filter selection count"
+                            + " (filter=" + combinedFilterCount + ", table=" + tableRecordCount + ")");
+        } else {
+            int filterOptionCount = getFilterOptionCount(filterName, optionLabel);
+            Verify.softAssert(filterOptionCount > 0,
+                    filterName + " option '" + optionLabel + "' has count > 0 (actual=" + filterOptionCount + ")");
+            Logger.logMessage(filterName + " table sync option='" + optionLabel + "' filterCount=" + filterOptionCount
+                    + " column='" + tableColumnName + "'");
+            waitForTableRecordCount(filterOptionCount, DEFAULT_WAIT_SECONDS);
+            tableRecordCount = getTableRecordCount();
+            Verify.softAssert(tableRecordCount == filterOptionCount,
+                    filterName + " table record count matches filter option count for " + optionLabel
+                            + " (filter=" + filterOptionCount + ", table=" + tableRecordCount + ")");
+            Logger.logMessage(filterName + " count sync OK for " + optionLabel + ": filter=" + filterOptionCount
+                    + ", table=" + tableRecordCount);
+        }
+
+        scrollOrdersGridUntilColumnVisible(tableColumnName);
+        List<String> columnValues = getVisibleTableColumnValues(tableColumnName);
+        Logger.logMessage(filterName + " " + tableColumnName + " column values fetched (" + columnValues.size()
+                + " visible cell(s)): " + columnValues);
+        Verify.softAssert(!columnValues.isEmpty(),
+                filterName + " has visible " + tableColumnName + " column values after selecting " + optionLabel);
+
+        for (int i = 0; i < columnValues.size(); i++) {
+            String cellText = columnValues.get(i);
+            if (multiSelectPreserved) {
+                Verify.softAssert(orderLevelCellMatchesAnySelectedOption(cellText, preservedSelections),
+                        filterName + " row " + (i + 1) + " " + tableColumnName + " matches one of "
+                                + preservedSelections + " after filter selection (actual='" + cellText + "')");
+            } else {
+                Verify.softAssert(orderLevelCellMatchesSelectedOption(cellText, optionLabel),
+                        filterName + " row " + (i + 1) + " " + tableColumnName + " is '" + optionLabel
+                                + "' after filter selection (actual='" + cellText + "')");
+            }
+        }
+        Logger.logMessage(filterName + " " + tableColumnName + " column OK — all " + columnValues.size()
+                + " visible row(s) match selection '" + optionLabel + "'");
+
+        if (!LeftFilterSessionHelper.shouldKeepFilterExpanded(filterName)) {
+            collapseFilter(filterName);
+        }
+    }

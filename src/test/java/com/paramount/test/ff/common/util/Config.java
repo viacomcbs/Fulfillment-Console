@@ -11,6 +11,7 @@ import javax.xml.xpath.XPathFactory;
 import java.util.Map;
 
 import org.testng.Assert;
+import org.testng.xml.XmlSuite;
 import org.w3c.dom.Document;
 
 public class Config {
@@ -72,9 +73,26 @@ public class Config {
 		}
 		for (Map.Entry<String, String> entry : parameters.entrySet()) {
 			if (entry.getKey() != null && entry.getValue() != null) {
-				System.setProperty(SYSTEM_TEST_PROP + entry.getKey().toLowerCase(), entry.getValue());
+				String key = SYSTEM_TEST_PROP + entry.getKey().toLowerCase();
+				// Keep Maven -Dsystem.test.* overrides from PowerShell scripts.
+				if (System.getProperty(key) != null) {
+					continue;
+				}
+				System.setProperty(key, entry.getValue());
 			}
 		}
+	}
+
+	/** Preload suite parameters before {@code ConfigProps} static fields initialize. */
+	public static void bootstrapFromSuite(XmlSuite suite) {
+		if (suite == null) {
+			return;
+		}
+		String suiteFile = suite.getFileName();
+		if (suiteFile != null && !suiteFile.trim().isEmpty()) {
+			System.setProperty("suiteXmlFile", suiteFile.trim());
+		}
+		applySuiteParameters(suite.getParameters());
 	}
 
 	public static boolean isLocalExecution() {

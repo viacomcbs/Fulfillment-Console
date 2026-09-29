@@ -1,5 +1,6 @@
 package com.paramount.test.ff.uitests.tests.leftfiltersvalidation.perfilter.orders.assignedto;
 
+import com.paramount.test.ff.uitests.helpers.leftfilters.OrdersLeftFilter;
 import com.paramount.test.ff.uitests.helpers.managecolumns.ManageColumnOptions;
 import com.paramount.test.ff.uitests.tests.leftfiltersvalidation.perfilter.orders.LeftFilterOrdersTabBaseTest;
 
@@ -9,6 +10,11 @@ import com.paramount.test.ff.uitests.tests.leftfiltersvalidation.perfilter.order
  * or blank cells when Unassigned is selected.
  */
 public abstract class LeftFilterAssignedToOrdersTabBaseTest extends LeftFilterOrdersTabBaseTest {
+
+    @Override
+    protected String keepExpandedFilterName() {
+        return OrdersLeftFilter.ASSIGNED_TO.getDisplayName();
+    }
 
     @Override
     protected String manageColumnsColumnToEnable() {

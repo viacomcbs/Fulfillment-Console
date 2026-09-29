@@ -1,0 +1,34 @@
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<!-- Consolidated email after run-lf-orders-2filters-lineitemstatus-errormessage-prod.ps1 -->
+<suite name="LF Orders Line Item Status Error Message 2 Filters Combined Email PROD" parallel="false" preserve-order="true">
+    <parameter name="SendReportAutoEmails" value="false"/>
+    <parameter name="SkipSuiteFinishAutoEmail" value="true"/>
+    <parameter name="SendReportEmailAddress" value="Akilandeswari.Sundararajan@paramount.com,qa_automation_status_-aaaagmcoe366ao4pdnt2t5ikp4@viacomcbs.org.slack.com"/>
+    <parameter name="SendReportInternalEmailAddress" value="Akilandeswari.Sundararajan@paramount.com"/>
+    <parameter name="SendChatReport" value="true"/>
+    <parameter name="SlackChannel" value="#qa_automation_status_go"/>
+    <parameter name="LeftFilterEmailReport" value="true"/>
+    <parameter name="LeftFilterEmailSuiteTitle" value="Orders Tab - Left Filters (PROD) - Line Item Status + Error message"/>
+    <parameter name="AggregateResultsDir" value="test-output/lf-o-2filter-lineitemstatus-errormessage-aggregate"/>
+    <parameter name="ConsolidatedEmailDedupePreferPass" value="true"/>
+    <parameter name="ConsolidatedEmailExcludeSynergyIssues" value="true"/>
+    <parameter name="Application" value="Fulfillment Console"/>
+    <parameter name="ApplicationTitle" value="Fulfillment Console"/>
+    <parameter name="TestEnvironment" value="PROD"/>
+    <parameter name="LocalExecution" value="true"/>
+    <parameter name="LabUrl" value="https://www.synergyserver.tech"/>
+    <parameter name="UserKey" value="af27f06e-2e7e-4c8d-9312-2320423e4641"/>
+    <parameter name="EmailRelayHost" value="imailrelay.viacom.com"/>
+    <parameter name="EmailRelayPort" value="25"/>
+    <parameter name="EmailSenderAddress" value="NOREPLY@dteqa.com"/>
+    <listeners>
+        <listener class-name="com.paramount.test.ff.common.listeners.SuiteListeners"/>
+    </listeners>
+    <test name="Send consolidated Batch 6 left-filter emails" preserve-order="true">
+        <classes>
+            <class name="com.paramount.test.ff.uitests.tests.leftfiltersvalidation.perfilter.orders.LeftFilterCombinedEmailReportTest">
+                <methods><include name="sendCombinedPassedOrdersEmail"/></methods>
+            </class>
+        </classes>
+    </test>
+</suite>

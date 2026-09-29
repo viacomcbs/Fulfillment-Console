@@ -17,4 +17,14 @@ public class LineItemsMainTablePage {
                 + " | //tbody//tr[contains(@class,'row')]//td[contains(@class,'revised-status')]"
                 + "//span[contains(@class,'status-label')]");
     }
+
+    /** Visible Activity Type values in the Line Items grid ({@code td.activity-type-col} / {@code div.default-cell}). */
+    public By visibleActivityTypeCells() {
+        return By.XPath("//div[@id='line_items_tab']//table[@id='lineItemTable']//tbody//tr[contains(@class,'row')]"
+                + "//td[contains(@class,'activity-type-col')]//div[contains(@class,'default-cell')]"
+                + " | //div[@id='line_items_tab']//tbody//tr[contains(@class,'row')]"
+                + "//td[contains(@class,'activity-type-col')]//div[contains(@class,'default-cell')]"
+                + " | //app-fulfillment-line-items-main-table//tbody//tr[contains(@class,'row')]"
+                + "//td[contains(@class,'activity-type-col')]");
+    }
 }

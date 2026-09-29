@@ -1,12 +1,22 @@
 package com.paramount.test.ff.pageobjects;
 
+import com.paramount.test.ff.uitests.helpers.bsd29967.OpsConsoleUrlUtil;
 import com.synergy.core.driver.By;
 
 /** Locators for ops-console API Dev UI (BSD-29967). */
 public class OpsConsolePage {
 
-    public static final String DEV_ORDER_URL_PREFIX =
-            "https://contentplatform.viacom.com/ops-console-api-dev-ui/order/";
+    /** Legacy default (DEV/PROD FC). Prefer {@link #resolveOrderUrlPrefix()}. */
+    public static final String DEV_ORDER_URL_PREFIX = OpsConsoleUrlUtil.DEFAULT_ORIGIN
+            + "/ops-console-api-dev-ui/order/";
+
+    public static String resolveOrderUrlPrefix() {
+        return OpsConsoleUrlUtil.orderUrlPrefix();
+    }
+
+    public static String resolveOrderUrl(String orderId) {
+        return OpsConsoleUrlUtil.orderUrl(orderId);
+    }
 
     public By workflowDropdown() {
         return By.XPath("//*[contains(normalize-space(),'Workflow')]/following::*[self::select or @role='combobox'"

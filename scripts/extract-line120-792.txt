@@ -1,0 +1,38 @@
+OLD:
+        if (!isFilterExpanded(filterName)) {
+            Verify.softAssert(false, filterName + " filter could not be expanded for TC606");
+            return;
+        }
+        ensureNoOptionsSelected(filterName);
+
+        String optionLabel = resolveFirstNonZeroFilterOption(filterName);
+        if (optionLabel == null) {
+            Logger.logMessage(filterName + " has no options with count > 0 — skipping TC606");
+            collapseFilter(filterName);
+            return;
+        }
+
+        int filterOptionCount = getFilterOptionCount(filterName, optionLabel);
+        Verify.softAssert(filterOptionCount > 0,
+                filterName + " option '" + optionLabel + "' has count > 0 (actual=" + filterOptionCount + ")");
+        Logger.logMessage(filterName + " TC606 option='" + optionLabel + "' filterCount=" + filterOptionCount);
+
+        selectFilterOption(filterName, optionLabel);
+
+NEW:
+        if (!isFilterExpanded(filterName)) {
+            Verify.softAssert(false, filterName + " filter could not be expanded for TC606");
+            return;
+        }
+
+        String optionLabel = resolveTableSyncOptionLabel(filterName);
+        if (optionLabel == null) {
+            Logger.logMessage(filterName + " has no options with count > 0 — skipping TC606");
+            collapseFilter(filterName);
+            return;
+        }
+
+        int filterOptionCount = getFilterOptionCount(filterName, optionLabel);
+        Verify.softAssert(filterOptionCount > 0,
+                filterName + " option '" + optionLabel + "' has count > 0 (actual=" + filterOptionCount + ")");
+        Logger.logMessage(filterName + " TC606 option='" + optionLabel + "' filterCount=" + filterOptionCount);

@@ -1,0 +1,39 @@
+// --- Add imports ---
+import com.yourteam.test.helpers.email.LeftFilterEmailReport;
+import org.testng.ITestListener;
+import org.testng.ITestResult;
+
+// --- Class declaration: implement ITestListener ---
+public class SuiteListeners implements ISuiteListener, ITestListener {
+
+    @Override
+    public void onStart(ISuite testSuite) {
+        Config.applySuiteParameters(testSuite.getXmlSuite().getAllParameters());
+        LeftFilterEmailReport.configureForSuite(testSuite);  // GLOBAL: scenario report ON by default
+        // ... rest of your onStart
+    }
+
+    @Override
+    public void onTestSuccess(ITestResult result) {
+        LeftFilterEmailReport.recordResult(result);
+    }
+
+    @Override
+    public void onTestFailure(ITestResult result) {
+        LeftFilterEmailReport.recordResult(result);
+    }
+
+    @Override
+    public void onTestSkipped(ITestResult result) {
+        LeftFilterEmailReport.recordResult(result);
+    }
+
+    @Override
+    public void onFinish(ISuite suite) {
+        // ... before EmailUtil.sendResultEmail:
+        if (LeftFilterEmailReport.isEnabled()) {
+            LeftFilterEmailReport.captureSynergySessionId();
+        }
+        // ... existing email send logic
+    }
+}

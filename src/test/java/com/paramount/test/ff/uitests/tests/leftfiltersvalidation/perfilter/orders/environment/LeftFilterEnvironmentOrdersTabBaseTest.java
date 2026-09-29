@@ -1,5 +1,6 @@
 package com.paramount.test.ff.uitests.tests.leftfiltersvalidation.perfilter.orders.environment;
 
+import com.paramount.test.ff.uitests.helpers.leftfilters.OrdersLeftFilter;
 import com.paramount.test.ff.uitests.tests.leftfiltersvalidation.perfilter.orders.LeftFilterOrdersTabBaseTest;
 
 /**
@@ -7,6 +8,11 @@ import com.paramount.test.ff.uitests.tests.leftfiltersvalidation.perfilter.order
  * Table sync verifies filter option count vs. Orders table total count only.
  */
 public abstract class LeftFilterEnvironmentOrdersTabBaseTest extends LeftFilterOrdersTabBaseTest {
+
+    @Override
+    protected String keepExpandedFilterName() {
+        return OrdersLeftFilter.ENVIRONMENT.getDisplayName();
+    }
 
     @Override
     protected boolean requiresAutomationViewSetup() {

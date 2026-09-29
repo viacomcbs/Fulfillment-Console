@@ -1,0 +1,32 @@
+OLD:
+        String optionLabel;
+        if (LeftFilterSessionHelper.shouldKeepFilterExpanded(filterName)) {
+            optionLabel = resolveFirstSelectedNonZeroFilterOption(filterName);
+            if (optionLabel != null) {
+                Logger.logReportMessage("TC620 — reusing preserved " + filterName + " selection: " + optionLabel);
+            } else {
+                optionLabel = resolveFirstNonZeroFilterOption(filterName);
+                if (optionLabel != null) {
+                    selectFilterOption(filterName, optionLabel);
+                }
+            }
+        } else {
+            ensureNoOptionsSelected(filterName);
+            optionLabel = resolveFirstNonZeroFilterOption(filterName);
+            if (optionLabel != null) {
+                selectFilterOption(filterName, optionLabel);
+            }
+        }
+        if (optionLabel == null) {
+            Logger.logMessage(filterName + " has no options with count > 0 — skipping TC620");
+            collapseFilter(filterName);
+            return;
+        }
+
+NEW:
+        String optionLabel = resolveTableSyncOptionLabel(filterName);
+        if (optionLabel == null) {
+            Logger.logMessage(filterName + " has no options with count > 0 — skipping TC620");
+            collapseFilter(filterName);
+            return;
+        }

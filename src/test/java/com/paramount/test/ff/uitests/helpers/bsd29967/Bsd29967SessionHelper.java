@@ -18,6 +18,7 @@ public final class Bsd29967SessionHelper {
     private static final class SessionState {
         boolean loggedIn;
         boolean calendarSetToYesterday;
+        boolean calendarSetToToday;
         boolean environmentFilterApplied;
         boolean orderStartDateColumnEnabled;
         int expectedEnvironmentCount;
@@ -64,6 +65,14 @@ public final class Bsd29967SessionHelper {
 
     public static void markCalendarSetToYesterday() {
         state().calendarSetToYesterday = true;
+    }
+
+    public static boolean isCalendarSetToToday() {
+        return state().calendarSetToToday;
+    }
+
+    public static void markCalendarSetToToday() {
+        state().calendarSetToToday = true;
     }
 
     public static boolean isEnvironmentFilterApplied() {

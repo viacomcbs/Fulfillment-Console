@@ -1,5 +1,6 @@
 package com.paramount.test.ff.uitests.tests.leftfiltersvalidation.perfilter.orders.submittedby;
 
+import com.paramount.test.ff.uitests.helpers.leftfilters.OrdersLeftFilter;
 import com.paramount.test.ff.uitests.helpers.managecolumns.ManageColumnOptions;
 import com.paramount.test.ff.uitests.tests.leftfiltersvalidation.perfilter.orders.LeftFilterOrdersTabBaseTest;
 
@@ -8,6 +9,11 @@ import com.paramount.test.ff.uitests.tests.leftfiltersvalidation.perfilter.order
  * Table sync reads initials in the Submitted By column on the main Orders grid (no row expand).
  */
 public abstract class LeftFilterSubmittedByOrdersTabBaseTest extends LeftFilterOrdersTabBaseTest {
+
+    @Override
+    protected String keepExpandedFilterName() {
+        return OrdersLeftFilter.SUBMITTED_BY.getDisplayName();
+    }
 
     @Override
     protected String manageColumnsColumnToEnable() {

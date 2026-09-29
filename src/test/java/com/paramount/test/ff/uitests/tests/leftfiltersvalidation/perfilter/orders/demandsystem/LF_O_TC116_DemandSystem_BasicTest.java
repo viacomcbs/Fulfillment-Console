@@ -3,12 +3,12 @@ package com.paramount.test.ff.uitests.tests.leftfiltersvalidation.perfilter.orde
 import com.paramount.test.ff.common.util.SoftAssert;
 import com.paramount.test.ff.uitests.helpers.leftfilters.ConsoleTab;
 import com.paramount.test.ff.uitests.helpers.leftfilters.OrdersLeftFilter;
-import com.paramount.test.ff.uitests.tests.leftfiltersvalidation.perfilter.orders.LeftFilterOrdersTabBaseTest;
+import com.paramount.test.ff.uitests.tests.leftfiltersvalidation.perfilter.orders.demandsystem.LeftFilterDemandSystemOrdersTabBaseTest;
 import io.qameta.allure.Description;
 import org.testng.annotations.Test;
 
 /** TC116 — DemandSystem Basic. */
-public class LF_O_TC116_DemandSystem_BasicTest extends LeftFilterOrdersTabBaseTest {
+public class LF_O_TC116_DemandSystem_BasicTest extends LeftFilterDemandSystemOrdersTabBaseTest {
 
     private static final String FILTER = OrdersLeftFilter.DEMAND_SYSTEM.getDisplayName();
     private static final int FILTER_INDEX = 16;

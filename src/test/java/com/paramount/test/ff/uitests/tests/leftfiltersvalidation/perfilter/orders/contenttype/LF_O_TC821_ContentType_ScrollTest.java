@@ -5,12 +5,12 @@ import com.paramount.test.ff.uitests.helpers.leftfilters.ConsoleTab;
 import com.paramount.test.ff.uitests.helpers.leftfilters.OrdersLeftFilter;
 import com.paramount.test.ff.uitests.helpers.leftfilters.LeftFilterPerFilterTestRunner;
 import com.paramount.test.ff.uitests.helpers.leftfilters.LeftFilterTestCategory;
-import com.paramount.test.ff.uitests.tests.leftfiltersvalidation.perfilter.orders.LeftFilterOrdersTabBaseTest;
+import com.paramount.test.ff.uitests.tests.leftfiltersvalidation.perfilter.orders.contenttype.LeftFilterContentTypeOrdersTabBaseTest;
 import io.qameta.allure.Description;
 import org.testng.annotations.Test;
 
 /** TC821 — ContentType Scroll. */
-public class LF_O_TC821_ContentType_ScrollTest extends LeftFilterOrdersTabBaseTest {
+public class LF_O_TC821_ContentType_ScrollTest extends LeftFilterContentTypeOrdersTabBaseTest {
 
     private static final String FILTER = OrdersLeftFilter.CONTENT_TYPE.getDisplayName();
     private static final int FILTER_INDEX = 21;

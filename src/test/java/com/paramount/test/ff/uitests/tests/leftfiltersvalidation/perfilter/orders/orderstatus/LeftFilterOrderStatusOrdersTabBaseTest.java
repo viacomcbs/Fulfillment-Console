@@ -1,5 +1,6 @@
 package com.paramount.test.ff.uitests.tests.leftfiltersvalidation.perfilter.orders.orderstatus;
 
+import com.paramount.test.ff.uitests.helpers.leftfilters.OrdersLeftFilter;
 import com.paramount.test.ff.uitests.tests.leftfiltersvalidation.perfilter.orders.LeftFilterOrdersTabBaseTest;
 
 /**
@@ -7,6 +8,11 @@ import com.paramount.test.ff.uitests.tests.leftfiltersvalidation.perfilter.order
  * (no Manage columns setup required). Table sync reads the Status column on the main grid.
  */
 public abstract class LeftFilterOrderStatusOrdersTabBaseTest extends LeftFilterOrdersTabBaseTest {
+
+    @Override
+    protected String keepExpandedFilterName() {
+        return OrdersLeftFilter.ORDER_STATUS.getDisplayName();
+    }
 
     @Override
     protected boolean requiresAutomationViewSetup() {

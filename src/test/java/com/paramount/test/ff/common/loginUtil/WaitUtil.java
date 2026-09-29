@@ -54,6 +54,18 @@ public class WaitUtil extends BaseTest{
 		
 	}
 
+	public static boolean isDisplayQuiet(By by, int waitFor) {
+		if (driver.get() == null) {
+			return false;
+		}
+		try {
+			waitUtil.waitForVisibilityOfElement(by, waitFor);
+			return driver.get().finder().findElement(by).isDisplayed();
+		} catch (Exception ignored) {
+			return false;
+		}
+	}
+
 	/**
 	 * Polls {@code findElements} instead of {@code findElement} so absent elements do not
 	 * block on Synergy's default 60s element timeout (used for panel open/closed checks).

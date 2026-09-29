@@ -1,0 +1,21 @@
+{
+  "notifications": {
+    "wsr": {
+      "slackChannel": "#qa_automation_status_go",
+      "slackEmail": "qa_automation_status_-aaaagmcoe366ao4pdnt2t5ikp4@viacomcbs.org.slack.com",
+      "reportEmail": "Akilandeswari.Sundararajan@paramount.com"
+    }
+  },
+  "defaultSchedules": {
+    "update-wsr": {
+      "frequency": "weekly",
+      "time": "09:00",
+      "daysOfWeek": ["Thursday"]
+    },
+    "update-airtable": {
+      "frequency": "weekly",
+      "time": "18:00",
+      "daysOfWeek": ["Friday"]
+    }
+  }
+}

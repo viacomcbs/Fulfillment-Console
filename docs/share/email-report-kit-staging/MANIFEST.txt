@@ -1,0 +1,48 @@
+Fulfillment Console Email Report Kit — file list
+Generated: 2026-09-25
+
+CORE
+  java/com/paramount/test/ff/common/util/EmailUtil.java
+  java/com/paramount/test/ff/common/util/ReportEmailBuilder.java
+  java/com/paramount/test/ff/common/util/EmailExecutionReport.java
+
+REPORTING (PDF, Allure, consolidated)
+  java/com/paramount/test/ff/common/util/reporting/*.java
+
+SCENARIO EMAIL TABLE
+  java/com/paramount/test/ff/uitests/helpers/leftfilters/LeftFilterEmailReport.java
+  java/com/paramount/test/ff/uitests/helpers/leftfilters/LeftFilterFailureAnalyzer.java
+  java/com/paramount/test/ff/uitests/helpers/leftfilters/LeftFilterEmailScenario.java
+
+FEATURE-SPECIFIC EMAIL (optional patterns)
+  java/com/paramount/test/ff/uitests/helpers/dsid/DsidEmailReport.java
+  java/com/paramount/test/ff/uitests/helpers/bsd29967/Bsd29967EmailReport.java
+  java/com/paramount/test/ff/uitests/helpers/ptspackaging/PtsPackagingEmailReport.java
+
+LISTENERS
+  java/com/paramount/test/ff/common/listeners/SuiteListeners.java
+  java/com/paramount/test/ff/common/listeners/LeftFilterSuiteListener.java
+  java/com/paramount/test/ff/common/listeners/DsidSuiteListener.java
+  java/com/paramount/test/ff/common/listeners/Bsd29967SuiteListener.java
+  java/com/paramount/test/ff/common/listeners/PtsPackagingSuiteListener.java
+
+CONSOLIDATED EMAIL TESTS
+  java/.../LeftFilterCombinedEmailReportTest.java
+  java/.../FulfillmentCombinedEmailReportTest.java
+  java/.../Bsd30019CombinedEmailReportTest.java
+
+SCRIPTS
+  scripts/send-daily-consolidated-email.ps1
+  scripts/start-daily-email-session.ps1
+  scripts/send-job-left-filter-email.ps1
+  scripts/send-today-passed-report.ps1
+  scripts/run-lf-tableview-split-consolidated-email-prod.ps1
+
+SUITE XML EXAMPLES
+  suites/consolidated/*.xml
+  suites/left-filters/*CombinedEmail*.xml
+
+INTEGRATION SNIPPETS
+  config/EmailUtil-integration-snippet.txt
+  config/SuiteListeners-integration-snippet.txt
+  config/example-suite.xml

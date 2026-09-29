@@ -1,5 +1,6 @@
 package com.paramount.test.ff.uitests.tests.leftfiltersvalidation.perfilter.orders.lineitemstatus;
 
+import com.paramount.test.ff.uitests.helpers.leftfilters.OrdersLeftFilter;
 import com.paramount.test.ff.uitests.tests.leftfiltersvalidation.perfilter.orders.LeftFilterOrdersTabBaseTest;
 
 /**
@@ -7,6 +8,11 @@ import com.paramount.test.ff.uitests.tests.leftfiltersvalidation.perfilter.order
  * Order Status and Line Item Status are not configurable in Manage columns.
  */
 public abstract class LeftFilterLineItemStatusOrdersTabBaseTest extends LeftFilterOrdersTabBaseTest {
+
+    @Override
+    protected String keepExpandedFilterName() {
+        return OrdersLeftFilter.LINE_ITEM_STATUS.getDisplayName();
+    }
 
     @Override
     protected boolean requiresAutomationViewSetup() {
