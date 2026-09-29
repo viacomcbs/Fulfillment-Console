@@ -1,4 +1,6 @@
 # Build / reports
+__pycache__/
+*.pyc
 target/
 allure-results/
 allure-report/
