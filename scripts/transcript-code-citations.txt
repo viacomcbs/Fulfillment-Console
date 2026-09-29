@@ -1,0 +1,75 @@
+=== LINES 20-24 (transcript line 349) ===
+        List<String> preservedSelections = LeftFilterSessionHelper.shouldKeepFilterExpanded(filterName)
+                ? resolveAllSelectedNonZeroFilterOptions(filterName) : Collections.emptyList();
+        boolean multiSelectPreserved = preservedSelections.size() > 1;
+        ...
+        if (multiSelectPreserved) {
+            optionLabel = String.join(" + ", preservedSelections);
+            Logger.logReportMessage("Table sync — preserved multi-select for " + filterName + ": "
+                    + preservedSelections);
+        } else {
+            optionLabel = resolveTableSyncOptionLabel(filterName);
+
+
+=== LINES 23-25 (transcript line 54) ===
+            if (packageCount > 0) {
+                int packagesToTry = Math.min(packageCount, MAX_PACKAGES_TO_TRY);
+                for (int pkg = 1; pkg <= packagesToTry; pkg++) {
+                    if (!clickExpandedPackageRow(pkg)) {
+                        ...
+                    }
+                    ...
+                    if (activityTypes.stream().anyMatch(value -> value.toLowerCase(Locale.ROOT).contains(optionLower))) {
+                        ...
+                        return true;
+                    }
+                }
+                continue;
+            }
+
+
+=== LINES 174-185 (transcript line 54) ===
+        if (LeftFilterSessionHelper.shouldKeepFilterExpanded(filterName)) {
+            Logger.logReportMessage(filterName + " keep-expanded suite — leaving accordion open after TC120");
+            return;
+        }
+
+
+=== LINES 1873-1883 (transcript line 349) ===
+        if (multiSelectPreserved) {
+            int combinedFilterCount = 0;
+            for (String sel : preservedSelections) {
+                combinedFilterCount += getFilterOptionCount(filterName, sel);
+            }
+            ...
+            Verify.softAssert(tableRecordCount == combinedFilterCount,
+                    filterName + " table record count matches combined filter selection count"
+                            + " (filter=" + combinedFilterCount + ", table=" + tableRecordCount + ")");
+
+
+=== LINES 1899-1918 (transcript line 349) ===
+        scrollOrdersGridUntilColumnVisible(tableColumnName);
+        List<String> columnValues = getVisibleTableColumnValues(tableColumnName);
+        ...
+        for (int i = 0; i < columnValues.size(); i++) {
+            String cellText = columnValues.get(i);
+            if (multiSelectPreserved) {
+                Verify.softAssert(orderLevelCellMatchesAnySelectedOption(cellText, preservedSelections),
+                        filterName + " row " + (i + 1) + " " + tableColumnName + " matches one of "
+                                + preservedSelections + " after filter selection (actual='" + cellText + "')");
+            } else {
+                Verify.softAssert(orderLevelCellMatchesSelectedOption(cellText, optionLabel),
+                        ...
+            }
+        }
+
+
+=== LINES 2729-2734 (transcript line 349) ===
+    private static boolean orderLevelCellMatchesSelectedOption(String cellValue, String optionLabel) {
+        if (cellValue == null || optionLabel == null) {
+            return false;
+        }
+        return cellValue.trim().equalsIgnoreCase(optionLabel.trim());
+    }
+
+

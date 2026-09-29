@@ -1,0 +1,26 @@
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<!-- In-sprint automation — BSD-30019: combined email only (after run-bsd-30019.ps1 / .sh). -->
+<suite name="BSD-30019 Combined Email" parallel="false" preserve-order="true">
+    <parameter name="SendReportAutoEmails" value="false"/>
+    <parameter name="SendReportEmailAddress" value="Akilandeswari.Sundararajan@paramount.com"/>
+    <parameter name="LeftFilterEmailReport" value="true"/>
+    <parameter name="LeftFilterEmailSuiteTitle" value="BSD-30019 — Error code functionality mismatch between table and left filter"/>
+    <parameter name="AggregateResultsDir" value="test-output/bsd-30019-aggregate"/>
+    <parameter name="Application" value="Fulfillment Console"/>
+    <parameter name="ApplicationTitle" value="Fulfillment Console"/>
+    <parameter name="TestEnvironment" value="UAT"/>
+    <parameter name="LocalExecution" value="true"/>
+    <parameter name="EmailRelayHost" value="imailrelay.viacom.com"/>
+    <parameter name="EmailRelayPort" value="25"/>
+    <parameter name="EmailSenderAddress" value="NOREPLY@dteqa.com"/>
+    <listeners>
+        <listener class-name="com.paramount.test.ff.common.listeners.SuiteListeners"/>
+    </listeners>
+    <test name="Send combined BSD-30019 email" preserve-order="true">
+        <classes>
+            <class name="com.paramount.test.ff.uitests.tests.tablevalidation.bsd30019.Bsd30019CombinedEmailReportTest">
+                <methods><include name="sendCombinedBsd30019Email"/></methods>
+            </class>
+        </classes>
+    </test>
+</suite>

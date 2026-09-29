@@ -13,6 +13,7 @@ import com.paramount.test.ff.uitests.helpers.leftfilters.ConsoleTab;
 import com.paramount.test.ff.uitests.helpers.leftfilters.LeftFilterPanelUtil;
 import com.paramount.test.ff.uitests.helpers.leftfilters.LeftFilterSessionHelper;
 import com.paramount.test.ff.uitests.helpers.leftfilters.LineItemsLeftFilter;
+import com.paramount.test.ff.uitests.helpers.managecolumns.ManageColumnOptions;
 import com.paramount.test.ff.common.listeners.PerFilterTestTrackerListener;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
@@ -61,6 +62,8 @@ public abstract class LeftFilterLineItemsTabBaseTest extends BaseTest {
 
         softAssert = new SoftAssert("lineItemsLeftFilterSetup", getClass().getSimpleName());
 
+        LeftFilterSessionHelper.ensureBrowserSessionActive();
+
         if (!LeftFilterSessionHelper.isLoggedIn()) {
             Logger.logReportMessage("Launching Fulfillment Console for Line items left-filter tests");
             DriverUtil.launchApplicationOnBrowser();
@@ -68,21 +71,24 @@ public abstract class LeftFilterLineItemsTabBaseTest extends BaseTest {
             LeftFilterSessionHelper.markLoggedIn();
             setCalendarToYesterdayOnce();
         } else {
-            Logger.logReportMessage("Refreshing Fulfillment Console for next Line items left-filter test");
-            driver.get().browser().refresh();
-            WaitUtil.waitForJSToLoad(45);
-            Thread.sleep(FILTER_EXPAND_WAIT_MS);
+            Logger.logReportMessage("Reusing Fulfillment Console session — clear filters only (no browser refresh)");
+            leftFilterPanelUtil.clearAllActiveFiltersIfPresent();
         }
 
         lineItemsTabSetup.prepareLineItemsTab(softAssert);
         if (requiresAutomationViewSetup()) {
-            automationTableViewSetup.ensureAAutomationView(softAssert, ConsoleTab.LINE_ITEMS);
+            automationTableViewSetup.ensureColumnEnabled(softAssert, ConsoleTab.LINE_ITEMS, manageColumnsColumnToEnable());
         }
     }
 
     /** Override to {@code false} only for Order Status and Line Item Status (mandatory grid columns, not in Manage columns). */
     protected boolean requiresAutomationViewSetup() {
         return true;
+    }
+
+    /** Column to enable once per session via Manage columns before filter tests run. */
+    protected String manageColumnsColumnToEnable() {
+        return ManageColumnOptions.ACTIVITY_TYPE;
     }
 
     private void setCalendarToYesterdayOnce() throws InterruptedException {

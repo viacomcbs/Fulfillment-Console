@@ -52,8 +52,124 @@ public class ManageColumnsUtil extends BaseTest {
         }
     }
 
+    /**
+     * Opens Manage columns once and enables multiple columns (order-level and/or order-line-item flat list)
+     * before a multi-filter batch run.
+     */
+    public void ensureBatchColumnsForView(SoftAssert softAssert, String... columnLabels) throws InterruptedException {
+        if (columnLabels == null || columnLabels.length == 0) {
+            return;
+        }
+        java.util.List<String> pending = new java.util.ArrayList<>();
+        for (String columnLabel : columnLabels) {
+            if (columnLabel == null || columnLabel.isBlank()) {
+                continue;
+            }
+            Section section = ManageColumnOptions.defaultSectionForColumn(columnLabel);
+            if (isColumnAlreadyEnabledOnView(columnLabel, section)) {
+                Logger.logMessage(columnLabel + " already enabled on Orders view — skip in batch Manage columns");
+            } else {
+                pending.add(columnLabel);
+            }
+        }
+        if (pending.isEmpty()) {
+            Logger.logMessage("All requested columns already on view — skip Manage columns entirely");
+            return;
+        }
+        Logger.logMessage("Manage columns batch setup — enable columns in one pass: " + pending);
+        openPanel(softAssert, 2, pending.get(0));
+        if (!waitForTableManageColumnsPanel(DEFAULT_PANEL_WAIT_S)) {
+            Verify.softAssert1(false, "Manage columns panel open for batch column setup", softAssert);
+            return;
+        }
+        expandAllManageColumnAccordions();
+        Thread.sleep(400);
+        scrollManageColumnsPanelToTop();
+        boolean anyToggled = false;
+        for (String columnLabel : pending) {
+            Section section = ManageColumnOptions.defaultSectionForColumn(columnLabel);
+            if (ManageColumnOptions.TITLE_SEASON_EPISODE.equals(columnLabel)) {
+                anyToggled = enableTitleSeasonEpisodeInBatch(softAssert, anyToggled);
+                continue;
+            }
+            scrollToColumnInManagePanelLikePts(section, columnLabel);
+            Verify.softAssert1(WaitUtil.isDisplayFast(columnLabel(section, columnLabel), 5),
+                    columnLabel + " visible in Manage columns after scroll", softAssert);
+            if (isColumnChecked(section, columnLabel)) {
+                Logger.logMessage(columnLabel + " already checked in Manage columns");
+                continue;
+            }
+            By checkbox = columnCheckbox(section, columnLabel);
+            By label = columnLabel(section, columnLabel);
+            boolean toggled = clickColumnCheckboxIfUnchecked(section, checkbox, label, columnLabel);
+            Verify.softAssert1(toggled || isColumnChecked(section, columnLabel),
+                    "Enabled " + columnLabel + " in Manage columns (batch)", softAssert);
+            anyToggled = anyToggled || toggled;
+        }
+        if (anyToggled) {
+            saveChangesWhenNeeded(softAssert, String.join(", ", pending));
+        } else {
+            closePanelSafely(softAssert);
+        }
+    }
+
+    /**
+     * Opens Manage columns once and enables multiple order-level columns (e.g. Brand + Submitted By)
+     * before a multi-filter batch run.
+     */
+    public void ensureOrderLevelColumnsForView(SoftAssert softAssert, String... columnLabels) throws InterruptedException {
+        if (columnLabels == null || columnLabels.length == 0) {
+            return;
+        }
+        java.util.List<String> pending = new java.util.ArrayList<>();
+        for (String columnLabel : columnLabels) {
+            if (columnLabel == null || columnLabel.isBlank()) {
+                continue;
+            }
+            if (isOrderColumnVisibleOnGrid(columnLabel)) {
+                Logger.logMessage(columnLabel + " already visible on Orders grid — skip in batch Manage columns");
+            } else {
+                pending.add(columnLabel);
+            }
+        }
+        if (pending.isEmpty()) {
+            Logger.logMessage("All requested order columns already on grid — skip Manage columns entirely");
+            return;
+        }
+        Logger.logMessage("Manage columns batch setup — enable order columns in one pass: " + pending);
+        openPanel(softAssert, 2, pending.get(0));
+        if (!waitForTableManageColumnsPanel(DEFAULT_PANEL_WAIT_S)) {
+            Verify.softAssert1(false, "Manage columns panel open for batch column setup", softAssert);
+            return;
+        }
+        expandAllManageColumnAccordions();
+        Thread.sleep(400);
+        scrollManageColumnsPanelToTop();
+        boolean anyToggled = false;
+        for (String columnLabel : pending) {
+            scrollToColumnInManagePanelLikePts(Section.ORDER, columnLabel);
+            Verify.softAssert1(WaitUtil.isDisplayFast(columnLabel(Section.ORDER, columnLabel), 5),
+                    columnLabel + " visible in Order columns after scroll", softAssert);
+            if (isOrderLevelCheckboxSelected(columnLabel)) {
+                Logger.logMessage(columnLabel + " already checked in Manage columns");
+                continue;
+            }
+            By checkbox = columnCheckbox(Section.ORDER, columnLabel);
+            By label = columnLabel(Section.ORDER, columnLabel);
+            boolean toggled = clickColumnCheckboxIfUnchecked(Section.ORDER, checkbox, label, columnLabel);
+            Verify.softAssert1(toggled || isOrderLevelCheckboxSelected(columnLabel),
+                    "Enabled " + columnLabel + " in Manage columns (batch)", softAssert);
+            anyToggled = anyToggled || toggled;
+        }
+        if (anyToggled) {
+            saveChangesWhenNeeded(softAssert, String.join(", ", pending));
+        } else {
+            closePanelSafely(softAssert);
+        }
+    }
+
     private boolean isColumnAlreadyEnabledOnView(String columnLabel, Section section) {
-        if (section == Section.ORDER) {
+        if (section == Section.ORDER || section == Section.ORDER_LINE_ITEM) {
             return isOrderColumnVisibleOnGrid(columnLabel);
         }
         return false;
@@ -62,6 +178,10 @@ public class ManageColumnsUtil extends BaseTest {
     /** True when {@code columnLabel} is already on the Orders grid (header or body cells in DOM). */
     public boolean isOrderColumnVisibleOnGrid(String columnLabel) {
         try {
+            if (ManageColumnOptions.TITLE_SEASON_EPISODE.equals(columnLabel)
+                    && isTitleSeasonEpisodeVisibleOnGrid()) {
+                return true;
+            }
             if (isOrderColumnPresentOnGridViaJs(columnLabel)) {
                 return true;
             }
@@ -80,6 +200,86 @@ public class ManageColumnsUtil extends BaseTest {
         }
     }
 
+    /** Combined {@code Title, Season, Episode} column or split Title + Season + Episode headers/cells. */
+    private boolean isTitleSeasonEpisodeVisibleOnGrid() {
+        try {
+            Object result = driver.get().browser().executeScript(
+                    "function has(sel){return !!document.querySelector(sel);}"
+                            + "if(has('app-fulfillment-main-table-container th.title-col')"
+                            + "||has('app-fulfillment-orders-main-table th.title-col')"
+                            + "||has('app-fulfillment-main-table-container td.title-col')"
+                            + "||has('app-fulfillment-orders-main-table td.title-col')){return true;}"
+                            + "var season=(has('th.season-col')||has('td.season-col'));"
+                            + "var episode=(has('th.episode-col')||has('td.episode-col'));"
+                            + "if(season&&episode){return true;}"
+                            + "var ths=document.querySelectorAll("
+                            + "'app-fulfillment-main-table-container th, app-fulfillment-orders-main-table th');"
+                            + "var hasTitle=false,hasSeason=false,hasEpisode=false,hasCombined=false;"
+                            + "for(var i=0;i<ths.length;i++){"
+                            + "  var t=(ths[i].textContent||'').replace(/\\s+/g,' ').trim();"
+                            + "  if(/title,\\s*season,\\s*episode/i.test(t)){hasCombined=true;}"
+                            + "  if(/^title$/i.test(t)){hasTitle=true;}"
+                            + "  if(/^season$/i.test(t)){hasSeason=true;}"
+                            + "  if(/^episode$/i.test(t)){hasEpisode=true;}"
+                            + "}"
+                            + "return hasCombined||(hasTitle&&hasSeason&&hasEpisode)||(hasSeason&&hasEpisode);");
+            return Boolean.TRUE.equals(result) || "true".equals(String.valueOf(result));
+        } catch (Exception e) {
+            Logger.logConsoleMessage("Could not detect Title/Season/Episode on Orders grid: " + e.getMessage());
+            return false;
+        }
+    }
+
+    private boolean isTitleSeasonEpisodeCheckedInManagePanel() {
+        if (isOrderLevelCheckboxSelected(ManageColumnOptions.TITLE_SEASON_EPISODE)) {
+            return true;
+        }
+        return isOrderLevelCheckboxSelected(ManageColumnOptions.SEASON)
+                && isOrderLevelCheckboxSelected(ManageColumnOptions.EPISODE);
+    }
+
+    private boolean enableTitleSeasonEpisodeManageColumns(Section section) throws InterruptedException {
+        scrollToColumnInManagePanelLikePts(section, ManageColumnOptions.TITLE_SEASON_EPISODE);
+        By combinedLabel = tableView.titleSeasonEpisodeCombinedManageColumnLabel();
+        By combinedCheckbox = tableView.titleSeasonEpisodeCombinedManageColumnCheckbox();
+        if (WaitUtil.isDisplayFast(combinedLabel, 3)) {
+            Logger.logMessage("Manage columns — enabling combined Title, Season, Episode checkbox");
+            return clickColumnCheckboxIfUnchecked(section, combinedCheckbox, combinedLabel,
+                    ManageColumnOptions.TITLE_SEASON_EPISODE);
+        }
+        Logger.logMessage("Combined Title, Season, Episode not in Manage columns — enabling Season + Episode");
+        boolean toggled = false;
+        for (String splitLabel : new String[] {
+                ManageColumnOptions.SEASON, ManageColumnOptions.EPISODE }) {
+            scrollToColumnInManagePanelLikePts(section, splitLabel);
+            By checkbox = tableView.orderColumnCheckbox(splitLabel);
+            By label = tableView.orderColumnLabel(splitLabel);
+            toggled = clickColumnCheckboxIfUnchecked(section, checkbox, label, splitLabel) || toggled;
+        }
+        return toggled;
+    }
+
+    private boolean enableTitleSeasonEpisodeInBatch(SoftAssert softAssert, boolean anyToggledSoFar)
+            throws InterruptedException {
+        Section section = Section.ORDER;
+        scrollToColumnInManagePanelLikePts(section, ManageColumnOptions.TITLE_SEASON_EPISODE);
+        if (!WaitUtil.isDisplayFast(tableView.titleSeasonEpisodeManageColumnLabel(), 3)) {
+            scrollToColumnInManagePanelLikePts(section, ManageColumnOptions.SEASON);
+        }
+        Verify.softAssert1(WaitUtil.isDisplayFast(tableView.titleSeasonEpisodeManageColumnLabel(), 5),
+                ManageColumnOptions.TITLE_SEASON_EPISODE
+                        + " visible in Manage columns after scroll (combined or split layout)",
+                softAssert);
+        if (isTitleSeasonEpisodeCheckedInManagePanel()) {
+            Logger.logMessage(ManageColumnOptions.TITLE_SEASON_EPISODE + " already checked in Manage columns");
+            return anyToggledSoFar;
+        }
+        boolean toggled = enableTitleSeasonEpisodeManageColumns(section);
+        Verify.softAssert1(toggled || isTitleSeasonEpisodeCheckedInManagePanel(),
+                "Enabled " + ManageColumnOptions.TITLE_SEASON_EPISODE + " in Manage columns (batch)", softAssert);
+        return anyToggledSoFar || toggled;
+    }
+
     /** Detects order column in table DOM even when horizontally off-screen (avoids long scroll loops). */
     private boolean isOrderColumnPresentOnGridViaJs(String columnLabel) {
         try {
@@ -90,10 +290,16 @@ public class ManageColumnsUtil extends BaseTest {
                             + "var name='" + escaped + "';"
                             + "var sel='app-fulfillment-main-table-container td.'+cls"
                             + "+',app-fulfillment-orders-main-table td.'+cls"
+                            + "+',app-fulfillment-line-items-main-table td.'+cls"
+                            + "+',#line_items_tab td.'+cls"
                             + "+',app-fulfillment-main-table-container td[class*=\"'+cls+'\"]'"
                             + "+',app-fulfillment-orders-main-table td[class*=\"'+cls+'\"]'"
+                            + "+',app-fulfillment-line-items-main-table td[class*=\"'+cls+'\"]'"
+                            + "+',#line_items_tab td[class*=\"'+cls+'\"]'"
                             + "+',app-fulfillment-main-table-container th'"
-                            + "+',app-fulfillment-orders-main-table th';"
+                            + "+',app-fulfillment-orders-main-table th'"
+                            + "+',app-fulfillment-line-items-main-table th'"
+                            + "+',#line_items_tab th';"
                             + "var nodes=document.querySelectorAll(sel);"
                             + "for(var i=0;i<nodes.length;i++){"
                             + "  var t=(nodes[i].textContent||'').replace(/\\s+/g,' ').trim();"
@@ -377,6 +583,11 @@ public class ManageColumnsUtil extends BaseTest {
         enableActivityTypeColumn(softAssert);
     }
 
+    /** Enable Job line-item column on the current table view (Orders expanded grid / Line Items grid). */
+    public void enableJobColumn(SoftAssert softAssert) throws InterruptedException {
+        ensureColumnEnabledForView(softAssert, ManageColumnOptions.JOB);
+    }
+
     /**
      * Open Manage columns on Orders, enable an order-level column (e.g. Brand, PTS Packaging ID)
      * under the Order columns accordion — Save when enabled, otherwise close.
@@ -396,6 +607,18 @@ public class ManageColumnsUtil extends BaseTest {
         Thread.sleep(400);
         scrollManageColumnsPanelToTop();
         Section section = Section.ORDER;
+        if (ManageColumnOptions.TITLE_SEASON_EPISODE.equals(columnLabel)) {
+            if (isTitleSeasonEpisodeCheckedInManagePanel()) {
+                Logger.logMessage(columnLabel + " already checked in Manage columns — skip Save, close panel");
+                closePanelSafely(softAssert);
+                return;
+            }
+            boolean toggled = enableTitleSeasonEpisodeManageColumns(section);
+            Verify.softAssert1(toggled || isTitleSeasonEpisodeCheckedInManagePanel(),
+                    "Enabled " + columnLabel + " in Manage columns", softAssert);
+            saveChangesWhenNeeded(softAssert, columnLabel);
+            return;
+        }
         scrollToColumnInManagePanelLikePts(section, columnLabel);
         Verify.softAssert1(WaitUtil.isDisplayFast(columnLabel(section, columnLabel), 5),
                 columnLabel + " visible in Order columns after scroll", softAssert);
@@ -904,6 +1127,9 @@ public class ManageColumnsUtil extends BaseTest {
         scrollLabelIntoView(section, columnLabel);
         if (section == Section.ORDER_LINE_ITEM) {
             return isOrderLineItemFlatCheckboxSelected(columnLabel);
+        }
+        if (section == Section.ORDER && ManageColumnOptions.TITLE_SEASON_EPISODE.equals(columnLabel)) {
+            return isTitleSeasonEpisodeCheckedInManagePanel();
         }
         if (section == Section.ORDER) {
             return isOrderLevelCheckboxSelected(columnLabel);
@@ -1767,6 +1993,9 @@ public class ManageColumnsUtil extends BaseTest {
     }
 
     public By columnCheckbox(Section section, String columnLabel) {
+        if (section == Section.ORDER && ManageColumnOptions.TITLE_SEASON_EPISODE.equals(columnLabel)) {
+            return tableView.titleSeasonEpisodeManageColumnCheckbox();
+        }
         switch (section) {
             case ORDER:
                 return tableView.orderColumnCheckbox(columnLabel);
@@ -1784,6 +2013,9 @@ public class ManageColumnsUtil extends BaseTest {
     }
 
     public By columnLabel(Section section, String columnLabel) {
+        if (section == Section.ORDER && ManageColumnOptions.TITLE_SEASON_EPISODE.equals(columnLabel)) {
+            return tableView.titleSeasonEpisodeManageColumnLabel();
+        }
         switch (section) {
             case ORDER:
                 return tableView.OrderColumnNameOnTableView(columnLabel);

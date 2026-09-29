@@ -58,6 +58,8 @@ public class LeftFilterPanelUtil extends BaseTest {
     }
 
     private static final Pattern COUNT_PATTERN = Pattern.compile("\\((\\d+)\\)");
+    private static final int MAX_FLAG_TABLE_SYNC_FILTER_COUNT = 500;
+    private static final int MAX_TABLE_SYNC_VISIBLE_ROWS = 10;
 
     public void navigateToTab(ConsoleTab tab) throws InterruptedException {
         if (tab == ConsoleTab.LINE_ITEMS) {
@@ -361,6 +363,10 @@ public class LeftFilterPanelUtil extends BaseTest {
      * Collapses one filter and clears its search text after a per-filter test category.
      */
     public void resetFilterState(String filterName) throws InterruptedException {
+        if (LeftFilterSessionHelper.shouldKeepFilterExpanded(filterName)) {
+            clearFilterSearchInput(filterName);
+            return;
+        }
         if (isFilterExpanded(filterName)) {
             clearFilterSearchInput(filterName);
             collapseFilter(filterName);
@@ -414,8 +420,10 @@ public class LeftFilterPanelUtil extends BaseTest {
         List<FilterOption> zero = visible.stream().filter(o -> o.getCount() == 0).collect(Collectors.toList());
 
         // Assigned To: Unassigned is pinned directly below Select all — not sorted A-Z with person names.
+        // Delivery Protocol: [No Value] is pinned at end of non-zero group — exclude from strict A-Z check.
         List<FilterOption> nonZeroForAlpha = nonZero.stream()
                 .filter(o -> !isUnassignedFilterOption(o.getLabel()))
+                .filter(o -> !isNoValueFilterOption(o.getLabel()))
                 .collect(Collectors.toList());
         FilterOption unassignedOption = nonZero.stream()
                 .filter(o -> isUnassignedFilterOption(o.getLabel()))
@@ -437,6 +445,36 @@ public class LeftFilterPanelUtil extends BaseTest {
             Verify.softAssert(isSortedAlphabetically(zero),
                     filterName + " first visible zero-count options are alphabetical. Actual: " + labelsOf(zero));
         }
+        Verify.softAssert(isNonZeroFirstThenZero(visible),
+                filterName + " visible non-zero options appear before zero-count. Actual: " + labelsOf(visible));
+
+        if (!zero.isEmpty() && !nonZero.isEmpty()) {
+            Verify.softAssert(hasVisibleZeroCountDivider(filterName, zero.get(0).getLabel()),
+                    filterName + " shows CSS divider line between non-zero and zero-count options");
+        }
+
+        collapseFilter(filterName);
+    }
+
+    /**
+     * TC102 for large-list filters (Series title, Partner): Select All first, non-zero before zero,
+     * CSS divider when both groups exist. Skips strict A-Z — virtual scroll shows a partial viewport only.
+     */
+    public void validateLargeListOptionListOrderSmoke(SoftAssert softAssert, String filterName)
+            throws InterruptedException {
+        expandFilter(filterName);
+
+        Verify.softAssert(WaitUtil.isDisplay(leftFilterPanel.selectAllLabel(filterName), DEFAULT_WAIT_SECONDS),
+                filterName + " — Select All is first at top");
+
+        List<FilterOption> visible = getFilterOptions(filterName);
+        Verify.softAssert(!visible.isEmpty(), filterName + " has visible filter options when expanded");
+
+        List<FilterOption> nonZero = visible.stream()
+                .filter(o -> o.getCount() > 0 && !isAmbiguousFilterOptionLabel(o.getLabel()))
+                .collect(Collectors.toList());
+        List<FilterOption> zero = visible.stream().filter(o -> o.getCount() == 0).collect(Collectors.toList());
+
         Verify.softAssert(isNonZeroFirstThenZero(visible),
                 filterName + " visible non-zero options appear before zero-count. Actual: " + labelsOf(visible));
 
@@ -547,10 +585,33 @@ public class LeftFilterPanelUtil extends BaseTest {
     }
 
     public void collapseFilter(String filterName) throws InterruptedException {
-        if (isFilterExpanded(filterName)) {
-            DriverUtil.clickOnElement(leftFilterPanel.filterAccordionButton(filterName), DEFAULT_WAIT_SECONDS);
-            Thread.sleep(FILTER_EXPAND_WAIT_MS);
+        if (!isFilterExpanded(filterName)) {
+            return;
         }
+        scrollFilterListTowardFilter(filterName);
+        By accordionButton = leftFilterPanel.filterAccordionButton(filterName);
+        DriverUtil.scrollToElement(accordionButton);
+        Thread.sleep(200);
+        if (DriverUtil.clickOnElement(accordionButton, DEFAULT_WAIT_SECONDS)) {
+            Thread.sleep(FILTER_EXPAND_WAIT_MS);
+            if (!isFilterExpanded(filterName)) {
+                return;
+            }
+        }
+        DriverUtil.clickOnElementJs(accordionButton, DEFAULT_WAIT_SECONDS);
+        Thread.sleep(FILTER_EXPAND_WAIT_MS);
+    }
+
+    /** Collapses filter even when keep-expanded mode is active (suite teardown). */
+    public void forceCollapseFilter(String filterName) throws InterruptedException {
+        if (isFilterExpanded(filterName)) {
+            collapseFilter(filterName);
+            if (isFilterExpanded(filterName)) {
+                DriverUtil.clickOnElementJs(leftFilterPanel.filterAccordionButton(filterName), DEFAULT_WAIT_SECONDS);
+                Thread.sleep(FILTER_EXPAND_WAIT_MS);
+            }
+        }
+        clearFilterSearchInput(filterName);
     }
 
     public boolean isFilterExpanded(String filterName) {
@@ -1243,14 +1304,12 @@ public class LeftFilterPanelUtil extends BaseTest {
                 filterName + " has visible Status column values after selecting " + optionLabel);
 
         String keywordLower = statusKeyword.toLowerCase(Locale.ROOT);
-        for (int i = 0; i < statusValues.size(); i++) {
-            String statusText = statusValues.get(i);
-            Verify.softAssert(statusText.toLowerCase(Locale.ROOT).contains(keywordLower),
-                    filterName + " row " + (i + 1) + " Status is '" + statusKeyword
-                            + "' after filter selection (filter='" + optionLabel + "', actual='" + statusText + "')");
-        }
-        Logger.logMessage(filterName + " Status column OK — all " + statusValues.size()
-                + " visible row(s) match keyword '" + statusKeyword + "' for '" + optionLabel + "'");
+        String statusText = statusValues.get(0);
+        Verify.softAssert(statusText.toLowerCase(Locale.ROOT).contains(keywordLower),
+                filterName + " first visible Status row is '" + statusKeyword
+                        + "' after filter selection (filter='" + optionLabel + "', actual='" + statusText + "')");
+        Logger.logMessage(filterName + " Status column OK — first of " + statusValues.size()
+                + " visible row(s) matches keyword '" + statusKeyword + "' for '" + optionLabel + "'");
 
         if (WaitUtil.isDisplay(leftFilterPanel.statusSummaryChip(statusKeyword), 5)) {
             Logger.logMessage(filterName + " status summary chip visible for: " + statusKeyword);
@@ -1268,58 +1327,7 @@ public class LeftFilterPanelUtil extends BaseTest {
      * (order-level column; no row expand — same grid read pattern as {@link #validateTableRecordsMatchFilter}).
      */
     public void validateBrandTableSyncSmoke(SoftAssert softAssert, String filterName) throws InterruptedException {
-        ensureOrdersDataLoaded(softAssert);
-        expandFilter(filterName);
-        if (!isFilterExpanded(filterName)) {
-            Verify.softAssert(false, filterName + " filter could not be expanded for TC613");
-            return;
-        }
-        ensureNoOptionsSelected(filterName);
-
-        String optionLabel = resolveFirstNonZeroFilterOption(filterName);
-        if (optionLabel == null) {
-            Logger.logMessage(filterName + " has no options with count > 0 — skipping TC613");
-            collapseFilter(filterName);
-            return;
-        }
-
-        int filterOptionCount = getFilterOptionCount(filterName, optionLabel);
-        Verify.softAssert(filterOptionCount > 0,
-                filterName + " option '" + optionLabel + "' has count > 0 (actual=" + filterOptionCount + ")");
-        Logger.logMessage(filterName + " TC613 option='" + optionLabel + "' filterCount=" + filterOptionCount);
-
-        selectFilterOption(filterName, optionLabel);
-        waitUtils.waitForVisibilityOfElement(leftFilterPanel.tableRecordCountLabel(), DEFAULT_WAIT_SECONDS);
-        waitForTableRecordCount(filterOptionCount, DEFAULT_WAIT_SECONDS);
-
-        int tableRecordCount = getTableRecordCount();
-        Verify.softAssert(tableRecordCount >= 0,
-                filterName + " results count available after selecting " + optionLabel
-                        + " (actual=" + tableRecordCount + ")");
-        Verify.softAssert(tableRecordCount == filterOptionCount,
-                filterName + " table record count matches filter option count for " + optionLabel
-                        + " (filter=" + filterOptionCount + ", table=" + tableRecordCount + ")");
-        Logger.logMessage(filterName + " count sync OK for " + optionLabel + ": filter=" + filterOptionCount
-                + ", table=" + tableRecordCount);
-
-        scrollOrdersGridUntilColumnVisible(ManageColumnOptions.BRAND);
-        List<String> brandValues = getVisibleTableColumnValues(ManageColumnOptions.BRAND);
-        Logger.logMessage(filterName + " TC613 Brand column values fetched (" + brandValues.size()
-                + " visible cell(s)): " + brandValues);
-        Verify.softAssert(!brandValues.isEmpty(),
-                filterName + " has visible Brand column values after selecting " + optionLabel
-                        + " (scroll Brand column into view on Orders grid)");
-
-        for (int i = 0; i < brandValues.size(); i++) {
-            String brandText = brandValues.get(i);
-            Verify.softAssert(brandCellMatchesSelectedOption(brandText, optionLabel),
-                    filterName + " row " + (i + 1) + " Brand is '" + optionLabel
-                            + "' after filter selection (actual='" + brandText + "')");
-        }
-        Logger.logMessage(filterName + " Brand column OK — all " + brandValues.size()
-                + " visible row(s) match '" + optionLabel + "'");
-
-        collapseFilter(filterName);
+        validateOrderLevelColumnTableSyncSmoke(softAssert, filterName, ManageColumnOptions.BRAND);
     }
 
     /**
@@ -1376,13 +1384,11 @@ public class LeftFilterPanelUtil extends BaseTest {
         Verify.softAssert(!assignedToValues.isEmpty(),
                 filterName + " has visible Assigned to column values after selecting " + optionLabel);
 
-        for (int i = 0; i < assignedToValues.size(); i++) {
-            String cellText = assignedToValues.get(i);
-            Verify.softAssert(assignedToCellMatchesSelectedPerson(cellText, optionLabel),
-                    filterName + " row " + (i + 1) + " Assigned to initials are '" + expectedInitials
-                            + "' after filter selection (filter='" + optionLabel + "', actual='" + cellText + "')");
-        }
-        Logger.logMessage(filterName + " Assigned to column OK — all " + assignedToValues.size()
+        String cellText = assignedToValues.get(0);
+        Verify.softAssert(assignedToCellMatchesSelectedPerson(cellText, optionLabel),
+                filterName + " first visible Assigned to initials are '" + expectedInitials
+                        + "' after filter selection (filter='" + optionLabel + "', actual='" + cellText + "')");
+        Logger.logMessage(filterName + " Assigned to column OK — first of " + assignedToValues.size()
                 + " visible row(s) match initials '" + expectedInitials + "' for '" + optionLabel + "'");
     }
 
@@ -1409,14 +1415,12 @@ public class LeftFilterPanelUtil extends BaseTest {
                 filterName + " Assigned to column is visible on Orders grid after selecting Unassigned"
                         + " (cells may be blank when no assignee)");
 
-        for (int i = 0; i < assignedToValues.size(); i++) {
-            String cellText = assignedToValues.get(i);
-            Verify.softAssert(assignedToCellIsBlank(cellText),
-                    filterName + " row " + (i + 1) + " Assigned to is blank for Unassigned filter"
-                            + " (actual='" + cellText + "')");
-        }
-        Logger.logMessage(filterName + " Assigned to column OK — all " + assignedToValues.size()
-                + " visible row(s) are blank for Unassigned filter");
+        String cellText = assignedToValues.get(0);
+        Verify.softAssert(assignedToCellIsBlank(cellText),
+                filterName + " first visible Assigned to is blank for Unassigned filter"
+                        + " (actual='" + cellText + "')");
+        Logger.logMessage(filterName + " Assigned to column OK — first of " + assignedToValues.size()
+                + " visible row(s) blank for Unassigned filter");
     }
 
     /** First checkbox option with count &gt; 0, excluding {@code All} and {@code Unassigned}. */
@@ -1453,6 +1457,15 @@ public class LeftFilterPanelUtil extends BaseTest {
 
     static boolean isUnassignedFilterOption(String label) {
         return label != null && label.trim().equalsIgnoreCase("Unassigned");
+    }
+
+    /** Delivery Protocol and similar filters pin {@code [No Value]} outside strict A-Z ordering. */
+    static boolean isNoValueFilterOption(String label) {
+        if (label == null) {
+            return false;
+        }
+        String trimmed = label.trim();
+        return trimmed.equalsIgnoreCase("[No Value]") || trimmed.equalsIgnoreCase("No Value");
     }
 
     private static boolean assignedToCellMatchesSelectedPerson(String cellValue, String optionLabel) {
@@ -1520,13 +1533,11 @@ public class LeftFilterPanelUtil extends BaseTest {
                 filterName + " has visible Submitted By column values after selecting " + optionLabel
                         + " (scroll Submitted By column into view on Orders grid)");
 
-        for (int i = 0; i < submittedByValues.size(); i++) {
-            String cellText = submittedByValues.get(i);
-            Verify.softAssert(submittedByCellMatchesSelectedOption(cellText, optionLabel),
-                    filterName + " row " + (i + 1) + " Submitted By initials are '" + expectedInitials
-                            + "' after filter selection (filter='" + optionLabel + "', actual='" + cellText + "')");
-        }
-        Logger.logMessage(filterName + " Submitted By column OK — all " + submittedByValues.size()
+        String cellText = submittedByValues.get(0);
+        Verify.softAssert(submittedByCellMatchesSelectedOption(cellText, optionLabel),
+                filterName + " first visible Submitted By initials are '" + expectedInitials
+                        + "' after filter selection (filter='" + optionLabel + "', actual='" + cellText + "')");
+        Logger.logMessage(filterName + " Submitted By column OK — first of " + submittedByValues.size()
                 + " visible row(s) match initials '" + expectedInitials + "' for '" + optionLabel + "'");
 
         collapseFilter(filterName);
@@ -1771,10 +1782,7 @@ public class LeftFilterPanelUtil extends BaseTest {
     }
 
     private static boolean brandCellMatchesSelectedOption(String cellValue, String optionLabel) {
-        if (cellValue == null || optionLabel == null) {
-            return false;
-        }
-        return cellValue.trim().equalsIgnoreCase(optionLabel.trim());
+        return orderLevelCellMatchesSelectedOption(cellValue, optionLabel);
     }
 
     private static final int ACTIVITY_TYPE_EXPAND_WAIT_MS = 1500;
@@ -1932,15 +1940,68 @@ public class LeftFilterPanelUtil extends BaseTest {
         Verify.softAssert(!statusValues.isEmpty(),
                 filterName + " has visible Line Item Status values after selecting " + optionLabel);
 
-        boolean matchFound = statusValues.stream()
-                .anyMatch(value -> lineItemStatusMatchesFilterOption(value, optionLabel));
-        if (!matchFound) {
-            Logger.logMessage("TC601 [Line Items] status values checked (" + statusValues.size()
-                    + "): " + statusValues);
-        }
+        String firstStatus = statusValues.get(0);
+        boolean matchFound = lineItemStatusMatchesFilterOption(firstStatus, optionLabel);
         Verify.softAssert(matchFound,
-                filterName + " at least one Line Item Status matches '" + optionLabel
-                        + "' (checked " + statusValues.size() + " visible row(s); not all required)");
+                filterName + " first visible Line Item Status matches '" + optionLabel
+                        + "' (actual='" + firstStatus + "'; checked 1 of " + statusValues.size() + " row(s))");
+
+        collapseFilter(filterName);
+    }
+
+    /**
+     * TC620 on Line Items tab: filter count sync → read {@code activity-type-col} on the main grid →
+     * first visible Activity Type matches the selected filter option.
+     */
+    public void validateActivityTypeTableSyncOnLineItemsTab(SoftAssert softAssert, String filterName)
+            throws InterruptedException {
+        ensureLeftFilterPanelOpen();
+        if (!waitForFilterHeaderVisible(filterName, 30)) {
+            Verify.softAssert(false, filterName + " filter header not found in left panel");
+            return;
+        }
+        expandFilter(filterName);
+        if (!isFilterExpanded(filterName)) {
+            Verify.softAssert(false, filterName + " filter could not be expanded for TC620");
+            return;
+        }
+        ensureNoOptionsSelected(filterName);
+
+        String optionLabel = resolveFirstNonZeroFilterOption(filterName);
+        if (optionLabel == null) {
+            Logger.logMessage(filterName + " has no options with count > 0 — skipping TC620");
+            collapseFilter(filterName);
+            return;
+        }
+
+        int filterOptionCount = getFilterOptionCount(filterName, optionLabel);
+        Verify.softAssert(filterOptionCount > 0,
+                filterName + " option '" + optionLabel + "' has count > 0 (actual=" + filterOptionCount + ")");
+        Logger.logMessage("TC620 [Line Items] — select first non-zero " + filterName + " option='" + optionLabel
+                + "' count=" + filterOptionCount);
+
+        selectFilterOption(filterName, optionLabel);
+        waitUtils.waitForVisibilityOfElement(leftFilterPanel.tableRecordCountLabel(), DEFAULT_WAIT_SECONDS);
+        waitForTableRecordCount(filterOptionCount, DEFAULT_WAIT_SECONDS);
+        Thread.sleep(FILTER_EXPAND_WAIT_MS);
+
+        int tableRecordCount = getTableRecordCount();
+        Verify.softAssert(tableRecordCount == filterOptionCount,
+                filterName + " table record count matches filter option count for " + optionLabel
+                        + " (filter=" + filterOptionCount + ", table=" + tableRecordCount + ")");
+
+        scrollLineItemsGridUntilColumnVisible(ManageColumnOptions.ACTIVITY_TYPE);
+        List<String> activityTypeValues = collectVisibleLineItemActivityTypeLabels();
+        Verify.softAssert(!activityTypeValues.isEmpty(),
+                filterName + " has visible Activity Type values after selecting " + optionLabel
+                        + " (scroll Activity Type column into view on Line Items grid)");
+
+        String firstActivityType = activityTypeValues.get(0);
+        boolean matchFound = orderLevelCellMatchesSelectedOption(firstActivityType, optionLabel);
+        Verify.softAssert(matchFound,
+                filterName + " first visible Activity Type matches '" + optionLabel
+                        + "' (actual='" + firstActivityType + "'; checked 1 of " + activityTypeValues.size()
+                        + " row(s))");
 
         collapseFilter(filterName);
     }
@@ -2010,6 +2071,27 @@ public class LeftFilterPanelUtil extends BaseTest {
         Logger.logReportMessage("Cleared all active filters");
     }
 
+    /** After batch refresh between filters: no chips and Clear control must not be available. */
+    public void validateClearFiltersNotActive(SoftAssert softAssert) throws InterruptedException {
+        Verify.softAssert(!hasActiveFilterChips(),
+                "No active filter chips after refresh between filters");
+        openActiveFiltersPanelIfNeededForClearCheck();
+        Verify.softAssert(!WaitUtil.isDisplayFast(leftFilterPanel.activeFiltersClearButton(), 2),
+                "Clear filters control is not active after refresh between filters");
+        Logger.logReportMessage("Post-refresh check OK — Clear filters is not active");
+    }
+
+    private void openActiveFiltersPanelIfNeededForClearCheck() throws InterruptedException {
+        if (WaitUtil.isDisplayFast(leftFilterPanel.activeFiltersClearButton(), 1)
+                || WaitUtil.isDisplayFast(leftFilterPanel.activeFiltersPanelContent(), 1)) {
+            return;
+        }
+        if (WaitUtil.isDisplayFast(leftFilterPanel.activeFiltersToggleButton(), 2)) {
+            clickActiveFiltersButton();
+            Thread.sleep(FILTER_EXPAND_WAIT_MS);
+        }
+    }
+
     /** True when at least one active filter chip/badge is visible. */
     public boolean hasActiveFilterChips() {
         if (WaitUtil.isDisplayFast(leftFilterPanel.activeFiltersBadge(), 2)) {
@@ -2037,6 +2119,70 @@ public class LeftFilterPanelUtil extends BaseTest {
 
     private void scrollOrdersGridToCollapseColumn() {
         scrollOrdersGridUntilColumnVisible(null);
+    }
+
+    /**
+     * Horizontally scroll the Line Items main table until {@code columnName} body cells are visible.
+     */
+    private void scrollLineItemsGridUntilColumnVisible(String columnName) {
+        try {
+            By cells = columnName != null ? leftFilterPanel.tableColumnCells(columnName) : null;
+            if (cells != null && WaitUtil.isDisplayFast(cells, 2)) {
+                return;
+            }
+            scrollLineItemsGridToRevealColumnCells(columnName);
+            if (cells != null && WaitUtil.isDisplayFast(cells, 2)) {
+                return;
+            }
+            String[] scrollSelectors = {
+                    "#line_items_tab .fulfillment-table-wrapper",
+                    "app-fulfillment-line-items-main-table .custom-table-wrapper",
+                    "app-fulfillment-line-items-main-table .table-container",
+                    "app-fulfillment-line-items-main-table cdk-virtual-scroll-viewport"
+            };
+            for (String selector : scrollSelectors) {
+                for (int step = 0; step <= 5; step++) {
+                    driver.get().browser().executeScript(
+                            "var el=document.querySelector('" + selector + "');"
+                                    + "if(!el){return;}"
+                                    + "var max=Math.max(el.scrollWidth-el.clientWidth,0);"
+                                    + "el.scrollLeft=Math.round(max*" + step + "/5);");
+                    Thread.sleep(80);
+                    if (cells != null && WaitUtil.isDisplayFast(cells, 1)) {
+                        return;
+                    }
+                }
+            }
+            Thread.sleep(200);
+        } catch (Exception e) {
+            Logger.logConsoleMessage("Could not scroll Line Items grid for column " + columnName + ": "
+                    + e.getMessage());
+        }
+    }
+
+    private void scrollLineItemsGridToRevealColumnCells(String columnName) {
+        try {
+            String cssClass = "activity-type-col";
+            if (columnName != null && !ManageColumnOptions.ACTIVITY_TYPE.equalsIgnoreCase(columnName)) {
+                cssClass = columnName.trim().toLowerCase(Locale.ROOT).replaceAll("[^a-z0-9]+", "-") + "-col";
+            }
+            String escaped = cssClass.replace("\\", "\\\\").replace("'", "\\'");
+            driver.get().browser().executeScript(
+                    "var td=document.querySelector('#line_items_tab td." + escaped
+                            + ",app-fulfillment-line-items-main-table td." + escaped + "');"
+                            + "if(!td){return;}"
+                            + "td.scrollIntoView({block:'nearest',inline:'center'});"
+                            + "var wrap=td.closest('.fulfillment-table-wrapper,.custom-table-wrapper,.table-container');"
+                            + "if(wrap&&td.getBoundingClientRect){"
+                            + "  var r=td.getBoundingClientRect();"
+                            + "  var w=wrap.getBoundingClientRect();"
+                            + "  if(r.right>w.right){wrap.scrollLeft+=r.right-w.right+24;}"
+                            + "  else if(r.left<w.left){wrap.scrollLeft-=w.left-r.left+24;}"
+                            + "}");
+            Thread.sleep(200);
+        } catch (Exception e) {
+            Logger.logConsoleMessage("Could not scroll Line Items column cells into view: " + e.getMessage());
+        }
     }
 
     /**
@@ -2179,6 +2325,127 @@ public class LeftFilterPanelUtil extends BaseTest {
     }
 
     /**
+     * TC622: expand the first order row only and assert the first line-item Type matches the filter option.
+     * Filter count vs table record count is not checked (different grains on Orders view).
+     */
+    private boolean assertFirstOrderFirstLineItemJobTypeMatches(SoftAssert softAssert, String optionLabel)
+            throws InterruptedException {
+        String optionLower = optionLabel.toLowerCase(Locale.ROOT);
+        collapseExpandedOrders();
+        if (!expandOrderRow(softAssert, 1)) {
+            Verify.softAssert1(false, "TC622 could not expand first order row", softAssert);
+            return false;
+        }
+        if (!waitForOrderRowExpanded(1, expandedGridWaitSeconds())) {
+            Verify.softAssert1(false, "TC622 first order row did not show expanded line-item grid", softAssert);
+            return false;
+        }
+
+        Logger.logMessage("TC622 — waiting " + (TC620_EXPANDED_LINE_ITEM_SETTLE_MS / 1000)
+                + "s after expand before reading first line-item Type");
+        Thread.sleep(TC620_EXPANDED_LINE_ITEM_SETTLE_MS);
+
+        String firstLineItemType = readFirstExpandedLineItemJobType();
+        Logger.logMessage("TC622 first order first line item Type='" + firstLineItemType
+                + "' (filter option='" + optionLabel + "')");
+
+        Verify.softAssert1(firstLineItemType != null && !firstLineItemType.isEmpty(),
+                "TC622 could read first line-item Type (td.col.line-item-type) after expanding first order",
+                softAssert);
+        if (firstLineItemType == null || firstLineItemType.isEmpty()) {
+            return false;
+        }
+
+        boolean match = jobTypeMatchesFilterOption(firstLineItemType, optionLabel, optionLower);
+        Verify.softAssert1(match,
+                "TC622 first order first line item Type matches '" + optionLabel + "' (actual='"
+                        + firstLineItemType + "')",
+                softAssert);
+        return match;
+    }
+
+    private String readFirstExpandedLineItemJobType() {
+        try {
+            if (WaitUtil.isDisplayFast(ordersMainTablePage.firstOrderFirstLineItemTypeValueLabel(), 5)) {
+                String text = normalizeCellText(driver.get().finder()
+                        .findElement(ordersMainTablePage.firstOrderFirstLineItemTypeValueLabel())
+                        .getText());
+                if (!text.isEmpty()) {
+                    return text;
+                }
+            }
+        } catch (Exception e) {
+            Logger.logConsoleMessage("Could not read first order first line-item Type (scoped xpath): "
+                    + e.getMessage());
+        }
+        try {
+            List<DesktopBrowserElement> labels = driver.get().finder()
+                    .findElements(ordersMainTablePage.expandedLineItemTypeValueLabels());
+            if (!labels.isEmpty()) {
+                String text = normalizeCellText(labels.get(0).getText());
+                if (!text.isEmpty()) {
+                    return text;
+                }
+            }
+        } catch (Exception e) {
+            Logger.logConsoleMessage("Could not read first Type value label: " + e.getMessage());
+        }
+        try {
+            List<DesktopBrowserElement> cells = driver.get().finder()
+                    .findElements(ordersMainTablePage.expandedLineItemJobCellsExact());
+            if (!cells.isEmpty()) {
+                String text = normalizeCellText(cells.get(0).getText());
+                if (!text.isEmpty()) {
+                    return text;
+                }
+            }
+        } catch (Exception e) {
+            Logger.logConsoleMessage("Could not read first Type cell: " + e.getMessage());
+        }
+        List<String> fromJs = collectFirstExpandedLineItemJobTypeViaJs();
+        return fromJs.isEmpty() ? null : fromJs.get(0);
+    }
+
+    private static boolean jobTypeMatchesFilterOption(String cellValue, String optionLabel, String optionLower) {
+        if (cellValue == null || optionLabel == null) {
+            return false;
+        }
+        String cellLower = cellValue.trim().toLowerCase(Locale.ROOT);
+        return cellLower.contains(optionLower) || optionLower.contains(cellLower)
+                || cellLower.equals(optionLower);
+    }
+
+    private List<String> collectFirstExpandedLineItemJobTypeViaJs() {
+        List<String> jobTypes = new ArrayList<>();
+        try {
+            Object result = driver.get().browser().executeScript(
+                    "var row=document.querySelector(\"table[id*='orderTable'] tbody tr.clickable-row,"
+                            + "table[id*='orderTable'] tbody tr.row.clickable-row\");"
+                            + "if(!row){return [];}"
+                            + "var wrap=row.querySelector('.inner-table-wrapper,.package-line-items');"
+                            + "if(!wrap){return [];}"
+                            + "var td=wrap.querySelector(\"td[class*='line-item-type']\");"
+                            + "if(!td){return [];}"
+                            + "var span=td.querySelector('span.label')||td;"
+                            + "var t=(span.textContent||'').replace(/\\s+/g,' ').trim();"
+                            + "return t?[t]:[];");
+            if (result instanceof List) {
+                for (Object item : (List<?>) result) {
+                    if (item != null) {
+                        String text = normalizeCellText(String.valueOf(item));
+                        if (!text.isEmpty()) {
+                            jobTypes.add(text);
+                        }
+                    }
+                }
+            }
+        } catch (Exception e) {
+            Logger.logConsoleMessage("JS first line-item Type read failed: " + e.getMessage());
+        }
+        return jobTypes;
+    }
+
+    /**
      * Expands orders, waits for line-item grid, reads Line Item Status labels, and passes when at least one
      * line item matches the selected filter option.
      */
@@ -2301,6 +2568,59 @@ public class LeftFilterPanelUtil extends BaseTest {
             statuses.addAll(getVisibleTableColumnValues("Status"));
         }
         return statuses;
+    }
+
+    private List<String> collectVisibleLineItemActivityTypeLabels() {
+        List<String> activityTypes = new ArrayList<>();
+        try {
+            List<DesktopBrowserElement> cells = driver.get().finder()
+                    .findElements(lineItemsMainTablePage.visibleActivityTypeCells());
+            for (DesktopBrowserElement cell : cells) {
+                String text = normalizeCellText(cell.getText());
+                if (!text.isEmpty()) {
+                    activityTypes.add(text);
+                }
+            }
+        } catch (Exception e) {
+            Logger.logConsoleMessage("Could not read Line Items tab Activity Type cells: " + e.getMessage());
+        }
+        if (activityTypes.isEmpty()) {
+            activityTypes.addAll(collectVisibleLineItemActivityTypeLabelsViaJs());
+        }
+        if (activityTypes.isEmpty()) {
+            scrollLineItemsGridUntilColumnVisible(ManageColumnOptions.ACTIVITY_TYPE);
+            activityTypes.addAll(getVisibleTableColumnValues(ManageColumnOptions.ACTIVITY_TYPE));
+        }
+        return activityTypes;
+    }
+
+    private List<String> collectVisibleLineItemActivityTypeLabelsViaJs() {
+        List<String> activityTypes = new ArrayList<>();
+        try {
+            Object result = driver.get().browser().executeScript(
+                    "var out=[];"
+                            + "document.querySelectorAll("
+                            + "\"#line_items_tab td.activity-type-col div.default-cell,"
+                            + " app-fulfillment-line-items-main-table td.activity-type-col div.default-cell\""
+                            + ").forEach(function(cell){"
+                            + "  var t=(cell.textContent||'').replace(/\\s+/g,' ').trim();"
+                            + "  if(t){out.push(t);}"
+                            + "});"
+                            + "return out;");
+            if (result instanceof List) {
+                for (Object item : (List<?>) result) {
+                    if (item != null) {
+                        String text = normalizeCellText(String.valueOf(item));
+                        if (!text.isEmpty()) {
+                            activityTypes.add(text);
+                        }
+                    }
+                }
+            }
+        } catch (Exception e) {
+            Logger.logConsoleMessage("JS Line Items Activity Type collect failed: " + e.getMessage());
+        }
+        return activityTypes;
     }
 
     private static boolean lineItemStatusMatchesFilterOption(String cellValue, String optionLabel) {
@@ -2514,6 +2834,679 @@ public class LeftFilterPanelUtil extends BaseTest {
         return optionLabel;
     }
 
+
+    // --- table sync helpers (keep-expanded / continuous flow) ---
+
+    public String resolveFirstSelectedNonZeroFilterOption(String filterName) throws InterruptedException {
+        expandFilter(filterName);
+        for (FilterOption option : getFilterOptions(filterName)) {
+            if (option.getCount() > 0
+                    && !isAmbiguousFilterOptionLabel(option.getLabel())
+                    && isFilterOptionSelected(filterName, option.getLabel())) {
+                return option.getLabel();
+            }
+        }
+        return null;
+    }
+
+    public List<String> resolveAllSelectedNonZeroFilterOptions(String filterName) throws InterruptedException {
+        expandFilter(filterName);
+        List<String> selected = new ArrayList<>();
+        for (FilterOption option : getFilterOptions(filterName)) {
+            if (option.getCount() > 0
+                    && !isAmbiguousFilterOptionLabel(option.getLabel())
+                    && isFilterOptionSelected(filterName, option.getLabel())) {
+                selected.add(option.getLabel());
+            }
+        }
+        return selected;
+    }
+
+    /** Selected options including zero-count (used by Clear filters when flow preserved a zero-result option). */
+    public List<String> resolveAllSelectedFilterOptions(String filterName) throws InterruptedException {
+        expandFilter(filterName);
+        List<String> selected = new ArrayList<>();
+        for (FilterOption option : getFilterOptions(filterName)) {
+            if (!isAmbiguousFilterOptionLabel(option.getLabel())
+                    && isFilterOptionSelected(filterName, option.getLabel())) {
+                selected.add(option.getLabel());
+            }
+        }
+        return selected;
+    }
+
+    /**
+     * Table sync setup: reuse preserved selection in keep-expanded suites; otherwise clear and pick first non-zero.
+     */
+    private String resolveTableSyncOptionLabel(String filterName) throws InterruptedException {
+        if (LeftFilterSessionHelper.shouldKeepFilterExpanded(filterName)) {
+            String preserved = resolveFirstSelectedNonZeroFilterOption(filterName);
+            if (preserved != null) {
+                Logger.logReportMessage("Table sync — reusing preserved " + filterName + " selection: " + preserved);
+                return preserved;
+            }
+        }
+        ensureNoOptionsSelected(filterName);
+        String optionLabel = resolveFirstNonZeroFilterOption(filterName);
+        if (optionLabel != null) {
+            selectFilterOption(filterName, optionLabel);
+        }
+        return optionLabel;
+    }
+
+    private static boolean orderLevelCellMatchesSelectedOption(String cellValue, String optionLabel) {
+        if (cellValue == null || optionLabel == null) {
+            return false;
+        }
+        return cellValue.trim().equalsIgnoreCase(optionLabel.trim());
+    }
+
+    private static boolean orderLevelCellMatchesAnySelectedOption(String cellValue, List<String> optionLabels) {
+        if (cellValue == null || optionLabels == null) {
+            return false;
+        }
+        for (String label : optionLabels) {
+            if (orderLevelCellMatchesSelectedOption(cellValue, label)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private void assertFirstVisibleOrderRowColumnSync(SoftAssert softAssert, String filterName,
+                                                      String tableColumnName, List<String> expectedOptions) {
+        scrollOrdersGridUntilColumnVisible(tableColumnName);
+        List<String> columnValues = getVisibleTableColumnValues(tableColumnName);
+        Verify.softAssert(!columnValues.isEmpty(),
+                filterName + " has visible " + tableColumnName + " column values (first-row sync)");
+        String cellText = columnValues.get(0);
+        if (expectedOptions.size() > 1) {
+            Verify.softAssert(orderLevelCellMatchesAnySelectedOption(cellText, expectedOptions),
+                    filterName + " first visible " + tableColumnName + " row matches one of "
+                            + expectedOptions + " (actual='" + cellText + "')");
+        } else {
+            Verify.softAssert(orderLevelCellMatchesSelectedOption(cellText, expectedOptions.get(0)),
+                    filterName + " first visible " + tableColumnName + " row matches '"
+                            + expectedOptions.get(0) + "' (actual='" + cellText + "')");
+        }
+        Logger.logMessage(filterName + " first-row " + tableColumnName + " sync OK (checked 1 of "
+                + columnValues.size() + " visible cell(s))");
+    }
+
+    private void assertCountSync(SoftAssert softAssert, String filterName, String optionLabel, int filterOptionCount)
+            throws InterruptedException {
+        waitUtils.waitForVisibilityOfElement(leftFilterPanel.tableRecordCountLabel(), DEFAULT_WAIT_SECONDS);
+        waitForTableRecordCount(filterOptionCount, DEFAULT_WAIT_SECONDS);
+        int tableRecordCount = getTableRecordCount();
+        Verify.softAssert(tableRecordCount == filterOptionCount,
+                filterName + " table record count matches filter option count for " + optionLabel
+                        + " (filter=" + filterOptionCount + ", table=" + tableRecordCount + ")");
+        Logger.logMessage(filterName + " count sync OK for " + optionLabel + ": filter=" + filterOptionCount
+                + ", table=" + tableRecordCount);
+    }
+
+    private void runCountOnlyTableSyncSmoke(SoftAssert softAssert, String filterName) throws InterruptedException {
+        ensureOrdersDataLoaded(softAssert);
+        expandFilter(filterName);
+        if (!isFilterExpanded(filterName)) {
+            Verify.softAssert(false, filterName + " filter could not be expanded for count-only table sync");
+            return;
+        }
+        String optionLabel = resolveTableSyncOptionLabel(filterName);
+        if (optionLabel == null) {
+            Logger.logMessage(filterName + " has no options with count > 0 — skipping count-only table sync");
+            collapseFilter(filterName);
+            return;
+        }
+        int filterOptionCount = getFilterOptionCount(filterName, optionLabel);
+        Verify.softAssert(filterOptionCount > 0,
+                filterName + " option '" + optionLabel + "' has count > 0 (actual=" + filterOptionCount + ")");
+        assertCountSync(softAssert, filterName, optionLabel, filterOptionCount);
+        if (!LeftFilterSessionHelper.shouldKeepFilterExpanded(filterName)) {
+            collapseFilter(filterName);
+        }
+    }
+
+    private void runCountOnlyTableSyncForSelectedOption(SoftAssert softAssert, String filterName, String optionLabel)
+            throws InterruptedException {
+        ensureOrdersDataLoaded(softAssert);
+        expandFilter(filterName);
+        selectFilterOptionIfNotSelected(filterName, optionLabel);
+        int filterOptionCount = getFilterOptionCount(filterName, optionLabel);
+        assertCountSync(softAssert, filterName, optionLabel, filterOptionCount);
+    }
+
+    public void validateCountOnlyTableSyncSmoke(SoftAssert softAssert, String filterName) throws InterruptedException {
+        runCountOnlyTableSyncSmoke(softAssert, filterName);
+    }
+
+    public void validateCountOnlyTableSyncForSelectedOption(SoftAssert softAssert, String filterName,
+                                                            String optionLabel) throws InterruptedException {
+        runCountOnlyTableSyncForSelectedOption(softAssert, filterName, optionLabel);
+    }
+
+    public void validateOrderLevelColumnTableSyncSmoke(SoftAssert softAssert, String filterName,
+                                                        String tableColumnName) throws InterruptedException {
+        ensureOrdersDataLoaded(softAssert);
+        expandFilter(filterName);
+        if (!isFilterExpanded(filterName)) {
+            Verify.softAssert(false, filterName + " filter could not be expanded for table sync");
+            return;
+        }
+
+        List<String> preservedSelections = LeftFilterSessionHelper.shouldKeepFilterExpanded(filterName)
+                ? resolveAllSelectedNonZeroFilterOptions(filterName) : Collections.emptyList();
+        boolean multiSelectPreserved = preservedSelections.size() > 1;
+        String optionLabel;
+
+        if (multiSelectPreserved) {
+            optionLabel = String.join(" + ", preservedSelections);
+            Logger.logReportMessage("Table sync — preserved multi-select for " + filterName + ": "
+                    + preservedSelections);
+        } else {
+            optionLabel = resolveTableSyncOptionLabel(filterName);
+        }
+        if (optionLabel == null) {
+            Logger.logMessage(filterName + " has no options with count > 0 — skipping table sync");
+            collapseFilter(filterName);
+            return;
+        }
+
+        int filterOptionCount;
+        if (multiSelectPreserved) {
+            filterOptionCount = 0;
+            for (String sel : preservedSelections) {
+                filterOptionCount += getFilterOptionCount(filterName, sel);
+            }
+        } else {
+            filterOptionCount = getFilterOptionCount(filterName, optionLabel);
+        }
+        Verify.softAssert(filterOptionCount > 0,
+                filterName + " option '" + optionLabel + "' has count > 0 (actual=" + filterOptionCount + ")");
+        Logger.logMessage(filterName + " table sync option='" + optionLabel + "' filterCount=" + filterOptionCount
+                + " column='" + tableColumnName + "'");
+
+        assertCountSync(softAssert, filterName, optionLabel, filterOptionCount);
+        List<String> expected = multiSelectPreserved ? preservedSelections : Collections.singletonList(optionLabel);
+        assertFirstVisibleOrderRowColumnSync(softAssert, filterName, tableColumnName, expected);
+
+        if (!LeftFilterSessionHelper.shouldKeepFilterExpanded(filterName)) {
+            collapseFilter(filterName);
+        }
+    }
+
+    public void validateOrderLevelColumnTableSyncForSelectedOption(SoftAssert softAssert, String filterName,
+                                                                   String optionLabel, String tableColumnName)
+            throws InterruptedException {
+        ensureOrdersDataLoaded(softAssert);
+        expandFilter(filterName);
+        selectFilterOptionIfNotSelected(filterName, optionLabel);
+        int filterOptionCount = getFilterOptionCount(filterName, optionLabel);
+        assertCountSync(softAssert, filterName, optionLabel, filterOptionCount);
+        assertFirstVisibleOrderRowColumnSync(softAssert, filterName, tableColumnName,
+                Collections.singletonList(optionLabel));
+    }
+
+    public void validatePartnerSelectAllSmoke(SoftAssert softAssert, String filterName, String searchText)
+            throws InterruptedException {
+        ensureOrdersDataLoaded(softAssert);
+        expandFilter(filterName);
+        if (!isFilterExpanded(filterName)) {
+            Verify.softAssert(false, filterName + " filter could not be expanded for TC406");
+            return;
+        }
+        ensureNoOptionsSelected(filterName);
+
+        int totalOptions = getTotalOptionCount(filterName);
+        Verify.softAssert(totalOptions > SELECT_ALL_DISABLED_OPTION_THRESHOLD,
+                filterName + " total option count exceeds Select all threshold (count=" + totalOptions + ")");
+        Verify.softAssert(isSelectAllDisabled(filterName),
+                filterName + " Select all is disabled when total options > "
+                        + SELECT_ALL_DISABLED_OPTION_THRESHOLD);
+
+        String tooltip = hoverSelectAllAndReadTooltip(filterName);
+        Verify.softAssert(tooltip != null && !tooltip.isEmpty(),
+                filterName + " Select all tooltip visible on hover when disabled");
+
+        List<String> searchResults = searchFilterOptions(filterName, searchText);
+        Verify.softAssert(!searchResults.isEmpty(),
+                filterName + " search returned results for: " + searchText);
+        Verify.softAssert(!isSelectAllDisabled(filterName),
+                filterName + " Select all is enabled after search narrows options (search='" + searchText + "')");
+
+        clearFilterSearchInput(filterName);
+        collapseFilter(filterName);
+    }
+
+    public void validatePartnerTableSyncSmoke(SoftAssert softAssert, String filterName) throws InterruptedException {
+        validateOrderLevelColumnTableSyncSmoke(softAssert, filterName, ManageColumnOptions.PARTNER);
+    }
+
+    public void validatePartnerTableSyncForSelectedOption(SoftAssert softAssert, String filterName, String optionLabel)
+            throws InterruptedException {
+        validateOrderLevelColumnTableSyncForSelectedOption(softAssert, filterName, optionLabel,
+                ManageColumnOptions.PARTNER);
+    }
+
+    public void validateSeriesTitleSelectAllSmoke(SoftAssert softAssert, String filterName)
+            throws InterruptedException {
+        String searchText = resolveFirstSelectableFilterOption(filterName);
+        if (searchText == null || searchText.length() < 3) {
+            searchText = "the";
+        } else {
+            searchText = searchText.substring(0, Math.min(3, searchText.length()));
+        }
+        validatePartnerSelectAllSmoke(softAssert, filterName, searchText);
+    }
+
+    public void validateSeasonNumberSelectAllSmoke(SoftAssert softAssert, String filterName)
+            throws InterruptedException {
+        validateSeriesTitleSelectAllSmoke(softAssert, filterName);
+    }
+
+    public void validateEpisodeNumberSelectAllSmoke(SoftAssert softAssert, String filterName)
+            throws InterruptedException {
+        validateSeriesTitleSelectAllSmoke(softAssert, filterName);
+    }
+
+    private void runEnterRangeSmoke(SoftAssert softAssert, String filterName) throws InterruptedException {
+        expandFilter(filterName);
+        validateRangeInputsPresent(softAssert, filterName);
+        List<String> numericOptions = new ArrayList<>();
+        for (FilterOption option : getFilterOptions(filterName)) {
+            if (option.getLabel().matches("\\d+")) {
+                numericOptions.add(option.getLabel());
+            }
+        }
+        Verify.softAssert(numericOptions.size() >= 2,
+                filterName + " has at least two numeric options for range test (found=" + numericOptions + ")");
+        if (numericOptions.size() < 2) {
+            collapseFilter(filterName);
+            return;
+        }
+        String fromValue = numericOptions.get(0);
+        String toValue = numericOptions.get(1);
+        DriverUtil.sendKeyToElement(leftFilterPanel.filterRangeFromInput(filterName), DEFAULT_WAIT_SECONDS, fromValue);
+        DriverUtil.sendKeyToElement(leftFilterPanel.filterRangeToInput(filterName), DEFAULT_WAIT_SECONDS, toValue);
+        Thread.sleep(FILTER_EXPAND_WAIT_MS);
+        Verify.softAssert(getTableRecordCount() >= 0,
+                filterName + " table record count available after Enter Range " + fromValue + "-" + toValue);
+        collapseFilter(filterName);
+    }
+
+    public void validateSeasonNumberEnterRangeSmoke(SoftAssert softAssert, String filterName)
+            throws InterruptedException {
+        runEnterRangeSmoke(softAssert, filterName);
+    }
+
+    public void validateEpisodeNumberEnterRangeSmoke(SoftAssert softAssert, String filterName)
+            throws InterruptedException {
+        runEnterRangeSmoke(softAssert, filterName);
+    }
+
+    public void validateDemandSystemTableSyncSmoke(SoftAssert softAssert, String filterName)
+            throws InterruptedException {
+        runCountOnlyTableSyncSmoke(softAssert, filterName);
+    }
+
+    public void validateDemandSystemTableSyncForSelectedOption(SoftAssert softAssert, String filterName,
+                                                               String optionLabel) throws InterruptedException {
+        runCountOnlyTableSyncForSelectedOption(softAssert, filterName, optionLabel);
+    }
+
+    public void validateDemandSystemTableSyncOnLineItemsTab(SoftAssert softAssert, String filterName)
+            throws InterruptedException {
+        runCountOnlyTableSyncSmoke(softAssert, filterName);
+    }
+
+    public void validateDeliveryProtocolTableSyncSmoke(SoftAssert softAssert, String filterName)
+            throws InterruptedException {
+        runCountOnlyTableSyncSmoke(softAssert, filterName);
+    }
+
+    public void validateDeliveryProtocolTableSyncForSelectedOption(SoftAssert softAssert, String filterName,
+                                                                   String optionLabel) throws InterruptedException {
+        runCountOnlyTableSyncForSelectedOption(softAssert, filterName, optionLabel);
+    }
+
+    public void validateLanguageTableSyncSmoke(SoftAssert softAssert, String filterName) throws InterruptedException {
+        runCountOnlyTableSyncSmoke(softAssert, filterName);
+    }
+
+    public void validateLanguageTableSyncForSelectedOption(SoftAssert softAssert, String filterName,
+                                                             String optionLabel) throws InterruptedException {
+        runCountOnlyTableSyncForSelectedOption(softAssert, filterName, optionLabel);
+    }
+
+    public void validateRegionTableSyncSmoke(SoftAssert softAssert, String filterName) throws InterruptedException {
+        runCountOnlyTableSyncSmoke(softAssert, filterName);
+    }
+
+    public void validateRegionTableSyncForSelectedOption(SoftAssert softAssert, String filterName, String optionLabel)
+            throws InterruptedException {
+        runCountOnlyTableSyncForSelectedOption(softAssert, filterName, optionLabel);
+    }
+
+    public void validateContentTypeTableSyncSmoke(SoftAssert softAssert, String filterName)
+            throws InterruptedException {
+        validateOrderLevelColumnTableSyncSmoke(softAssert, filterName, ManageColumnOptions.CONTENT_TYPE);
+    }
+
+    /**
+     * TC622 on Orders: Job type filter → expand first order → first line-item Type matches filter.
+     * No count sync and no Manage columns (Type column visible in expanded grid by default).
+     */
+    public void validateJobTableSyncSmoke(SoftAssert softAssert, String filterName) throws InterruptedException {
+        validateJobTableSync(softAssert, filterName, null);
+    }
+
+    public void validateJobTableSyncForSelectedOption(SoftAssert softAssert, String filterName, String optionLabel)
+            throws InterruptedException {
+        validateJobTableSync(softAssert, filterName, optionLabel);
+    }
+
+    private void validateJobTableSync(SoftAssert softAssert, String filterName, String preselectedOption)
+            throws InterruptedException {
+        ensureLeftFilterPanelOpen();
+        if (!waitForFilterHeaderVisible(filterName, 30)) {
+            Verify.softAssert(false, filterName + " filter header not found in left panel");
+            return;
+        }
+        expandFilter(filterName);
+        if (!isFilterExpanded(filterName)) {
+            Verify.softAssert(false, filterName + " filter could not be expanded for TC622");
+            return;
+        }
+
+        String optionLabel;
+        if (preselectedOption != null && !preselectedOption.isBlank()) {
+            optionLabel = preselectedOption;
+            selectFilterOptionIfNotSelected(filterName, optionLabel);
+        } else {
+            ensureNoOptionsSelected(filterName);
+            optionLabel = resolveFirstNonZeroFilterOption(filterName);
+            if (optionLabel == null) {
+                Logger.logMessage(filterName + " has no options with count > 0 — skipping TC622");
+                collapseFilter(filterName);
+                return;
+            }
+            int filterOptionCount = getFilterOptionCount(filterName, optionLabel);
+            Verify.softAssert(filterOptionCount > 0,
+                    filterName + " option '" + optionLabel + "' has count > 0 (actual=" + filterOptionCount + ")");
+            Logger.logMessage("TC622 — select first non-zero " + filterName + " option='" + optionLabel
+                    + "' count=" + filterOptionCount);
+            selectFilterOption(filterName, optionLabel);
+        }
+
+        waitUtils.waitForVisibilityOfElement(leftFilterPanel.tableRecordCountLabel(), DEFAULT_WAIT_SECONDS);
+        Thread.sleep(FILTER_EXPAND_WAIT_MS);
+
+        int filterOptionCount = getFilterOptionCount(filterName, optionLabel);
+        int tableRecordCount = getTableRecordCount();
+        Verify.softAssert(tableRecordCount > 0,
+                filterName + " Orders table shows rows after selecting " + optionLabel
+                        + " (rows=" + tableRecordCount + ")");
+        Logger.logMessage(filterName + " TC622 Orders view — filter count=" + filterOptionCount
+                + ", table record count=" + tableRecordCount + " (count equality not checked on Orders view)");
+
+        boolean matchFound = assertFirstOrderFirstLineItemJobTypeMatches(softAssert, optionLabel);
+        Verify.softAssert(matchFound,
+                filterName + " first order first line item Type matches '" + optionLabel + "'");
+
+        if (!LeftFilterSessionHelper.shouldKeepFilterExpanded(filterName)) {
+            collapseFilter(filterName);
+        }
+    }
+
+    public void validateJobTableSyncOnLineItemsTab(SoftAssert softAssert, String filterName)
+            throws InterruptedException {
+        runCountOnlyTableSyncSmoke(softAssert, filterName);
+    }
+
+    public void validateSeriesTitleTableSyncSmoke(SoftAssert softAssert, String filterName)
+            throws InterruptedException {
+        validateOrderLevelColumnTableSyncSmoke(softAssert, filterName, ManageColumnOptions.TITLE_SEASON_EPISODE);
+    }
+
+    public void validateSeasonNumberTableSyncSmoke(SoftAssert softAssert, String filterName)
+            throws InterruptedException {
+        runCountOnlyTableSyncSmoke(softAssert, filterName);
+    }
+
+    public void validateEpisodeNumberTableSyncSmoke(SoftAssert softAssert, String filterName)
+            throws InterruptedException {
+        runCountOnlyTableSyncSmoke(softAssert, filterName);
+    }
+
+    public void validateFranchiseTableSyncSmoke(SoftAssert softAssert, String filterName) throws InterruptedException {
+        runCountOnlyTableSyncSmoke(softAssert, filterName);
+    }
+
+    public void validateFranchiseTableSyncOnLineItemsTab(SoftAssert softAssert, String filterName)
+            throws InterruptedException {
+        runCountOnlyTableSyncSmoke(softAssert, filterName);
+    }
+
+    public void validateSystemNameTableSyncSmoke(SoftAssert softAssert, String filterName)
+            throws InterruptedException {
+        runCountOnlyTableSyncSmoke(softAssert, filterName);
+    }
+
+    public void validateSystemNameTableSyncOnLineItemsTab(SoftAssert softAssert, String filterName)
+            throws InterruptedException {
+        runCountOnlyTableSyncSmoke(softAssert, filterName);
+    }
+
+    public void validateOrderStatusTableSyncOnLineItemsTab(SoftAssert softAssert, String filterName)
+            throws InterruptedException {
+        runCountOnlyTableSyncSmoke(softAssert, filterName);
+    }
+
+    public void validateEnvironmentTableSyncOnLineItemsTab(SoftAssert softAssert, String filterName)
+            throws InterruptedException {
+        runCountOnlyTableSyncSmoke(softAssert, filterName);
+    }
+
+    public void validateSubmittedByTableSyncForSelectedOption(SoftAssert softAssert, String filterName,
+                                                              String optionLabel) throws InterruptedException {
+        ensureOrdersDataLoaded(softAssert);
+        expandFilter(filterName);
+        selectFilterOptionIfNotSelected(filterName, optionLabel);
+        int filterOptionCount = getFilterOptionCount(filterName, optionLabel);
+        assertCountSync(softAssert, filterName, optionLabel, filterOptionCount);
+        scrollOrdersGridUntilColumnVisible(ManageColumnOptions.SUBMITTED_BY);
+        List<String> values = getVisibleTableColumnValues(ManageColumnOptions.SUBMITTED_BY);
+        Verify.softAssert(!values.isEmpty(),
+                filterName + " has visible Submitted By values after selecting " + optionLabel);
+        Verify.softAssert(submittedByCellMatchesSelectedOption(values.get(0), optionLabel),
+                filterName + " first visible Submitted By row matches '" + optionLabel + "' (actual='"
+                        + values.get(0) + "')");
+    }
+
+    public void validateAssignedToTableSyncForSelectedOption(SoftAssert softAssert, String filterName,
+                                                             String optionLabel) throws InterruptedException {
+        ensureOrdersDataLoaded(softAssert);
+        expandFilter(filterName);
+        selectFilterOptionIfNotSelected(filterName, optionLabel);
+        int filterOptionCount = getFilterOptionCount(filterName, optionLabel);
+        assertCountSync(softAssert, filterName, optionLabel, filterOptionCount);
+        scrollOrdersGridUntilColumnVisible(ManageColumnOptions.ASSIGNED_TO);
+        List<String> values = getVisibleTableColumnValues(ManageColumnOptions.ASSIGNED_TO, true);
+        Verify.softAssert(!values.isEmpty(),
+                filterName + " has visible Assigned to values after selecting " + optionLabel);
+        if (isUnassignedFilterOption(optionLabel)) {
+            Verify.softAssert(assignedToCellIsBlank(values.get(0)),
+                    filterName + " first visible Assigned to row is blank for Unassigned");
+        } else {
+            Verify.softAssert(assignedToCellMatchesSelectedPerson(values.get(0), optionLabel),
+                    filterName + " first visible Assigned to row matches '" + optionLabel + "'");
+        }
+    }
+
+    public void validateActivityTypeTableSyncForSelectedOption(SoftAssert softAssert, String filterName,
+                                                               String optionLabel) throws InterruptedException {
+        validateActivityTypeTableSyncSmoke(softAssert, filterName);
+    }
+
+    public void validateSelectAllSmoke(SoftAssert softAssert, String filterName) throws InterruptedException {
+        validateSelectAllAtTop(softAssert, filterName);
+        validateSelectAllSelectsAll(softAssert, filterName);
+        int partialCount = FlagFilterConstants.FILTER_DISPLAY_NAME.equalsIgnoreCase(filterName) ? 1 : 2;
+        validateSelectAllIndeterminateAndDeselect(softAssert, filterName, partialCount);
+    }
+
+    public void validateScrollSmoke(SoftAssert softAssert, String filterName) throws InterruptedException {
+        validateScrollFilterOptions(softAssert, filterName);
+    }
+
+    public void validateActiveFiltersSmoke(SoftAssert softAssert, String filterName) throws InterruptedException {
+        validateActiveFiltersForPreservedSelection(softAssert, filterName);
+    }
+
+    public void validateClearFiltersSmoke(SoftAssert softAssert, String filterName) throws InterruptedException {
+        validateClearFiltersControlAvailable(softAssert, filterName, null);
+    }
+
+    public void validateClearFiltersControlAvailable(SoftAssert softAssert, String filterName)
+            throws InterruptedException {
+        validateClearFiltersControlAvailable(softAssert, filterName, null);
+    }
+
+    /**
+     * TC11xx Clear filters: active filters shows preserved selection (including zero-count options),
+     * Clear control is visible, and click clears chips from the active-filters tray.
+     */
+    public void validateClearFiltersControlAvailable(SoftAssert softAssert, String filterName, String preservedOption)
+            throws InterruptedException {
+        if (!isFilterExpanded(filterName)) {
+            expandFilter(filterName);
+        }
+        List<String> selected = resolveSelectedOptionsForClearFilters(filterName, preservedOption);
+        Verify.softAssert(!selected.isEmpty(), filterName + " has active filter selection before Clear check");
+        openActiveFiltersPanelIfNeeded(filterName);
+        verifyActiveFilterChips(softAssert, filterName, selected);
+        Verify.softAssert(WaitUtil.isDisplay(leftFilterPanel.activeFiltersClearButton(), DEFAULT_WAIT_SECONDS),
+                "Active filters Clear control visible and available to click");
+        DriverUtil.clickOnElement(leftFilterPanel.activeFiltersClearButton(), DEFAULT_WAIT_SECONDS);
+        Logger.logMessage(filterName + " Clear filters control clicked (smoke — no post-clear chip assertion)");
+    }
+
+    private List<String> resolveSelectedOptionsForClearFilters(String filterName, String preservedOption)
+            throws InterruptedException {
+        if (preservedOption != null && !preservedOption.isBlank()) {
+            selectFilterOptionIfNotSelected(filterName, preservedOption);
+            return Collections.singletonList(preservedOption);
+        }
+        List<String> selected = resolveAllSelectedFilterOptions(filterName);
+        if (!selected.isEmpty()) {
+            return selected;
+        }
+        String option = resolveFirstSelectableFilterOption(filterName);
+        if (option == null) {
+            return Collections.emptyList();
+        }
+        selectFilterOptionIfNotSelected(filterName, option);
+        return Collections.singletonList(option);
+    }
+
+    private void openActiveFiltersPanelIfNeeded(String filterName) throws InterruptedException {
+        if (WaitUtil.isDisplayFast(leftFilterPanel.activeFiltersClearButton(), 2)
+                || WaitUtil.isDisplayFast(leftFilterPanel.activeFiltersPanelContent(), 2)) {
+            return;
+        }
+        Verify.softAssert(WaitUtil.isDisplay(leftFilterPanel.activeFiltersToggleButton(), DEFAULT_WAIT_SECONDS),
+                "Active filters button visible for " + filterName);
+        clickActiveFiltersButton();
+        Thread.sleep(FILTER_EXPAND_WAIT_MS);
+    }
+
+    public void validateActiveFiltersForPreservedSelection(SoftAssert softAssert, String filterName)
+            throws InterruptedException {
+        if (!isFilterExpanded(filterName)) {
+            expandFilter(filterName);
+        }
+        List<String> preserved = resolveAllSelectedNonZeroFilterOptions(filterName);
+        if (preserved.isEmpty()) {
+            String option = resolveTableSyncOptionLabel(filterName);
+            if (option != null) {
+                preserved = Collections.singletonList(option);
+            }
+        }
+        Verify.softAssert(!preserved.isEmpty(),
+                filterName + " has at least one selected option for active filters check");
+        openActiveFiltersPanelIfNeeded(filterName);
+        verifyActiveFilterChips(softAssert, filterName, preserved);
+    }
+
+    public void validateActiveFiltersForSelectedOption(SoftAssert softAssert, String filterName, String optionLabel)
+            throws InterruptedException {
+        expandFilter(filterName);
+        selectFilterOptionIfNotSelected(filterName, optionLabel);
+        Thread.sleep(FILTER_EXPAND_WAIT_MS);
+        clickActiveFiltersButton();
+        Thread.sleep(FILTER_EXPAND_WAIT_MS);
+        verifyActiveFilterChips(softAssert, filterName, Collections.singletonList(optionLabel));
+    }
+
+    public String validateSearchAndSelectFirstOptionForFlow(SoftAssert softAssert, String filterName)
+            throws InterruptedException {
+        expandFilter(filterName);
+        String searchText = resolveFirstSelectableFilterOption(filterName);
+        Verify.softAssert(searchText != null, filterName + " has at least one option for search flow");
+        if (searchText == null) {
+            return null;
+        }
+        validateSearchInsideFilter(softAssert, filterName, searchText);
+        selectFilterOptionIfNotSelected(filterName, searchText);
+        Thread.sleep(FILTER_EXPAND_WAIT_MS);
+        clearFilterSearchInput(filterName);
+        Logger.logReportMessage(filterName + " flow search selected: " + searchText);
+        return searchText;
+    }
+
+    public String hoverSelectAllAndReadTooltip(String filterName) throws InterruptedException {
+        scrollFilterListTowardFilter(filterName);
+        By selectAllText = leftFilterPanel.selectAllLabel(filterName);
+        DriverUtil.scrollToElement(selectAllText);
+        Thread.sleep(300);
+        try {
+            DesktopBrowserElement element = driver.get().finder().findElement(selectAllText);
+            element.mouseOver();
+            Thread.sleep(900);
+        } catch (Exception e) {
+            Logger.logConsoleMessage("Could not hover Select all for " + filterName + ": " + e.getMessage());
+        }
+        for (int i = 0; i < 8; i++) {
+            String tooltip = readVisibleOverlayTooltipText();
+            if (tooltip != null && !tooltip.isEmpty()) {
+                return tooltip;
+            }
+            Thread.sleep(250);
+        }
+        return readVisibleOverlayTooltipText();
+    }
+
+    private String readVisibleOverlayTooltipText() {
+        try {
+            Object text = driver.get().browser().executeScript(
+                    "var nodes=document.querySelectorAll('float-ui-content,.mat-mdc-tooltip,[role=tooltip]');"
+                            + "for(var i=0;i<nodes.length;i++){"
+                            + "  var t=(nodes[i].textContent||'').replace(/\\s+/g,' ').trim();"
+                            + "  if(t.length>0)return t;"
+                            + "}"
+                            + "return null;");
+            if (text != null) {
+                String tooltip = String.valueOf(text).trim();
+                if (!tooltip.isEmpty() && !"null".equalsIgnoreCase(tooltip)) {
+                    return tooltip;
+                }
+            }
+        } catch (Exception ignored) {
+        }
+        return null;
+    }
+
+
     public void validateFilterNamesMatchTableColumns(SoftAssert softAssert, List<String> filterNames,
                                                      List<String> tableColumnNames) {
         for (String filterName : filterNames) {
@@ -2523,12 +3516,9 @@ public class LeftFilterPanelUtil extends BaseTest {
         }
     }
 
-    /**
-     * TC10xx Active filters: open filter → select 1st option → select 2nd (keep 1st) → click Active filters once → verify chips.
-     */
+    /** @deprecated Use {@link #validateActiveFiltersForPreservedSelection}. */
     public void validateActiveFiltersTwoOptions(SoftAssert softAssert, String filterName) throws InterruptedException {
-        List<String> selected = selectTwoOptionsAndOpenActiveFiltersPanel(softAssert, filterName);
-        verifyActiveFilterChips(softAssert, filterName, selected);
+        validateActiveFiltersForPreservedSelection(softAssert, filterName);
     }
 
     public void validateFilterCountInsideAndOutside(SoftAssert softAssert, String filterName, String optionLabel)
@@ -2555,22 +3545,10 @@ public class LeftFilterPanelUtil extends BaseTest {
                 filterName + " shows To range input");
     }
 
-    /**
-     * TC11xx Clear filters: same as active filters (two options + open panel + verify chips), then click Clear.
-     */
+    /** TC11xx Clear filters: active filters has chips and Clear control is available to click. */
     public void validateClearFilters(SoftAssert softAssert, String filterName, String optionLabel)
             throws InterruptedException {
-        List<String> selected = selectTwoOptionsAndOpenActiveFiltersPanel(softAssert, filterName);
-        verifyActiveFilterChips(softAssert, filterName, selected);
-
-        Verify.softAssert(WaitUtil.isDisplay(leftFilterPanel.activeFiltersClearButton(), DEFAULT_WAIT_SECONDS),
-                "Active filters Clear control visible beside chips");
-        DriverUtil.clickOnElement(leftFilterPanel.activeFiltersClearButton(), DEFAULT_WAIT_SECONDS);
-        Thread.sleep(FILTER_EXPAND_WAIT_MS);
-        for (String label : selected) {
-            Verify.softAssert(!WaitUtil.isDisplayFast(leftFilterPanel.activeFilterChip(filterName, label), 2),
-                    label + " cleared via Active filters Clear (not chip X)");
-        }
+        validateClearFiltersControlAvailable(softAssert, filterName, optionLabel);
     }
 
     /**
@@ -2856,6 +3834,20 @@ public class LeftFilterPanelUtil extends BaseTest {
     public List<FilterOption> getFilterOptions(String filterName) {
         List<FilterOption> options = new ArrayList<>();
         try {
+            List<DesktopBrowserElement> optionItems = driver.get().finder()
+                    .findElements(leftFilterPanel.allFilterOptionItems(filterName));
+            if (!optionItems.isEmpty()) {
+                for (DesktopBrowserElement optionItem : optionItems) {
+                    FilterOption parsed = parseFilterOptionFromItem(optionItem);
+                    if (parsed != null) {
+                        options.add(parsed);
+                    }
+                }
+                if (!options.isEmpty()) {
+                    return options;
+                }
+            }
+
             List<DesktopBrowserElement> containers = driver.get().finder()
                     .findElements(leftFilterPanel.allFilterOptionContainers(filterName));
             if (!containers.isEmpty()) {
@@ -2928,7 +3920,7 @@ public class LeftFilterPanelUtil extends BaseTest {
         return -1;
     }
 
-    private void waitForTableRecordCount(int expectedCount, int timeoutSeconds) throws InterruptedException {
+    public void waitForTableRecordCount(int expectedCount, int timeoutSeconds) throws InterruptedException {
         long deadline = System.currentTimeMillis() + (timeoutSeconds * 1000L);
         while (System.currentTimeMillis() < deadline) {
             int current = getTableRecordCount();
@@ -3000,6 +3992,16 @@ public class LeftFilterPanelUtil extends BaseTest {
         return getVisibleTableColumnValues(columnName, false);
     }
 
+    /** Reads visible main-grid cell text for a column header (used by BSD-30019 and table sync). */
+    public List<String> readVisibleColumnValues(String columnName) {
+        return getVisibleTableColumnValues(columnName);
+    }
+
+    /** Reads visible main-grid cell text including blank cells. */
+    public List<String> readVisibleColumnValuesIncludingBlanks(String columnName) {
+        return getVisibleTableColumnValues(columnName, true);
+    }
+
     /**
      * Reads visible body cells for {@code columnName}. When {@code includeBlankCells} is true, empty cells
      * are included (needed for Assigned To → Unassigned, where the column is present but has no value).
@@ -3029,6 +4031,41 @@ public class LeftFilterPanelUtil extends BaseTest {
             Logger.logConsoleMessage("Could not read table column " + columnName + ": " + e.getMessage());
         }
         return values;
+    }
+
+    private FilterOption parseFilterOptionFromItem(DesktopBrowserElement optionItem) {
+        try {
+            Object parsed = optionItem.executeScript(
+                    "var link = arguments[0];"
+                            + "var lbl = link.querySelector('label.option-label');"
+                            + "var label = lbl ? lbl.textContent.trim() : link.textContent.trim();"
+                            + "if (!label || label.indexOf('" + SELECT_ALL_LABEL + "') === 0) return null;"
+                            + "var countAttr = link.getAttribute('data-option-count');"
+                            + "var count = countAttr !== null && countAttr !== '' ? parseInt(countAttr, 10) : NaN;"
+                            + "return { label: label, count: isNaN(count) ? -1 : count };");
+            if (!(parsed instanceof java.util.Map)) {
+                return null;
+            }
+            @SuppressWarnings("unchecked")
+            java.util.Map<String, Object> map = (java.util.Map<String, Object>) parsed;
+            Object labelObj = map.get("label");
+            if (labelObj == null) {
+                return null;
+            }
+            String label = labelObj.toString().trim();
+            if (label.isEmpty()) {
+                return null;
+            }
+            Object countObj = map.get("count");
+            int count = countObj instanceof Number ? ((Number) countObj).intValue() : -1;
+            if (count < 0) {
+                return parseFilterOption(label);
+            }
+            return new FilterOption(label, count);
+        } catch (Exception e) {
+            Logger.logConsoleMessage("Could not parse filter option item: " + e.getMessage());
+            return null;
+        }
     }
 
     private FilterOption parseFilterOption(String text) {

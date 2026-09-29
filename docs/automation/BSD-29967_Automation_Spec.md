@@ -24,7 +24,8 @@
 | System | URL |
 |--------|-----|
 | FC Dev | `https://dev-operationsconsole.paramountmsc.com/fulfillment/` |
-| Ops Console API Dev UI | `https://contentplatform.viacom.com/ops-console-api-dev-ui/order/{orderId}` |
+| Ops Console API Dev UI (DEV/PROD FC) | `https://contentplatform.viacom.com/ops-console-api-dev-ui/order/{orderId}` |
+| Ops Console API Dev UI (UAT FC) | `https://uat.contentplatform.viacom.com/ops-console-api-dev-ui/order/{orderId}` |
 | Example order | `.../order/4590424` (user reference) |
 
 **Suite parameter:** start with `TestEnvironment=DEV` and `TargetUrlDEV`; mirror `FF_DSID_BSD29870_ProdServerSuite.xml` structure.

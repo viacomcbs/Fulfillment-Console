@@ -28,7 +28,9 @@ public enum OrdersLeftFilter {
     FRANCHISE("Franchise"),
     DELIVERY_PROTOCOL("Delivery Protocol"),
     ACTIVITY_TYPE("Activity Type"),
-    CONTENT_TYPE("Content type");
+    CONTENT_TYPE("Content type"),
+    /** Left filter "Job type" (panel label); Manage columns column is {@link com.paramount.test.ff.uitests.helpers.managecolumns.ManageColumnOptions#JOB} ("Type"). */
+    JOB("Job type");
 
     private final String displayName;
 

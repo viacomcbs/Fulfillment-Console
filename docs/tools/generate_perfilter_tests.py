@@ -28,6 +28,7 @@ FILTERS = [
     ("DELIVERY_PROTOCOL", "DeliveryProtocol", "CHECKBOX"),
     ("ACTIVITY_TYPE", "ActivityType", "CHECKBOX"),
     ("CONTENT_TYPE", "ContentType", "CHECKBOX"),
+    ("JOB", "Job type", "CHECKBOX"),
 ]
 
 SKIP_CATEGORIES = {

@@ -1,6 +1,13 @@
 <!-- Default TestNG suite — TC620 Activity Type PROD Synergy server (service account).
      Maven (default): mvn test
-     Override suite: mvn test "-DsuiteXmlFile=src/test/resources/regression/left-filters/orders-view/LF_O_ActivityType_All_ProdServerSuite.xml"
+     Override suite: mvn test "-DsuiteXmlFile=src/test/resources/regression/left-filters/orders-view/LF_O_All_LeftFilters_ProdServerSuite.xml"
+     Line Items regression: src/test/resources/regression/left-filters/line-items-view/LF_LI_All_LeftFilters_ProdServerSuite.xml
+     In-sprint (BSD-*): src/test/resources/insprint-automation/BSD-{KEY}_ProdServerSuite.xml
+     BSD-30019 (3 Synergy sessions + 1 email): scripts/run-bsd-30019.ps1
+       Session 1: insprint-automation/BSD-30019_OrdersPerFilter_ProdServerSuite.xml
+       Session 2: insprint-automation/BSD-30019_LineItemsPerFilter_ProdServerSuite.xml
+       Session 3: insprint-automation/BSD-30019_StoryValidation_ProdServerSuite.xml
+       Email:     insprint-automation/BSD-30019_SendCombinedEmail_ProdServerSuite.xml
      IntelliJ: TestNG Default Suite (PROD Server) run configuration -->
 <suite name="Fulfillment Console" parallel="false" preserve-order="true">
 
@@ -36,8 +43,14 @@
     <parameter name="ReRunOnFailureCount" value="0"/>
     <parameter name="ThreadCount" value="10"/>
     <parameter name="SendReportAutoEmails" value="true"/>
+    <!-- Set AppendToDailyAggregate=true (or -Dsystem.test.appendtodailyaggregate=true) to save each run for end-of-day consolidated email -->
+    <parameter name="AppendToDailyAggregate" value="false"/>
+    <parameter name="DailyAggregateDir" value=""/>
+    <parameter name="ConsolidatedEmailDedupePreferPass" value="true"/>
+    <parameter name="ConsolidatedEmailExcludeSynergyIssues" value="true"/>
+    <parameter name="SendReportInternalEmailAddress" value="Akilandeswari.Sundararajan@paramount.com"/>
     <parameter name="SendReportEmailAddress"
-               value="Akilandeswari.Sundararajan@paramount.com"/>
+               value="Akilandeswari.Sundararajan@paramount.com,qa_automation_status_-aaaagmcoe366ao4pdnt2t5ikp4@viacomcbs.org.slack.com"/>
     <!--<parameter name="SendReportEmailAddress"
                value="Akilandeswari.Sundararajan@paramount.com"/>-->
     <parameter name="ProxyHost" value="localhost"/>

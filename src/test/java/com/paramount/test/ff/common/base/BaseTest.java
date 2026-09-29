@@ -9,6 +9,7 @@ import com.synergy.core.driver.desktop.DesktopDriver;
 import com.synergy.core.driver.web.WebDriver;
 import com.synergy.core.enums.FileSystemDirectory;
 import com.synergy.core.reporting.FileUploader;
+import org.testng.SkipException;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeClass;
 
@@ -16,8 +17,11 @@ import java.io.File;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class BaseTest {
+
+	private static final AtomicBoolean SUITE_DRIVER_STOPPED = new AtomicBoolean(false);
 
 	// Synergy Upgrade
 	public static ThreadLocal<WebDriver> driver= new ThreadLocal<>();
@@ -54,7 +58,11 @@ public class BaseTest {
 		waitUtil = new WaitUtils();
 		softAssert = new SoftAssert(new Object() {
 		}.getClass().getEnclosingMethod().getName(), this.getClass().getSimpleName());
-		
+		SUITE_DRIVER_STOPPED.set(false);
+		if (keepDriverAliveAfterTestMethod) {
+			ensureDriverStarted();
+			return;
+		}
 		try {
 			driver = LocalCapabilityFactory.initiateDriver();
 			
@@ -64,6 +72,35 @@ public class BaseTest {
 						
 		} catch (Exception e) {
 			Verify.softAssert(false, "WebDriver or DesktopDriver is null as "+ e.getMessage());
+		}
+	}
+
+	public static void ensureDriverStarted() {
+		if (isDriverActive()) {
+			return;
+		}
+		try {
+			LocalCapabilityFactory.initiateDriver();
+			if (driver.get() == null) {
+				throw new IllegalStateException("WebDriver was not initialized.");
+			}
+		} catch (Exception e) {
+			Logger.logReportMessage("WebDriver initialization failed: " + e.getMessage());
+			throw new SkipException("Skipping tests because WebDriver could not be started: " + e.getMessage(), e);
+		}
+	}
+
+	private static boolean isDriverActive() {
+		WebDriver webDriver = driver.get();
+		if (webDriver == null) {
+			return false;
+		}
+		try {
+			webDriver.getSessionID();
+			return true;
+		} catch (Exception e) {
+			driver.remove();
+			return false;
 		}
 	}
 	
@@ -108,6 +145,14 @@ public class BaseTest {
 
 	}*/
 	
+	public static WebDriver requireDriver() {
+		WebDriver webDriver = driver.get();
+		if (webDriver == null) {
+			throw new SkipException("WebDriver is not initialized. Start Synergy client/server and rerun the suite.");
+		}
+		return webDriver;
+	}
+
 	public static String uploadExtensionFile(String fileToUplaod) {
 		File file = new File(fileToUplaod);
 		FileUploader fileUploader = new FileUploader("https://www.synergyserver.tech?key="+ConfigProps.USER_KEY);

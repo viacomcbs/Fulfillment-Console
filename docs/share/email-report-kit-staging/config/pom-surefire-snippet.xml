@@ -1,0 +1,5 @@
+<!-- Add inside maven-surefire-plugin <configuration><properties> -->
+<property>
+    <name>listener</name>
+    <value>com.yourteam.test.listeners.AllureListeners,com.yourteam.test.listeners.SuiteListeners,com.yourteam.test.listeners.ScenarioEmailSuiteListener</value>
+</property>

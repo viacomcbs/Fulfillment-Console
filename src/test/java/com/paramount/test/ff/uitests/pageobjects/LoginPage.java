@@ -24,7 +24,7 @@ public class LoginPage {
         return By.XPath("//a[@aria-label='Select to get a push notification to the Okta Verify app.']");
     }
 
-    public By getOktaVerifyFactorOptions() {
+	public By getOktaVerifyFactorOptions() {
         return By.XPath("//a[contains(@aria-label,'Okta Verify')]"
                 + " | //button[contains(.,'Okta Verify')]"
                 + " | //input[@value='Send push' or @value='Send Push']"
@@ -32,6 +32,24 @@ public class LoginPage {
                 + " | //span[contains(.,'Okta Verify')]/ancestor::a");
     }
 
+    public By getOktaVerifyFactor() {
+        return getOktaVerifyFactorOptions();
+    }
+
+    public By getOktaPushOrVerifyButton() {
+        return By.XPath("//input[@value='Send Push'] | //button[normalize-space()='Send Push']"
+                + " | //input[@value='Verify'] | //button[normalize-space()='Verify']");
+    }
+
+    public By getStaySignedInYes() {
+        return By.XPath("//input[@value='Yes'] | //button[normalize-space()='Yes']"
+                + " | //label[normalize-space()='Yes']");
+    }
+
+	public By getHomePage() {
+		return By.XPath("//span[text()='MEDIA INGEST CONSOLE'] | //button[@id='tableViewButton']");
+	}
+	
     public By getOktaPushSentIndicator() {
         return By.XPath("//*[contains(.,'Push notification sent') or contains(.,'push notification sent')"
                 + " or contains(.,'waiting for your response') or contains(.,'Waiting for you to verify')]");
@@ -42,11 +60,7 @@ public class LoginPage {
                 + " | //span[contains(@class,'number') and string-length(normalize-space()) <= 2]"
                 + " | //h1[contains(@class,'number')]");
     }
-	
-	public By getHomePage() {
-		return By.XPath("//span[text()='MEDIA INGEST CONSOLE']");
-	}
-	
+
 	public By getNextButton() {
 		return By.XPath("//input[@value='Next']");
 	}

@@ -3,12 +3,12 @@ package com.paramount.test.ff.uitests.tests.leftfiltersvalidation.perfilter.orde
 import com.paramount.test.ff.common.util.SoftAssert;
 import com.paramount.test.ff.uitests.helpers.leftfilters.ConsoleTab;
 import com.paramount.test.ff.uitests.helpers.leftfilters.OrdersLeftFilter;
-import com.paramount.test.ff.uitests.tests.leftfiltersvalidation.perfilter.orders.LeftFilterOrdersTabBaseTest;
+import com.paramount.test.ff.uitests.tests.leftfiltersvalidation.perfilter.orders.systemname.LeftFilterSystemNameOrdersTabBaseTest;
 import io.qameta.allure.Description;
 import org.testng.annotations.Test;
 
 /** TC214 — SystemName Search. */
-public class LF_O_TC214_SystemName_SearchTest extends LeftFilterOrdersTabBaseTest {
+public class LF_O_TC214_SystemName_SearchTest extends LeftFilterSystemNameOrdersTabBaseTest {
 
     private static final String FILTER = OrdersLeftFilter.SYSTEM_NAME.getDisplayName();
     private static final int FILTER_INDEX = 14;

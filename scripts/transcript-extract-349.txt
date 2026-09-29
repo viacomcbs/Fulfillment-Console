@@ -1,0 +1,160 @@
+Here is how **TC613 Brand table sync** validates today, based on the current code and what your run did.
+
+## Entry point
+
+`LF_O_TC613_Brand_TableSyncTest` calls:
+
+```20:24:c:\FulfillmentConsole\Fulfillment-Console\src\test\java\com\paramount\test\ff\uitests\tests\leftfiltersvalidation\perfilter\orders\brand\LF_O_TC613_Brand_TableSyncTest.java
+    public void tc613_brandTableSync() throws InterruptedException {
+        softAssert = new SoftAssert("tc613_brandTableSync", getClass().getSimpleName());
+        leftFilterPanelUtil.navigateToTab(ConsoleTab.ORDERS);
+        leftFilterPanelUtil.validateBrandTableSyncSmoke(softAssert, FILTER);
+        softAssert.assertAll();
+```
+
+That routes to `validateOrderLevelColumnTableSyncSmoke(..., ManageColumnOptions.BRAND)`.
+
+---
+
+## Step 1 — Which Brand selection is used?
+
+Brand runs in a **keep-expanded** suite, so TC613 **does not clear and re-pick** options if multiple are already checked from earlier tests (e.g. TC1013).
+
+```1847:1865:c:\FulfillmentConsole\Fulfillment-Console\src\test\java\com\paramount\test\ff\uitests\helpers\leftfilters\LeftFilterPanelUtil.java
+        List<String> preservedSelections = LeftFilterSessionHelper.shouldKeepFilterExpanded(filterName)
+                ? resolveAllSelectedNonZeroFilterOptions(filterName) : Collections.emptyList();
+        boolean multiSelectPreserved = preservedSelections.size() > 1;
+        ...
+        if (multiSelectPreserved) {
+            optionLabel = String.join(" + ", preservedSelections);
+            Logger.logReportMessage("Table sync — preserved multi-select for " + filterName + ": "
+                    + preservedSelections);
+        } else {
+            optionLabel = resolveTableSyncOptionLabel(filterName);
+```
+
+**Selection rules:**
+- **Multi-select (your run):** all checked, non-zero options are kept — e.g. `[Nickelodeon, NickelodeonJr]`
+- **Single-select:** reuse one preserved checked option, or clear all → pick first non-zero option (skips literal `All` and `Select All`) → click it
+
+Your log matched the multi-select path:
+
+> `Table sync — preserved multi-select for Brand: [Nickelodeon, NickelodeonJr]`
+
+---
+
+## Step 2 — Count sync (filter count vs table total)
+
+### Multi-select (what ran for you)
+
+```1873:1883:c:\FulfillmentConsole\Fulfillment-Console\src\test\java\com\paramount\test\ff\uitests\helpers\leftfilters\LeftFilterPanelUtil.java
+        if (multiSelectPreserved) {
+            int combinedFilterCount = 0;
+            for (String sel : preservedSelections) {
+                combinedFilterCount += getFilterOptionCount(filterName, sel);
+            }
+            ...
+            Verify.softAssert(tableRecordCount == combinedFilterCount,
+                    filterName + " table record count matches combined filter selection count"
+                            + " (filter=" + combinedFilterCount + ", table=" + tableRecordCount + ")");
+```
+
+- **Filter count:** sum of the `(N)` counts beside each selected Brand checkbox in the left panel
+- **Table count:** parsed from the top `div.total-count` label (e.g. `"71 results"`)
+- **Assert:** `table count == combined filter count`
+
+Your run: `combinedFilterCount=71 table=71` → pass.
+
+### Single-select (if only one brand checked)
+
+- Reads count for that one option from the left filter
+- Waits up to 15s for table count to match
+- Asserts `filter count == table count`
+
+---
+
+## Step 3 — Brand column cell validation
+
+After count sync, it scrolls the Orders grid until the **Brand** column is visible, then reads **every visible Brand cell** in the current viewport:
+
+```1899:1918:c:\FulfillmentConsole\Fulfillment-Console\src\test\java\com\paramount\test\ff\uitests\helpers\leftfilters\LeftFilterPanelUtil.java
+        scrollOrdersGridUntilColumnVisible(tableColumnName);
+        List<String> columnValues = getVisibleTableColumnValues(tableColumnName);
+        ...
+        for (int i = 0; i < columnValues.size(); i++) {
+            String cellText = columnValues.get(i);
+            if (multiSelectPreserved) {
+                Verify.softAssert(orderLevelCellMatchesAnySelectedOption(cellText, preservedSelections),
+                        filterName + " row " + (i + 1) + " " + tableColumnName + " matches one of "
+                                + preservedSelections + " after filter selection (actual='" + cellText + "')");
+            } else {
+                Verify.softAssert(orderLevelCellMatchesSelectedOption(cellText, optionLabel),
+                        ...
+            }
+        }
+```
+
+**Cell match rule** (case-insensitive exact text):
+
+```2729:2734:c:\FulfillmentConsole\Fulfillment-Console\src\test\java\com\paramount\test\ff\uitests\helpers\leftfilters\LeftFilterPanelUtil.java
+    private static boolean orderLevelCellMatchesSelectedOption(String cellValue, String optionLabel) {
+        if (cellValue == null || optionLabel == null) {
+            return false;
+        }
+        return cellValue.trim().equalsIgnoreCase(optionLabel.trim());
+    }
+```
+
+- **Multi-select:** each visible cell must equal **at least one** of the selected brands
+- **Single-select:** each visible cell must equal that one brand exactly (ignore case)
+
+Your run: 35 visible cells, all `NickelodeonJr` or `Nickelodeon` → pass.
+
+---
+
+## What it does NOT validate
+
+| Not checked | Why |
+|-------------|-----|
+| Row expand / line items | Brand is order-level; no expand |
+| All pages of data | Only **visible rows** in the grid viewport |
+| Sort order | Order of rows doesn't matter |
+| Partial text / aliases | Must match filter label exactly (`Comedy Central` ≠ `ComedyCentral`) unless that exact label was selected |
+
+---
+
+## Flow summary (your Brand run)
+
+```mermaid
+flowchart TD
+    A[TC613 starts on Orders tab] --> B[Expand Brand filter]
+    B --> C{2+ options already checked?}
+    C -->|Yes| D[Use preserved selections e.g. Nickelodeon + NickelodeonJr]
+    C -->|No| E[Clear and pick first non-zero brand]
+    D --> F[Sum filter option counts]
+    E --> G[Single option filter count]
+    F --> H[Read table total count]
+    G --> H
+    H --> I{table count == filter count?}
+    I -->|No| J[Fail count sync]
+    I -->|Yes| K[Scroll Brand column into view]
+    K --> L[Read all visible Brand cells]
+    L --> M{Each cell matches a selected brand?}
+    M -->|Yes| N[Pass]
+    M -->|No| O[Fail row assertion]
+```
+
+---
+
+## Prerequisites (handled by base test)
+
+Before TC613 runs, the Brand suite already:
+- Keeps Brand accordion expanded across tests
+- Ensures **Brand** column is enabled in Manage columns
+- Leaves prior filter selections in place (from TC1013 active-filters test)
+
+That is why TC613 validated **multi-select** rather than picking a fresh single brand.
+
+If you want, I can also walk through how it would behave on a **fresh single-brand** run (no prior selections) vs your **keep-expanded batch** path side by side.
+
+[REDACTED]

@@ -1,0 +1,286 @@
+{
+  "id" : "TC048",
+  "name" : "partner2",
+  "description" : "Recorded via Scriptless GUI",
+  "application" : "operationsconsole.paramountmsc.com",
+  "url" : "https://operationsconsole.paramountmsc.com/fulfillment/",
+  "browser" : "CHROME",
+  "loginProfileId" : null,
+  "loginProfile" : null,
+  "includeLoginStepsInTest" : false,
+  "steps" : [ {
+    "id" : "0f59d1ca-664a-43f3-8d2c-edd84a51b35b",
+    "target" : "https://operationsconsole.paramountmsc.com/fulfillment/",
+    "locatorType" : "CSS",
+    "value" : "https://operationsconsole.paramountmsc.com/fulfillment/",
+    "locatorFallbacks" : [ ],
+    "column" : "",
+    "direction" : "",
+    "pageUrl" : "https://operationsconsole.paramountmsc.com/fulfillment/",
+    "pageTitle" : "Fulfillment",
+    "timestamp" : "2026-09-25T04:34:02.944877100Z",
+    "waitStrategy" : "NONE",
+    "waitBefore" : {
+      "type" : "NONE",
+      "timeout" : 30,
+      "value" : "",
+      "attribute" : "",
+      "count" : null,
+      "locator" : "",
+      "locatorType" : "CSS",
+      "active" : false
+    },
+    "waitAfter" : {
+      "type" : "WAIT_FOR_PAGE_READY",
+      "timeout" : 30,
+      "value" : "",
+      "attribute" : "",
+      "count" : null,
+      "locator" : "",
+      "locatorType" : "CSS",
+      "active" : true
+    },
+    "metadata" : { },
+    "status" : "RECORDED",
+    "timeoutSeconds" : 30,
+    "maxRetries" : 3,
+    "step" : 1,
+    "action" : "NAVIGATE",
+    "locator" : "",
+    "expectedValue" : "https://operationsconsole.paramountmsc.com/fulfillment/"
+  }, {
+    "id" : "1f66419e-c1d4-45e3-aaf1-b19edc35ae28",
+    "target" : "Active filters In progress 641 Failed 133 Ready for delivery 25 Done 822",
+    "locatorType" : "CSS",
+    "value" : "",
+    "locatorFallbacks" : [ {
+      "strategy" : "XPATH",
+      "value" : "//*[@id='calendar-dropdown']"
+    } ],
+    "column" : "",
+    "direction" : "",
+    "pageUrl" : "https://operationsconsole.paramountmsc.com/fulfillment/",
+    "pageTitle" : "Fulfillment",
+    "timestamp" : "2026-09-25T04:34:08.002373Z",
+    "waitStrategy" : "CLICKABLE",
+    "waitBefore" : {
+      "type" : "WAIT_FOR_CLICKABLE",
+      "timeout" : 30,
+      "value" : "",
+      "attribute" : "",
+      "count" : null,
+      "locator" : "",
+      "locatorType" : "CSS",
+      "active" : true
+    },
+    "waitAfter" : {
+      "type" : "WAIT_FOR_LOADING_COMPLETE",
+      "timeout" : 30,
+      "value" : "",
+      "attribute" : "",
+      "count" : null,
+      "locator" : "",
+      "locatorType" : "CSS",
+      "active" : true
+    },
+    "metadata" : { },
+    "status" : "RECORDED",
+    "timeoutSeconds" : 30,
+    "maxRetries" : 3,
+    "step" : 2,
+    "action" : "CLICK",
+    "locator" : "#calendar-dropdown > div > i:nth-of-type(2)",
+    "expectedValue" : ""
+  }, {
+    "id" : "04efc695-d33c-4f79-9f83-4a475162442d",
+    "target" : "Yesterday",
+    "locatorType" : "CSS",
+    "value" : "",
+    "locatorFallbacks" : [ {
+      "strategy" : "XPATH",
+      "value" : "//*[@id='calendar']"
+    } ],
+    "column" : "",
+    "direction" : "",
+    "pageUrl" : "https://operationsconsole.paramountmsc.com/fulfillment/",
+    "pageTitle" : "Fulfillment",
+    "timestamp" : "2026-09-25T04:34:10.618767Z",
+    "waitStrategy" : "CLICKABLE",
+    "waitBefore" : {
+      "type" : "WAIT_FOR_CLICKABLE",
+      "timeout" : 30,
+      "value" : "",
+      "attribute" : "",
+      "count" : null,
+      "locator" : "",
+      "locatorType" : "CSS",
+      "active" : true
+    },
+    "waitAfter" : {
+      "type" : "WAIT_FOR_LOADING_COMPLETE",
+      "timeout" : 30,
+      "value" : "",
+      "attribute" : "",
+      "count" : null,
+      "locator" : "",
+      "locatorType" : "CSS",
+      "active" : true
+    },
+    "metadata" : { },
+    "status" : "RECORDED",
+    "timeoutSeconds" : 30,
+    "maxRetries" : 3,
+    "step" : 3,
+    "action" : "CLICK",
+    "locator" : "app-calendar-quick-options > div > div:nth-of-type(2) > div:nth-of-type(3) > div:nth-of-type(2) > i",
+    "expectedValue" : ""
+  }, {
+    "id" : "2341767a-c4d1-4672-8185-37ca630675d0",
+    "target" : "Partner 0/2528",
+    "locatorType" : "XPATH",
+    "value" : "Partner 0/2528",
+    "locatorFallbacks" : [ {
+      "strategy" : "XPATH",
+      "value" : "//*[@role='button'][normalize-space()='Partner 0/2528']"
+    }, {
+      "strategy" : "XPATH",
+      "value" : "//*[@id='accordionButton']"
+    }, {
+      "strategy" : "CSS",
+      "value" : "#accordionButton > button"
+    } ],
+    "column" : "",
+    "direction" : "",
+    "pageUrl" : "https://operationsconsole.paramountmsc.com/fulfillment/",
+    "pageTitle" : "Fulfillment",
+    "timestamp" : "2026-09-25T04:34:18.331769500Z",
+    "waitStrategy" : "CLICKABLE",
+    "waitBefore" : {
+      "type" : "WAIT_FOR_CLICKABLE",
+      "timeout" : 30,
+      "value" : "",
+      "attribute" : "",
+      "count" : null,
+      "locator" : "",
+      "locatorType" : "CSS",
+      "active" : true
+    },
+    "waitAfter" : {
+      "type" : "WAIT_FOR_LOADING_COMPLETE",
+      "timeout" : 30,
+      "value" : "",
+      "attribute" : "",
+      "count" : null,
+      "locator" : "",
+      "locatorType" : "CSS",
+      "active" : true
+    },
+    "metadata" : {
+      "kind" : "button"
+    },
+    "status" : "RECORDED",
+    "timeoutSeconds" : 30,
+    "maxRetries" : 3,
+    "step" : 4,
+    "action" : "CLICK",
+    "locator" : "//button[normalize-space()='Partner 0/2528']",
+    "expectedValue" : ""
+  }, {
+    "id" : "2f1dba54-64b1-4ce6-a17f-2114530fc37b",
+    "target" : "Order Status 0/9 Line Item Status 0/25 Flag 0/9 Assigned To 0/67 Partner 0/2528 ",
+    "locatorType" : "XPATH",
+    "value" : "100.80000305175781",
+    "locatorFallbacks" : [ {
+      "strategy" : "CSS",
+      "value" : "app-fulfillment-left-filter-nav > msc-left-filter-panel > div > div:nth-of-type(2) > div > div:nth-of-type(3)"
+    } ],
+    "column" : "",
+    "direction" : "",
+    "pageUrl" : "https://operationsconsole.paramountmsc.com/fulfillment/",
+    "pageTitle" : "Fulfillment",
+    "timestamp" : "2026-09-25T04:34:21.272826Z",
+    "waitStrategy" : "NONE",
+    "waitBefore" : {
+      "type" : "WAIT_FOR_VISIBLE",
+      "timeout" : 30,
+      "value" : "",
+      "attribute" : "",
+      "count" : null,
+      "locator" : "",
+      "locatorType" : "CSS",
+      "active" : true
+    },
+    "waitAfter" : {
+      "type" : "NONE",
+      "timeout" : 30,
+      "value" : "",
+      "attribute" : "",
+      "count" : null,
+      "locator" : "",
+      "locatorType" : "CSS",
+      "active" : false
+    },
+    "metadata" : {
+      "x" : 0,
+      "y" : 100.80000305175781
+    },
+    "status" : "RECORDED",
+    "timeoutSeconds" : 30,
+    "maxRetries" : 3,
+    "step" : 5,
+    "action" : "SCROLL",
+    "locator" : "//div[2]/div[1]/app-fulfillment-left-filter-nav/msc-left-filter-panel/div/div[2]/div/div[3]",
+    "expectedValue" : ""
+  }, {
+    "id" : "2688b9ea-3594-465d-9814-0df8cdbe5889",
+    "target" : "Order Status 0/9 Line Item Status 0/25 Flag 0/9 Assigned To 0/67 Partner 0/2528 ",
+    "locatorType" : "XPATH",
+    "value" : "123.19999694824219",
+    "locatorFallbacks" : [ {
+      "strategy" : "CSS",
+      "value" : "app-fulfillment-left-filter-nav > msc-left-filter-panel > div > div:nth-of-type(2) > div > div:nth-of-type(3)"
+    } ],
+    "column" : "",
+    "direction" : "",
+    "pageUrl" : "https://operationsconsole.paramountmsc.com/fulfillment/",
+    "pageTitle" : "Fulfillment",
+    "timestamp" : "2026-09-25T04:34:21.451281300Z",
+    "waitStrategy" : "NONE",
+    "waitBefore" : {
+      "type" : "WAIT_FOR_VISIBLE",
+      "timeout" : 30,
+      "value" : "",
+      "attribute" : "",
+      "count" : null,
+      "locator" : "",
+      "locatorType" : "CSS",
+      "active" : true
+    },
+    "waitAfter" : {
+      "type" : "NONE",
+      "timeout" : 30,
+      "value" : "",
+      "attribute" : "",
+      "count" : null,
+      "locator" : "",
+      "locatorType" : "CSS",
+      "active" : false
+    },
+    "metadata" : {
+      "x" : 0,
+      "y" : 123.19999694824219
+    },
+    "status" : "RECORDED",
+    "timeoutSeconds" : 30,
+    "maxRetries" : 3,
+    "step" : 6,
+    "action" : "SCROLL",
+    "locator" : "//div[2]/div[1]/app-fulfillment-left-filter-nav/msc-left-filter-panel/div/div[2]/div/div[3]",
+    "expectedValue" : ""
+  } ],
+  "created" : "2026-09-25T04:34:57.737192600Z",
+  "updated" : "2026-09-25T04:34:57.737192600Z",
+  "lastRun" : null,
+  "lastStatus" : null,
+  "stepCount" : 6
+}

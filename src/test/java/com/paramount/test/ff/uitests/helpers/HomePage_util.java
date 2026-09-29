@@ -7,6 +7,7 @@ import org.testng.asserts.SoftAssert;
 import com.paramount.test.ff.common.loginUtil.Verify;
 import com.paramount.test.ff.common.loginUtil.WaitUtil;
 import com.paramount.test.ff.pageobjects.HomePage;
+import com.paramount.test.ff.uitests.helpers.FulfillmentJsUtil;
 
 import static com.paramount.test.ff.common.base.BaseTest.driver;
 
@@ -15,8 +16,17 @@ public class HomePage_util extends com.paramount.test.ff.pageobjects.HomePage{
 	HomePage homePage = new HomePage();
 	WaitUtils WaitUtils = new WaitUtils();
 	public void validateHomePage(SoftAssert softAssert) {		
-		Verify.softAssert(WaitUtil.isDisplay(homePage.getHeaderTitle(), 5), "FULFILLMENT CONSOLE");
+		Verify.softAssert(FulfillmentJsUtil.waitForFulfillmentConsoleReady(15),
+				"FULFILLMENT CONSOLE");
 
+	}
+
+	public boolean isHomePageDisplayed() {
+		return FulfillmentJsUtil.isFulfillmentConsoleReady();
+	}
+
+	public boolean isFulfillmentConsoleReady() {
+		return FulfillmentJsUtil.isFulfillmentConsoleReady();
 	}
 
 	public void validateFilterLabel(SoftAssert softAssert) {

@@ -150,10 +150,48 @@ public class LeftFilterPanel {
                 + "//input[contains(@class,'form-check-input') and @type='checkbox']");
     }
 
+    public By selectAllOptionLink(String filterName) {
+        return By.XPath(filterAccordionBodyXPath(filterName)
+                + "//a[contains(@class,'option-item') and contains(@class,'all')]");
+    }
+
     public By selectAllLabel(String filterName) {
         return By.XPath(filterAccordionBodyXPath(filterName)
                 + "//a[contains(@class,'option-item') and contains(@class,'all')]"
-                + "//" + OPTION_LABEL + "[" + SELECT_ALL_LABEL_XPATH + "]");
+                + "//" + OPTION_LABEL + "[" + SELECT_ALL_LABEL_XPATH + "]"
+                + " | " + filterAccordionBodyXPath(filterName)
+                + "//div[contains(@class,'draggable-item')]"
+                + "//a[contains(@class,'option-item') and contains(@class,'all')]"
+                + "//" + OPTION_LABEL + "[normalize-space()='" + SELECT_ALL_LABEL + "']");
+    }
+
+    /** Exact "Select All" label text only — tooltip hover target (not checkbox or options-total count). */
+    public By selectAllTextLabel(String filterName) {
+        return By.XPath(filterAccordionBodyXPath(filterName)
+                + "//a[contains(@class,'option-item') and contains(@class,'all')]"
+                + "//" + OPTION_LABEL + "[normalize-space()='" + SELECT_ALL_LABEL + "']"
+                + " | " + filterAccordionBodyXPath(filterName)
+                + "//div[contains(@class,'draggable-item')]"
+                + "//a[contains(@class,'option-item') and contains(@class,'all')]"
+                + "//" + OPTION_LABEL + "[normalize-space()='" + SELECT_ALL_LABEL + "']");
+    }
+
+    /** Count beside Select All label, e.g. {@code (59330)} — not inside the label text. */
+    public By selectAllOptionsTotal(String filterName) {
+        return By.XPath(filterAccordionBodyXPath(filterName)
+                + "//a[contains(@class,'option-item') and contains(@class,'all')]"
+                + "//span[contains(@class,'options-total')]"
+                + " | " + filterAccordionBodyXPath(filterName)
+                + "//div[contains(@class,'draggable-item')]"
+                + "//a[contains(@class,'option-item') and contains(@class,'all')]"
+                + "//span[contains(@class,'options-total')]");
+    }
+
+    /** Globally rendered ngx-float-ui tooltip body (may be outside the filter accordion). */
+    public By floatUiTooltipContent() {
+        return By.XPath("//*[contains(@class,'float-ui-content') and not(contains(@class,'float-ui-hidden'))]"
+                + " | //float-ui-content[not(contains(@class,'float-ui-hidden'))]"
+                + " | //*[local-name()='float-ui-content' and not(contains(@class,'float-ui-hidden'))]");
     }
 
     public By filterOptionByLabel(String filterName, String optionLabel) {
@@ -183,6 +221,11 @@ public class LeftFilterPanel {
                 + " | " + filterAccordionBodyXPath(filterName)
                 + "//div[contains(@class,'draggable-item')]"
                 + "[.//" + OPTION_LABEL + "[normalize-space()='" + optionLabel + "']]");
+    }
+
+    public By allFilterOptionItems(String filterName) {
+        return By.XPath(filterAccordionBodyXPath(filterName)
+                + "//a[contains(@class,'option-item') and not(contains(@class,'all'))]");
     }
 
     public By allFilterOptionContainers(String filterName) {
@@ -502,6 +545,13 @@ public class LeftFilterPanel {
                 return "brand-col";
             case "assigned to":
                 return "assigned-to-col";
+            case "content type":
+                return "content-type-col";
+            case "title, episode":
+            case "title, season, episode":
+                return "title-col";
+            case "current system":
+                return "current-system-col";
             default:
                 return columnName.trim().toLowerCase(Locale.ROOT).replaceAll("[^a-z0-9]+", "-") + "-col";
         }

@@ -5,7 +5,8 @@ import com.synergy.core.driver.By;
 public class HomePage {
 	
 	public By getHeaderTitle() {
-		return By.XPath("//span[contains(normalize-space(),'FULFILLMENT CONSOLE')]");
+		return By.XPath("//span[contains(normalize-space(),'FULFILLMENT CONSOLE')]"
+				+ " | //button[@id='tableViewButton']");
 	}
 	
 	public By filterPanelLabel(){
@@ -17,16 +18,21 @@ public class HomePage {
 	}
 
 	public By DetailsPanelButton(){
-		return By.XPath("//button[text()='Details']");
+		return By.XPath("//button[normalize-space()='Details'] | //*[@role='button'][normalize-space()='Details']"
+				+ " | //button[text()='Details']");
 	}
 
 	public By inputSearchicon(){
-		return By.XPath("//div[@class='search-icon hide-search-box']");
+		return By.XPath("//div[contains(@class,'search-icon')]"
+				+ " | //div[@class='search-icon hide-search-box']");
 	}
 
 	public By inputGobalSearch() {
-		return By.XPath("//input[@placeholder='Search']"
-				+ " | //input[@placeholder='Search by title, ID or provider']");
+		return By.XPath("//input[@placeholder='Search by title, ID or provider']"
+				+ " | //input[contains(@placeholder,'Search by title')]"
+				+ " | //input[contains(@placeholder,'Search')]"
+				+ " | //input[@type='search']"
+				+ " | //input[@placeholder='Search']");
 	}
 
 	public By activeFiltersButton() {
@@ -58,7 +64,6 @@ public class HomePage {
 				+ "//button[normalize-space()='Line items' or normalize-space()='Line Items']");
 	}
 
-	/** Open Export dropdown showing Orders / Line items menu items. */
 	public By exportDropdownOpen() {
 		return By.XPath("//div[contains(@class,'export-dropdown-menu') and contains(@class,'show')]"
 				+ " | //div[contains(@class,'dropdown-menu') and contains(@class,'show')]"
@@ -66,14 +71,12 @@ public class HomePage {
 				+ " or normalize-space()='Line Items']]");
 	}
 
-	/** In-app async export progress (PROD: spinner + "Exporting File 0%" top-right of grid toolbar). */
 	public By exportProgressIndicator() {
 		return By.XPath("//*[contains(normalize-space(),'Exporting File')]"
 				+ " | //*[contains(@class,'export') and contains(normalize-space(),'Exporting')]"
 				+ " | //*[contains(@class,'export-progress') or contains(@class,'exporting')]");
 	}
 
-	/** Clickable area when export completes (link, toast, or notification near toolbar). */
 	public By exportCompleteNotification() {
 		return By.XPath("//*[contains(normalize-space(),'Export') and ("
 				+ "contains(translate(normalize-space(.), 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'),'complete')"
@@ -87,7 +90,6 @@ public class HomePage {
 				+ " or contains(translate(normalize-space(.), 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'),'export')]]");
 	}
 
-	/** Toast / snackbar after async Excel export completes (top area of page). */
 	public By exportReadyToast() {
 		return By.XPath("//div[contains(@class,'toast')]"
 				+ "[.//*[contains(translate(normalize-space(.), 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'),'export')"
@@ -99,7 +101,6 @@ public class HomePage {
 				+ " or contains(.,'FulfillmentExport') or contains(.,'.xlsx')]]");
 	}
 
-	/** Clickable link/button inside export-ready toast (opens download / Downloads folder on PROD). */
 	public By exportReadyToastAction() {
 		return By.XPath("//div[contains(@class,'toast')]"
 				+ "[.//*[contains(.,'FulfillmentExport') or contains(translate(normalize-space(.),"
@@ -115,7 +116,6 @@ public class HomePage {
 				+ "[.//*[contains(.,'FulfillmentExport') or contains(.,'.xlsx')]]//button");
 	}
 
-	/** Top-right notification bell / badge (blinks when export completes on PROD). */
 	public By exportNotificationBell() {
 		return By.XPath("//header//*[contains(@class,'notification') or contains(@class,'bell')]"
 				+ "//i[contains(@class,'bi-bell')]/ancestor::button[1]"
@@ -126,7 +126,6 @@ public class HomePage {
 				+ " | //i[contains(@class,'bi-bell')]/ancestor::button[1]");
 	}
 
-	/** Export row inside notification panel (after bell click). */
 	public By exportReadyNotificationItem() {
 		return By.XPath("//*[contains(@class,'notification') or contains(@class,'dropdown-menu')]"
 				+ "//*[contains(.,'FulfillmentExport') or contains(.,'.xlsx')"
@@ -138,7 +137,6 @@ public class HomePage {
 				+ " 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'),'export')]]");
 	}
 
-	/** PROD: after async export, toolbar may show a clickable xlsx link where "Exporting File" was. */
 	public By exportToolbarDownloadLink() {
 		return By.XPath("//div[contains(@class,'table-top') or contains(@class,'table-toolbar')]"
 				+ "//*[contains(.,'FulfillmentExport') or contains(.,'.xlsx')]"

@@ -8,25 +8,22 @@ import com.paramount.test.ff.common.util.Logger;
 import com.paramount.test.ff.common.util.SoftAssert;
 import com.paramount.test.ff.pageobjects.HomePage;
 import com.paramount.test.ff.pageobjects.LeftFilterPanel;
+import com.paramount.test.ff.pageobjects.NavigationPage;
+import com.paramount.test.ff.pageobjects.TableView;
 import com.synergy.core.driver.By;
 
 import static com.paramount.test.ff.uitests.helpers.leftfilters.LeftFilterConstants.DEFAULT_WAIT_SECONDS;
 import static com.paramount.test.ff.uitests.helpers.leftfilters.LeftFilterConstants.FILTER_EXPAND_WAIT_MS;
 
 /**
- * Line items tab test setup helpers (nav-link tab buttons, post-login blank-page refresh).
- * Kept in test helpers so base/common framework files are not modified.
+ * Line items tab test setup helpers (nav-pill tab switch per Scriptless TC049, post-login blank-page refresh).
  */
 public final class LineItemsTabTestSetupHelper extends BaseTest {
 
-    private static final String NAV_TAB_BASE = "//button[contains(@class,'nav-link')";
-    private static final String LOWER_TEXT =
-            "translate(normalize-space(.), 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz')";
-    private static final String ACTIVE_CLASS =
-            "contains(concat(' ', normalize-space(@class), ' '), ' active ')";
-
     private final HomePage homePage = new HomePage();
     private final LeftFilterPanel leftFilterPanel = new LeftFilterPanel();
+    private final NavigationPage navigationPage = new NavigationPage();
+    private final TableView tableView = new TableView();
 
     public void prepareLineItemsTab(SoftAssert softAssert) throws InterruptedException {
         driver.get().options().setElementTimeout(60000);
@@ -62,10 +59,17 @@ public final class LineItemsTabTestSetupHelper extends BaseTest {
             return;
         }
 
-        By lineItemsTab = lineItemsNavTab(false);
+        By lineItemsTab = navigationPage.lineItemsNavPillButton();
+        if (!WaitUtil.isDisplayFast(lineItemsTab, DEFAULT_WAIT_SECONDS)) {
+            lineItemsTab = tableView.lineItemsTab();
+        }
         if (WaitUtil.isDisplayFast(lineItemsTab, DEFAULT_WAIT_SECONDS)) {
             DriverUtil.scrollToElement(lineItemsTab);
-            DriverUtil.clickOnElement(lineItemsTab, DEFAULT_WAIT_SECONDS);
+            boolean clicked = DriverUtil.clickOnElement(lineItemsTab, DEFAULT_WAIT_SECONDS);
+            if (!clicked) {
+                clicked = DriverUtil.clickOnElementJs(lineItemsTab, 5);
+            }
+            Verify.softAssert(clicked, "Line Items nav-pill click succeeded");
             WaitUtil.waitForJSToLoad(30);
             Thread.sleep(FILTER_EXPAND_WAIT_MS);
         } else {
@@ -76,34 +80,13 @@ public final class LineItemsTabTestSetupHelper extends BaseTest {
     }
 
     private boolean isLineItemsTabActive() {
-        if (WaitUtil.isDisplayFast(lineItemsNavTab(true), 3)) {
+        if (WaitUtil.isDisplayFast(navigationPage.lineItemsNavPillActive(), 3)) {
             return true;
         }
         return WaitUtil.isDisplayFast(lineItemsTabContextMarker(), 3);
     }
 
-    private By lineItemsNavTab(boolean activeOnly) {
-        String xpath = NAV_TAB_BASE;
-        if (activeOnly) {
-            xpath += " and " + ACTIVE_CLASS;
-        }
-        xpath += " and contains(" + LOWER_TEXT + ", 'line items')]";
-        return By.XPath(xpath);
-    }
-
     private By lineItemsTabContextMarker() {
-        return By.XPath(lineItemsNavTabXPath(true)
-                + " | //*[contains(translate(normalize-space(), 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'),"
-                + " 'show hidden line items')]"
-                + " | //th[contains(normalize-space(),'Line item start date')]"
-                + " | //div[contains(@class,'header')]//span[normalize-space()='Line item start date']");
-    }
-
-    private String lineItemsNavTabXPath(boolean activeOnly) {
-        String xpath = NAV_TAB_BASE;
-        if (activeOnly) {
-            xpath += " and " + ACTIVE_CLASS;
-        }
-        return xpath + " and contains(" + LOWER_TEXT + ", 'line items')]";
+        return navigationPage.lineItemsTabContextMarker();
     }
 }
