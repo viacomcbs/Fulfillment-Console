@@ -324,7 +324,7 @@ public class Bsd29967OpsConsoleUtil {
     }
 
     private void openOpsConsoleTab(String orderId) throws InterruptedException {
-        String url = OpsConsolePage.DEV_ORDER_URL_PREFIX + orderId;
+        String url = OpsConsolePage.resolveOrderUrl(orderId);
         Logger.logReportMessage("Opening ops-console: " + url);
         driver.get().browser().executeScript("window.open('about:blank','_blank');");
         Set<String> handles = driver.get().browser().getWindowHandles();
@@ -373,7 +373,7 @@ public class Bsd29967OpsConsoleUtil {
         if (orderId.isEmpty()) {
             return null;
         }
-        String script = EXTRACT_FROM_ORDER_API_JS
+        String script = injectOpsConsoleOrigin(EXTRACT_FROM_ORDER_API_JS)
                 .replace("{{ORDER_ID}}", orderId.replace("'", "\\'"))
                 .replace("{{WORKFLOW}}", workflow == null ? "" : workflow.replace("'", "\\'"));
         return runJsTreeResult(script);
@@ -991,7 +991,7 @@ public class Bsd29967OpsConsoleUtil {
     private String fetchDynamoPayload(String orderId, String workflow) {
         String safeOrder = orderId.replace("'", "\\'");
         String safeWorkflow = workflow.replace("'", "\\'");
-        String script = FETCH_DYNAMO_API_JS
+        String script = injectOpsConsoleOrigin(FETCH_DYNAMO_API_JS)
                 .replace("{{ORDER_ID}}", safeOrder)
                 .replace("{{WORKFLOW}}", safeWorkflow);
         Object raw = driver.get().browser().executeScript(script);
@@ -1389,20 +1389,24 @@ public class Bsd29967OpsConsoleUtil {
                     + "return {jobIndex: -1, omfOrderId: '', dsids: []};"
                     + "})()";
 
+    private static String injectOpsConsoleOrigin(String script) {
+        return script.replace("{{OPS_CONSOLE_ORIGIN}}", OpsConsoleUrlUtil.resolveOrigin());
+    }
+
     private static final String FETCH_DYNAMO_API_JS =
             "(function() {"
                     + "var orderId = encodeURIComponent('{{ORDER_ID}}');"
                     + "var workflow = '{{WORKFLOW}}';"
                     + "var workflowParam = workflow ? ('?workflow=' + encodeURIComponent(workflow)) : '';"
-                    + "var origin = window.location.origin || 'https://contentplatform.viacom.com';"
+                    + "var origin = window.location.origin || '{{OPS_CONSOLE_ORIGIN}}';"
                     + "var urls = ["
                     + "  origin + '/ops-console-api-dev-ui/api/order/' + orderId + '/dynamo' + workflowParam,"
                     + "  origin + '/ops-console-api-dev-ui/api/dynamo/' + orderId + workflowParam,"
                     + "  origin + '/ops-console-api-dev/dynamo/' + orderId + workflowParam,"
                     + "  origin + '/ops-console-api-dev/order/' + orderId + '/dynamo' + workflowParam,"
                     + "  origin + '/ops-console-api-dev/order/' + orderId + workflowParam,"
-                    + "  'https://contentplatform.viacom.com/ops-console-api-dev-ui/api/order/' + orderId + '/dynamo' + workflowParam,"
-                    + "  'https://contentplatform.viacom.com/ops-console-api-dev/dynamo/' + orderId + workflowParam"
+                    + "  '{{OPS_CONSOLE_ORIGIN}}/ops-console-api-dev-ui/api/order/' + orderId + '/dynamo' + workflowParam,"
+                    + "  '{{OPS_CONSOLE_ORIGIN}}/ops-console-api-dev/dynamo/' + orderId + workflowParam"
                     + "];"
                     + "try {"
                     + "  performance.getEntriesByType('resource').forEach(function(e) {"
@@ -1813,14 +1817,14 @@ public class Bsd29967OpsConsoleUtil {
                     + "var orderId = '{{ORDER_ID}}';"
                     + "var workflow = '{{WORKFLOW}}';"
                     + "var wf = workflow ? ('?workflow=' + encodeURIComponent(workflow)) : '';"
-                    + "var origin = window.location.origin || 'https://contentplatform.viacom.com';"
+                    + "var origin = window.location.origin || '{{OPS_CONSOLE_ORIGIN}}';"
                     + "var urls = ["
                     + "  origin + '/ops-console-api-dev-ui/api/order/' + orderId + '/opensearch' + wf,"
                     + "  origin + '/ops-console-api-dev-ui/api/opensearch/order/' + orderId + wf,"
                     + "  origin + '/ops-console-api-dev-ui/api/order/' + orderId + wf,"
                     + "  origin + '/ops-console-api-dev/order/' + orderId + '/opensearch' + wf,"
                     + "  origin + '/ops-console-api-dev-ui/order/' + orderId + '/opensearch' + wf,"
-                    + "  'https://contentplatform.viacom.com/ops-console-api-dev-ui/api/order/' + orderId + '/opensearch' + wf"
+                    + "  '{{OPS_CONSOLE_ORIGIN}}/ops-console-api-dev-ui/api/order/' + orderId + '/opensearch' + wf"
                     + "];"
                     + "try {"
                     + "  performance.getEntriesByType('resource').forEach(function(e) {"

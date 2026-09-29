@@ -33,14 +33,28 @@ public final class ManageColumnOptions {
     public static final String DSID = "DSID";
     public static final String PTS_PACKAGING_ID = "PTS Packaging ID";
     public static final String BRAND = "Brand";
+    public static final String CONTENT_TYPE = "Content type";
+    public static final String CURRENT_SYSTEM = "Current system";
+    public static final String EPISODE = "Episode";
+    public static final String LANGUAGE = "Language";
+    public static final String SEASON = "Season";
+    public static final String TITLE_EPISODE = "Title, Episode";
+    public static final String TITLE_SEASON_EPISODE = "Title, Season, Episode";
+    public static final String PARTNER = "Partner";
     public static final String SUBMITTED_BY = "Submitted By";
     public static final String ASSIGNED_TO = "Assigned to";
     public static final String ACTIVITY_TYPE = "Activity Type";
+    /** Manage columns "Type" column — pairs with left filter {@code Job type}. */
+    public static final String JOB = "Type";
     public static final String MATERIAL_ID = "Material ID";
     public static final String EDIT_CRID = "Edit CRID";
     public static final String UUID = "UUID";
     public static final String PARTNER_END_DATE = "Partner end date";
     public static final String OPEN_TEXT_ID = "Open Text ID";
+    /** Orders tab grid column (order-level). */
+    public static final String ERROR_MESSAGES = "Error messages";
+    /** Line Items tab grid column (and line-item row on Orders tab). */
+    public static final String ERROR_MESSAGE = "Error message";
 
     /** Saved table view used by left-filter suites ({@code AutomationTableViewSetupUtil}); sorts first in dropdown. */
     public static final String AUTOMATION_VIEW_NAME = "AAAAA";
@@ -89,6 +103,7 @@ public final class ManageColumnOptions {
             "State",
             "Submitted By",
             "Title, Episode",
+            TITLE_SEASON_EPISODE,
             "Xytech ID"
     };
 
@@ -130,6 +145,7 @@ public final class ManageColumnOptions {
     /** Options under "LINE ITEM COLUMNS" on Orders tab, or the flat Line Items tab list. */
     public static final String[] LINE_ITEM_COLUMNS = {
             ACTIVITY_TYPE,
+            JOB,
             "Assigned to",
             "Content type",
             EDIT_CRID,
@@ -145,7 +161,6 @@ public final class ManageColumnOptions {
             "Start time",
             "Submission",
             "Total segments",
-            "Type",
             UUID
     };
 
@@ -169,6 +184,9 @@ public final class ManageColumnOptions {
      * Order-level (e.g. PTS Packaging ID) vs line-item-level (e.g. Activity Type) must not be mixed.
      */
     public static Section defaultSectionForColumn(String columnLabel) {
+        if (TITLE_SEASON_EPISODE.equals(columnLabel)) {
+            return Section.ORDER;
+        }
         for (String name : ORDER_COLUMNS) {
             if (name.equals(columnLabel)) {
                 return Section.ORDER;

@@ -2,8 +2,6 @@ package com.paramount.test.ff.uitests.tests.leftfiltersvalidation.perfilter.orde
 
 import com.paramount.test.ff.common.util.SoftAssert;
 import com.paramount.test.ff.uitests.helpers.leftfilters.ConsoleTab;
-import com.paramount.test.ff.uitests.helpers.leftfilters.OrdersLeftFilter;
-import com.paramount.test.ff.uitests.tests.leftfiltersvalidation.perfilter.orders.LeftFilterOrdersTabBaseTest;
 import io.qameta.allure.Description;
 import org.testng.annotations.Test;
 
@@ -15,12 +13,10 @@ import org.testng.annotations.Test;
  *   <li>Activity Type left filter — first option with count &gt; 0</li>
  *   <li>Manage columns — scroll to Activity Type, click once if unchecked; Save if enabled else close</li>
  *   <li>Wait for table refresh (no page refresh)</li>
- *   <li>Expand order → wait for line-item grid → verify at least one Activity Type matches filter</li>
+ *   <li>Expand order → click each package when present → verify line-item Activity Type matches filter</li>
  * </ol>
  */
-public class LF_O_TC620_ActivityType_TableSyncTest extends LeftFilterOrdersTabBaseTest {
-
-    private static final String FILTER = OrdersLeftFilter.ACTIVITY_TYPE.getDisplayName();
+public class LF_O_TC620_ActivityType_TableSyncTest extends LeftFilterActivityTypeOrdersTabBaseTest {
 
     @Override
     protected boolean requiresAutomationViewSetup() {

@@ -42,11 +42,12 @@ public final class CalendarSetupUtil extends BaseTest {
         Logger.logReportMessage("One-time setup — click Yesterday bookmark icon, then Yesterday label");
 
         waitForCalendarToolbar();
-        Verify.hardAssert(WaitUtil.isDisplay(calendarPage.calendarRangeIcon(), 15),
+        Verify.hardAssert(isCalendarToolbarVisible(15),
                 "Cannot set calendar — toolbar date picker not visible");
 
-        if (WaitUtil.isDisplayFast(calendarPage.yesterdayDefaultBookmarkActive(), 2) && isYesterdaySelected()) {
-            Logger.logReportMessage("Yesterday default bookmark already blue and date applied — skipping");
+        if (isYesterdaySelected()) {
+            Logger.logReportMessage("Toolbar already shows Yesterday on login — skip calendar (Yesterday is default): "
+                    + readToolbarDateRange());
             return;
         }
 
@@ -57,12 +58,13 @@ public final class CalendarSetupUtil extends BaseTest {
         Logger.logReportMessage("Setting date range to Yesterday");
 
         waitForCalendarToolbar();
-        Verify.hardAssert(WaitUtil.isDisplay(calendarPage.calendarRangeIcon(), 15),
+        Verify.hardAssert(isCalendarToolbarVisible(15),
                 "Cannot set calendar — toolbar date picker not visible");
 
         String toolbarRange = readToolbarDateRange();
         if (isYesterdayRange(toolbarRange) && !isCalendarOpen()) {
-            Logger.logReportMessage("Yesterday already set — skipping calendar setup: " + toolbarRange);
+            Logger.logReportMessage("Toolbar shows Yesterday on login — skip calendar (Yesterday is default): "
+                    + toolbarRange);
             return;
         }
 
@@ -112,7 +114,7 @@ public final class CalendarSetupUtil extends BaseTest {
         Logger.logReportMessage("Setting date range to Today");
 
         waitForCalendarToolbar();
-        Verify.hardAssert(WaitUtil.isDisplay(calendarPage.calendarRangeIcon(), 15),
+        Verify.hardAssert(isCalendarToolbarVisible(15),
                 "Cannot set calendar — toolbar date picker not visible");
 
         String toolbarRange = readToolbarDateRange();
@@ -157,10 +159,58 @@ public final class CalendarSetupUtil extends BaseTest {
         if (isCalendarOpen()) {
             return;
         }
-        By trigger = calendarPage.calendarRangeIcon();
-        if (WaitUtil.isDisplay(trigger, SHORT_WAIT)) {
-            DriverUtil.clickOnElement(trigger, DEFAULT_WAIT_SECONDS);
+        Logger.logReportMessage("Opening calendar date picker (toolbar icon or picker area)...");
+        if (clickCalendarTriggerWithFallback()) {
             WaitUtil.isDisplay(calendarPage.calendarPopup(), SHORT_WAIT);
+            return;
+        }
+        Logger.logReportMessage("Calendar picker XPath/JS click did not open popup — toolbar may still be loading");
+    }
+
+    private boolean clickCalendarTriggerWithFallback() {
+        scrollCalendarPickerIntoView();
+        By icon = calendarPage.calendarRangeIcon();
+        if (DriverUtil.clickOnElementSafely(icon, SHORT_WAIT)) {
+            Logger.logReportMessage("Clicked calendar range icon via XPath");
+            return true;
+        }
+        By picker = calendarPage.calendarRangePicker();
+        if (DriverUtil.clickOnElementSafely(picker, SHORT_WAIT)) {
+            Logger.logReportMessage("Clicked calendar picker container via XPath");
+            return true;
+        }
+        boolean jsClicked = clickCalendarTriggerViaJs();
+        Logger.logReportMessage("Clicked calendar picker via JS fallback: " + jsClicked);
+        return jsClicked;
+    }
+
+    private void scrollCalendarPickerIntoView() {
+        try {
+            driver.get().browser().executeScript(
+                    "var p=document.querySelector('app-custom-date-range-picker,#calendar-dropdown');"
+                            + "if(p){p.scrollIntoView({block:'center',inline:'nearest'});}");
+            Thread.sleep(300);
+        } catch (Exception e) {
+            Logger.logConsoleMessage("Could not scroll calendar picker into view: " + e.getMessage());
+        }
+    }
+
+    private boolean clickCalendarTriggerViaJs() {
+        try {
+            Object clicked = driver.get().browser().executeScript(
+                    "var picker=document.querySelector('app-custom-date-range-picker');"
+                            + "if(!picker){picker=document.querySelector('#calendar-dropdown');}"
+                            + "if(!picker){return false;}"
+                            + "picker.scrollIntoView({block:'center',inline:'nearest'});"
+                            + "var icon=picker.querySelector("
+                            + "'i.bi-calendar-range,i.calendar-icon,i[class*=calendar],i[class*=bi-calendar]');"
+                            + "if(icon){(icon.closest('button')||icon.closest('div')||icon).click();return true;}"
+                            + "picker.click();"
+                            + "return true;");
+            return Boolean.TRUE.equals(clicked) || "true".equals(String.valueOf(clicked));
+        } catch (Exception e) {
+            Logger.logConsoleMessage("Calendar picker JS click failed: " + e.getMessage());
+            return false;
         }
     }
 
@@ -259,15 +309,35 @@ public final class CalendarSetupUtil extends BaseTest {
     }
 
     private void waitForCalendarToolbar() throws InterruptedException {
-        Logger.logReportMessage("Waiting for calendar toolbar (skipping full filter load wait)...");
+        Logger.logReportMessage("Waiting for calendar toolbar date picker...");
         long deadline = System.currentTimeMillis() + 30_000L;
         while (System.currentTimeMillis() < deadline) {
-            if (WaitUtil.isDisplayFast(calendarPage.calendarRangeIcon(), 2)) {
-                Logger.logReportMessage("Calendar toolbar visible");
+            if (WaitUtil.isDisplayFast(calendarPage.calendarRangeIcon(), 2)
+                    || WaitUtil.isDisplayFast(calendarPage.calendarRangePicker(), 2)
+                    || isCalendarPickerInDom()) {
+                Logger.logReportMessage("Calendar toolbar visible — will click picker next");
                 return;
             }
             WaitUtil.waitForJSToLoad(3);
             Thread.sleep(500);
+        }
+        Logger.logReportMessage("Calendar toolbar not found within 30s — will still attempt JS picker click");
+    }
+
+    private boolean isCalendarToolbarVisible(int waitSeconds) {
+        return WaitUtil.isDisplay(calendarPage.calendarRangeIcon(), waitSeconds)
+                || WaitUtil.isDisplay(calendarPage.calendarRangePicker(), waitSeconds)
+                || isCalendarPickerInDom();
+    }
+
+    private boolean isCalendarPickerInDom() {
+        try {
+            Object result = driver.get().browser().executeScript(
+                    "return !!(document.querySelector('app-custom-date-range-picker')"
+                            + "||document.querySelector('#calendar-dropdown'));");
+            return Boolean.TRUE.equals(result) || "true".equals(String.valueOf(result));
+        } catch (Exception e) {
+            return false;
         }
     }
 

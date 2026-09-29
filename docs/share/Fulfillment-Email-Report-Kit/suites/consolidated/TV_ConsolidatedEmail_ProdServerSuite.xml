@@ -1,0 +1,35 @@
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<!-- One consolidated email after scripts/run-tableview-only-prod.ps1 -->
+<suite name="Table View Consolidated Email PROD" parallel="false" preserve-order="true">
+    <parameter name="SendReportAutoEmails" value="false"/>
+    <parameter name="SendReportEmailAddress" value="Akilandeswari.Sundararajan@paramount.com,Vishnupriya.Arumugam@paramount.com,qa_automation_status_-aaaagmcoe366ao4pdnt2t5ikp4@viacomcbs.org.slack.com"/>
+    <parameter name="SendReportInternalEmailAddress" value=""/>
+    <parameter name="SendInternalConsolidatedEmail" value="false"/>
+    <parameter name="PassedOnlyConsolidatedEmail" value="true"/>
+    <parameter name="SendChatReport" value="true"/>
+    <parameter name="SlackChannel" value="#qa_automation_status_go"/>
+    <parameter name="LeftFilterEmailReport" value="true"/>
+    <parameter name="LeftFilterEmailSuiteTitle" value="Fulfillment Console - Table View Regression (PROD)"/>
+    <parameter name="AggregateResultsDir" value="test-output/tv-passed-aggregate"/>
+    <parameter name="Application" value="Fulfillment Console"/>
+    <parameter name="ApplicationTitle" value="Fulfillment Console"/>
+    <parameter name="TestEnvironment" value="PROD"/>
+    <parameter name="LocalExecution" value="true"/>
+    <parameter name="LabUrl" value="https://www.synergyserver.tech"/>
+    <parameter name="UserKey" value="af27f06e-2e7e-4c8d-9312-2320423e4641"/>
+    <parameter name="EmailRelayHost" value="imailrelay.viacom.com"/>
+    <parameter name="EmailRelayPort" value="25"/>
+    <parameter name="EmailSenderAddress" value="NOREPLY@dteqa.com"/>
+    <parameter name="AttachPdfReport" value="true"/>
+    <parameter name="UploadPDF" value="true"/>
+    <listeners>
+        <listener class-name="com.paramount.test.ff.common.listeners.SuiteListeners"/>
+    </listeners>
+    <test name="Send consolidated table-view email" preserve-order="true">
+        <classes>
+            <class name="com.paramount.test.ff.uitests.tests.reporting.FulfillmentCombinedEmailReportTest">
+                <methods><include name="sendConsolidatedRegressionEmail"/></methods>
+            </class>
+        </classes>
+    </test>
+</suite>

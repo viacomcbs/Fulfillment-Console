@@ -1,6 +1,7 @@
 package com.paramount.test.ff.uitests.helpers.bsd29967;
 
 import com.paramount.test.ff.common.loginUtil.Verify;
+import com.paramount.test.ff.common.util.Config;
 import com.paramount.test.ff.common.util.Logger;
 import com.paramount.test.ff.common.util.SoftAssert;
 import com.paramount.test.ff.uitests.helpers.leftfilters.LeftFilterPanelUtil;
@@ -10,6 +11,7 @@ import com.paramount.test.ff.uitests.helpers.leftfilters.OrdersLeftFilter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 
 /** Loops round-robin 3 non-zero + mandatory UWFFSP Environment workflows; max 2 orders per workflow when DSIDs blank. */
 public class Bsd29967WorkflowUtil {
@@ -26,17 +28,19 @@ public class Bsd29967WorkflowUtil {
         Bsd29967SessionHelper.clearEnvironmentResults();
         String filterName = OrdersLeftFilter.ENVIRONMENT.getDisplayName();
         List<String> allNonZero = filterUtil.resolveAllNonZeroFilterOptions(filterName);
-        Verify.softAssert1(!allNonZero.isEmpty(),
-                filterName + " has at least one non-zero option", softAssert);
-        if (allNonZero.isEmpty()) {
+        if (allNonZero.isEmpty() && !hasFixedEnvironmentWorkflows()) {
+            Verify.softAssert1(false, filterName + " has at least one non-zero option", softAssert);
             return;
         }
 
         List<String> environments = selectEnvironmentWorkflows(allNonZero);
+        if (environments.isEmpty()) {
+            Verify.softAssert1(false, filterName + " — no Environment workflows configured", softAssert);
+            return;
+        }
         Bsd29967SessionHelper.setExpectedEnvironmentCount(environments.size());
         Logger.logReportMessage("BSD-29967 — validating " + environments.size()
-                + " Environment workflow(s) (round-robin " + MAX_NON_ZERO_ENV_WORKFLOWS
-                + " non-zero + mandatory " + MANDATORY_ENVIRONMENT + "): " + environments
+                + " Environment workflow(s) (" + describeWorkflowSelection() + "): " + environments
                 + " | available non-zero: " + allNonZero);
 
         for (String environment : environments) {
@@ -132,6 +136,12 @@ public class Bsd29967WorkflowUtil {
     }
 
     static List<String> selectEnvironmentWorkflows(List<String> allNonZero) {
+        String fixed = Config.getString("Bsd29967EnvironmentWorkflows");
+        if (fixed != null && !fixed.trim().isEmpty()) {
+            List<String> workflows = parseFixedEnvironmentWorkflows(fixed, allNonZero);
+            Bsd29967EmailReport.setWorkflowSelectionSummary("fixed: " + workflows);
+            return workflows;
+        }
         LeftFilterOptionRotationUtil.RotationResult rotation =
                 LeftFilterOptionRotationUtil.pickNext(
                         OrdersLeftFilter.ENVIRONMENT.getDisplayName(),
@@ -143,6 +153,39 @@ public class Bsd29967WorkflowUtil {
             selected.add(MANDATORY_ENVIRONMENT);
         }
         return selected;
+    }
+
+    private static boolean hasFixedEnvironmentWorkflows() {
+        String fixed = Config.getString("Bsd29967EnvironmentWorkflows");
+        return fixed != null && !fixed.trim().isEmpty();
+    }
+
+    private static String describeWorkflowSelection() {
+        if (hasFixedEnvironmentWorkflows()) {
+            return "fixed list from suite: " + Config.getString("Bsd29967EnvironmentWorkflows");
+        }
+        return "round-robin " + MAX_NON_ZERO_ENV_WORKFLOWS + " non-zero + mandatory " + MANDATORY_ENVIRONMENT;
+    }
+
+    private static List<String> parseFixedEnvironmentWorkflows(String csv, List<String> allNonZero) {
+        List<String> workflows = new ArrayList<>();
+        for (String part : csv.split(",")) {
+            String trimmed = part.trim();
+            if (trimmed.isEmpty()) {
+                continue;
+            }
+            workflows.add(resolveEnvironmentLabel(trimmed, allNonZero));
+        }
+        return workflows;
+    }
+
+    private static String resolveEnvironmentLabel(String desired, List<String> allNonZero) {
+        for (String option : allNonZero) {
+            if (option.equalsIgnoreCase(desired)) {
+                return option;
+            }
+        }
+        return desired.toUpperCase(Locale.ROOT);
     }
 
     private void validateEnvironmentWorkflow(LeftFilterPanelUtil filterUtil,

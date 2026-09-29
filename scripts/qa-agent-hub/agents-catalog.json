@@ -1,0 +1,85 @@
+{
+  "title": "Media Platform QA Agent Hub",
+  "subtitle": "One-click Cursor agents for daily QA workflows",
+  "defaultWorkspace": "C:\\FulfillmentConsole\\Fulfillment-Console",
+  "workspaces": {
+    "fulfillment": "C:\\FulfillmentConsole\\Fulfillment-Console",
+    "linear": "C:\\LinearConsole",
+    "cursorHome": "C:\\Users\\10747125\\.cursor"
+  },
+  "agents": [
+    {
+      "id": "uat-release-label",
+      "title": "Update UAT Release Label",
+      "subtitle": "Latest UAT release → Jira labels (FF / AC / FP)",
+      "color": "#FFC107",
+      "type": "submenu",
+      "workspace": "fulfillment",
+      "options": [
+        {
+          "title": "Fulfillment Console",
+          "prompt": "add label Fulfillment console"
+        },
+        {
+          "title": "Admin Console",
+          "prompt": "add label Admin console"
+        },
+        {
+          "title": "MSC Performance Metrics",
+          "prompt": "add label Performance metrics"
+        }
+      ]
+    },
+    {
+      "id": "update-airtable",
+      "title": "Update Airtable",
+      "subtitle": "Sync this month's Jira bugs & stories to QA tracker",
+      "color": "#4CAF50",
+      "type": "prompt",
+      "workspace": "fulfillment",
+      "scheduleable": true,
+      "defaultJobName": "weekly-airtable-sync",
+      "prompt": "Update-Airtable - sync Jira defects and stories to Airtable QA tracker for Akilandeswari Sundararajan. Show preview first, then run Task A and Task B."
+    },
+    {
+      "id": "update-wsr",
+      "title": "Update WSR",
+      "subtitle": "Weekly status + Slack #qa_automation_status_go",
+      "color": "#2196F3",
+      "type": "prompt",
+      "workspace": "fulfillment",
+      "scheduleable": true,
+      "defaultJobName": "weekly-wsr-update",
+      "prompt": "Update WSR - prepare copy-paste weekly status report content for Akilandeswari Sundararajan (Fulfillment Console, Admin Console, MSC Fulfillment Performance, Linear Console, AI Chatbot). Use last completed Thu-Wed week."
+    },
+    {
+      "id": "raise-ff-defect",
+      "title": "Raise Fulfillment Defect",
+      "subtitle": "Create BSD bug under epic BSD-18671",
+      "color": "#EC407A",
+      "type": "prompt",
+      "workspace": "fulfillment",
+      "prompt": "create fulfillment defect - I will provide title, environment, steps, actual result, and expected result. Use BSD-29296 format under epic BSD-18671."
+    }
+  ],
+  "quickLinks": [
+    {
+      "id": "automation-scheduler",
+      "title": "Automation Scheduler",
+      "subtitle": "Schedule and run test suites",
+      "launcher": "..\\Media-Platform-Automation-Scheduler\\Launch-AutomationScheduler.ps1",
+      "script": "..\\Media-Platform-Automation-Scheduler\\automation-scheduler\\AutomationScheduler.ps1",
+      "icon": "..\\Media-Platform-Automation-Scheduler\\automation-scheduler\\assets\\scheduler-icon.png",
+      "color": "#2196F3"
+    },
+    {
+      "id": "heidi",
+      "title": "Heidi",
+      "subtitle": "Your QA bot - URLs, access levels, notes",
+      "launcher": "..\\Media-Platform-QA-Dictionary\\Launch-Heidi.ps1",
+      "script": "..\\Media-Platform-QA-Dictionary\\dictionary\\Heidi.ps1",
+      "icon": "..\\Media-Platform-QA-Dictionary\\dictionary\\assets\\dictionary-icon.png",
+      "color": "#FF9800"
+    }
+  ]
+}

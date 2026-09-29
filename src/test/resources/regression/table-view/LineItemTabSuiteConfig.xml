@@ -1,0 +1,308 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<suite name="Fulfillment Console Line Items Tab" parallel="false" preserve-order="true" thread-count="1">
+
+    <!-- RUNTIME CONFIG -->
+    <parameter name="RunAsFactory" value="false"/>
+    <parameter name="Environment" value="PROD"/>
+    <parameter name="Browser" value="Chrome"/>
+    <parameter name="OS" value="Windows"/>
+    <parameter name="NetworkBandwidth" value="0"/>
+    <parameter name="NetworkLatency" value="0"/>
+    <parameter name="BuildNumber" value="Latest"/>
+    <parameter name="ReRunOnFailure" value="false"/>
+    <parameter name="ReRunOnFailureCount" value="0"/>
+    <parameter name="ThreadCount" value="1"/>
+    <parameter name="SendReportAutoEmails" value="true"/>
+    <parameter name="SendReportEmailAddress" value="babloo.kumar@paramount.com,Vishnupriya.Arumugam@paramount.com"/>
+    <parameter name="ProxyHost" value="localhost"/>
+    <parameter name="ProxyDebugPort" value="9099"/>
+    <parameter name="ProxyPort" value="9097"/>
+
+    <parameter name="SendChatReport" value="true"/>
+    <parameter name="SendSplunkData" value="false"/>
+    <parameter name="SetHueLights" value="false"/>
+
+    <parameter name="Application" value="Fulfillment Console"/>
+    <parameter name="TestEnvironment" value="PROD"/>
+    <parameter name="TestRailProjectId" value="223"/>
+    <parameter name="PostDataToTestRail" value="false"/>
+
+    <parameter name="LabUrl" value="https://www.synergyserver.tech"/>
+    <parameter name="UserKey" value="37a7965b-a4f3-49fe-acef-bb35e430b90e"/>
+    <parameter name="LocalURL" value="http://localhost:39445/synergy"/>
+    <parameter name="LocalExecution" value="false"/>
+    <parameter name="ClientID" value="6a64ce12-aec8-43da-a592-e5485ffe3767"/>
+
+    <parameter name="ApplicationTitle" value="Fulfillment Console"/>
+    <parameter name="TargetUrlDEV" value="https://dev-operationsconsole.paramountmsc.com/fulfillment/"/>
+    <parameter name="TargetUrlUAT" value="https://uat-operationsconsole.paramountmsc.com/fulfillment/"/>
+    <parameter name="TargetUrlPROD" value="https://operationsconsole.paramountmsc.com/fulfillment/"/>
+    <parameter name="TargetUrlPR" value="https://pr.paramountmsc.com/pr/Fulfillment/11423"/>
+
+    <parameter name="Username" value="svc-msc_bsd_qa_svc@paramount.com"/>
+    <parameter name="Password" value="D7h3M3Bo9SH4vJowwCXku2737!"/>
+    <parameter name="PathToElements" value="/src/test/resources/elements/"/>
+    <parameter name="PathToAppDataConfig" value="/src/test/resources/AppDataConfig.json"/>
+
+    <parameter name="SauceUsername" value=""/>
+    <parameter name="SauceKey" value=""/>
+    <parameter name="SplunkUsername" value=""/>
+    <parameter name="SplunkPassword" value=""/>
+    <parameter name="SplunkIndex" value="MIC"/>
+
+    <parameter name="EmailRelayHost" value="imailrelay.viacom.com"/>
+    <parameter name="EmailRelayPort" value="25"/>
+    <parameter name="EmailSenderAddress" value="NOREPLY@dteqa.com"/>
+    <parameter name="PathToReports" value="/test-output/reports/"/>
+    <parameter name="PathToScreenshots" value="/test-output/screenshots/"/>
+    <parameter name="PathToAllureResults" value="/Testreports/"/>
+    <parameter name="UploadReportToJenkins" value="false"/>
+    <parameter name="AttachPdfReport" value="true"/>
+    <parameter name="UploadPdfToSynergy" value="true"/>
+    <parameter name="SlackWebHookUrl" value=""/>
+    <parameter name="SlackChannel" value="#version-test"/>
+    <parameter name="SlackChannelId" value="C08NR6BK1NX"/>
+    <parameter name="S3BucketName" value="Greenroom-Web"/>
+    <parameter name="HueBridgeIP" value=""/>
+    <parameter name="HueUserId" value=""/>
+    <parameter name="HueWebLightId" value=""/>
+
+    <parameter name="WebDriverWebHubPort" value="4443"/>
+    <parameter name="WebDriverHubIP" value="localhost"/>
+    <parameter name="WaitForWaitTime" value="30"/>
+    <parameter name="VideoPlayingWaitTime" value="80"/>
+    <parameter name="VideoImageWaitTime" value="20"/>
+    <parameter name="PageLoadWaitTime" value="120"/>
+    <parameter name="PollingTime" value="500"/>
+    <parameter name="VideoCompareRetryCount" value="2"/>
+
+    <parameter name="sendExecutionReport" value="true"/>
+    <parameter name="authenticationReqd" value="true"/>
+    <parameter name="senderAddress" value="mqe.automation@viacomcontractor.com"/>
+    <parameter name="reRunFlg" value="false"/>
+    <parameter name="UploadPDF" value="true"/>
+    <parameter name="FailureVideoRecording" value="false"/>
+    <parameter name="PostSplunkData" value="false"/>
+    <parameter name="executeOnlyFailedAndSkippedTests" value="false"/>
+
+    <listeners>
+        <listener class-name="com.paramount.test.ff.common.listeners.AllureListeners"/>
+        <listener class-name="com.paramount.test.ff.common.listeners.SuiteListeners"/>
+        <listener class-name="com.paramount.test.ff.common.listeners.TestListeners"/>
+    </listeners>
+
+    <!-- Manage Columns TC_LI_001 through TC_LI_010 -->
+    <test verbose="1" name="LineItemTab_ManageColumns_TC_LI_001_to_010" annotations="JDK" preserve-order="true">
+        <classes>
+            <class name="com.paramount.test.ff.uitests.tests.lineitem.TC_LI_001_ValidateManageColumnIconLineItemTab"/>
+            <class name="com.paramount.test.ff.uitests.tests.lineitem.TC_LI_002_ValidateOpenManageColumn_LineItemTab"/>
+            <class name="com.paramount.test.ff.uitests.tests.lineitem.TC_LI_003_ValidateStandardViewModeManageColumn_LineItemTab"/>
+            <class name="com.paramount.test.ff.uitests.tests.lineitem.TC_LI_004_ValidateCreateNewTableView_LineItemTab"/>
+            <class name="com.paramount.test.ff.uitests.tests.lineitem.TC_LI_005_ValidateNewCreatedTableViewSelectedByDefault_LineItemTab"/>
+            <class name="com.paramount.test.ff.uitests.tests.lineitem.TC_LI_006_ValidateCreateTableView_LineItemTab"/>
+            <class name="com.paramount.test.ff.uitests.tests.lineitem.TC_LI_007_ValidateSwitchTableView_LineItemTab"/>
+            <class name="com.paramount.test.ff.uitests.tests.lineitem.TC_LI_008_ValidateRenameTableView_LineItemTab"/>
+            <class name="com.paramount.test.ff.uitests.tests.lineitem.TC_LI_009_ValidateDeleteTableView_LineItemTab"/>
+            <class name="com.paramount.test.ff.uitests.tests.lineitem.TC_LI_010_ValidateManageColumnsPanelAndCounter_LineItemTab"/>
+        </classes>
+    </test>
+
+    <!-- Column show/hide: 46 columns (11-102) -->
+    <test verbose="1" name="LineItemTab_Columns" annotations="JDK" preserve-order="true">
+        <classes>
+            <class name="com.paramount.test.ff.uitests.tests.lineitem.columns.TC_LI_011_COL_titleSeasonEpisode_Show"/>
+            <class name="com.paramount.test.ff.uitests.tests.lineitem.columns.TC_LI_012_COL_titleSeasonEpisode_Hide"/>
+            <class name="com.paramount.test.ff.uitests.tests.lineitem.columns.TC_LI_013_COL_season_Show"/>
+            <class name="com.paramount.test.ff.uitests.tests.lineitem.columns.TC_LI_014_COL_season_Hide"/>
+            <class name="com.paramount.test.ff.uitests.tests.lineitem.columns.TC_LI_015_COL_episode_Show"/>
+            <class name="com.paramount.test.ff.uitests.tests.lineitem.columns.TC_LI_016_COL_episode_Hide"/>
+            <class name="com.paramount.test.ff.uitests.tests.lineitem.columns.TC_LI_017_COL_lineItemId_Show"/>
+            <class name="com.paramount.test.ff.uitests.tests.lineitem.columns.TC_LI_018_COL_lineItemId_Hide"/>
+            <class name="com.paramount.test.ff.uitests.tests.lineitem.columns.TC_LI_019_COL_type_Show"/>
+            <class name="com.paramount.test.ff.uitests.tests.lineitem.columns.TC_LI_020_COL_type_Hide"/>
+            <class name="com.paramount.test.ff.uitests.tests.lineitem.columns.TC_LI_021_COL_orderType_Show"/>
+            <class name="com.paramount.test.ff.uitests.tests.lineitem.columns.TC_LI_023_COL_fileName_Show"/>
+            <class name="com.paramount.test.ff.uitests.tests.lineitem.columns.TC_LI_024_COL_fileName_Hide"/>
+            <class name="com.paramount.test.ff.uitests.tests.lineitem.columns.TC_LI_025_COL_submission_Show"/>
+            <class name="com.paramount.test.ff.uitests.tests.lineitem.columns.TC_LI_026_COL_submission_Hide"/>
+            <class name="com.paramount.test.ff.uitests.tests.lineitem.columns.TC_LI_027_COL_orderIdOrder_Show"/>
+            <class name="com.paramount.test.ff.uitests.tests.lineitem.columns.TC_LI_028_COL_orderIdOrder_Hide"/>
+            <class name="com.paramount.test.ff.uitests.tests.lineitem.columns.TC_LI_029_COL_xytechId_Show"/>
+            <class name="com.paramount.test.ff.uitests.tests.lineitem.columns.TC_LI_030_COL_xytechId_Hide"/>
+            <class name="com.paramount.test.ff.uitests.tests.lineitem.columns.TC_LI_031_COL_assetId_Show"/>
+            <class name="com.paramount.test.ff.uitests.tests.lineitem.columns.TC_LI_032_COL_assetId_Hide"/>
+            <class name="com.paramount.test.ff.uitests.tests.lineitem.columns.TC_LI_033_COL_dsid_Show"/>
+            <class name="com.paramount.test.ff.uitests.tests.lineitem.columns.TC_LI_034_COL_dsid_Hide"/>
+            <class name="com.paramount.test.ff.uitests.tests.lineitem.columns.TC_LI_035_COL_orderStartDate_Show"/>
+            <class name="com.paramount.test.ff.uitests.tests.lineitem.columns.TC_LI_036_COL_orderStartDate_Hide"/>
+            <class name="com.paramount.test.ff.uitests.tests.lineitem.columns.TC_LI_037_COL_orderEndDate_Show"/>
+            <class name="com.paramount.test.ff.uitests.tests.lineitem.columns.TC_LI_038_COL_orderEndDate_Hide"/>
+            <class name="com.paramount.test.ff.uitests.tests.lineitem.columns.TC_LI_039_COL_orderLastUpdated_Show"/>
+            <class name="com.paramount.test.ff.uitests.tests.lineitem.columns.TC_LI_041_COL_partner_Show"/>
+            <class name="com.paramount.test.ff.uitests.tests.lineitem.columns.TC_LI_042_COL_partner_Hide"/>
+            <class name="com.paramount.test.ff.uitests.tests.lineitem.columns.TC_LI_043_COL_brand_Show"/>
+            <class name="com.paramount.test.ff.uitests.tests.lineitem.columns.TC_LI_044_COL_brand_Hide"/>
+            <class name="com.paramount.test.ff.uitests.tests.lineitem.columns.TC_LI_045_COL_submittedBy_Show"/>
+            <class name="com.paramount.test.ff.uitests.tests.lineitem.columns.TC_LI_046_COL_submittedBy_Hide"/>
+            <class name="com.paramount.test.ff.uitests.tests.lineitem.columns.TC_LI_047_COL_episodeName_Show"/>
+            <class name="com.paramount.test.ff.uitests.tests.lineitem.columns.TC_LI_048_COL_episodeName_Hide"/>
+            <class name="com.paramount.test.ff.uitests.tests.lineitem.columns.TC_LI_049_COL_contentType_Show"/>
+            <class name="com.paramount.test.ff.uitests.tests.lineitem.columns.TC_LI_051_COL_currentSystem_Show"/>
+            <class name="com.paramount.test.ff.uitests.tests.lineitem.columns.TC_LI_052_COL_currentSystem_Hide"/>
+            <class name="com.paramount.test.ff.uitests.tests.lineitem.columns.TC_LI_053_COL_priority_Show"/>
+            <class name="com.paramount.test.ff.uitests.tests.lineitem.columns.TC_LI_054_COL_priority_Hide"/>
+            <class name="com.paramount.test.ff.uitests.tests.lineitem.columns.TC_LI_055_COL_purchaseOrderId_Show"/>
+            <class name="com.paramount.test.ff.uitests.tests.lineitem.columns.TC_LI_056_COL_purchaseOrderId_Hide"/>
+            <class name="com.paramount.test.ff.uitests.tests.lineitem.columns.TC_LI_057_COL_fastTrack_Show"/>
+            <class name="com.paramount.test.ff.uitests.tests.lineitem.columns.TC_LI_058_COL_fastTrack_Hide"/>
+            <class name="com.paramount.test.ff.uitests.tests.lineitem.columns.TC_LI_059_COL_packageName_Show"/>
+            <class name="com.paramount.test.ff.uitests.tests.lineitem.columns.TC_LI_060_COL_packageName_Hide"/>
+            <class name="com.paramount.test.ff.uitests.tests.lineitem.columns.TC_LI_061_COL_packageId_Show"/>
+            <class name="com.paramount.test.ff.uitests.tests.lineitem.columns.TC_LI_062_COL_packageId_Hide"/>
+            <class name="com.paramount.test.ff.uitests.tests.lineitem.columns.TC_LI_063_COL_endpoint_Show"/>
+            <class name="com.paramount.test.ff.uitests.tests.lineitem.columns.TC_LI_064_COL_endpoint_Hide"/>
+            <class name="com.paramount.test.ff.uitests.tests.lineitem.columns.TC_LI_065_COL_language_Show"/>
+            <class name="com.paramount.test.ff.uitests.tests.lineitem.columns.TC_LI_066_COL_language_Hide"/>
+            <class name="com.paramount.test.ff.uitests.tests.lineitem.columns.TC_LI_071_COL_status_Show"/>
+            <class name="com.paramount.test.ff.uitests.tests.lineitem.columns.TC_LI_073_COL_optional_Show"/>
+            <class name="com.paramount.test.ff.uitests.tests.lineitem.columns.TC_LI_074_COL_optional_Hide"/>
+            <class name="com.paramount.test.ff.uitests.tests.lineitem.columns.TC_LI_075_COL_assignedTo_Show"/>
+            <class name="com.paramount.test.ff.uitests.tests.lineitem.columns.TC_LI_076_COL_assignedTo_Hide"/>
+            <class name="com.paramount.test.ff.uitests.tests.lineitem.columns.TC_LI_078_COL_errorMessage_Hide"/>
+            <class name="com.paramount.test.ff.uitests.tests.lineitem.columns.TC_LI_079_COL_uuid_Show"/>
+            <class name="com.paramount.test.ff.uitests.tests.lineitem.columns.TC_LI_080_COL_uuid_Hide"/>
+            <class name="com.paramount.test.ff.uitests.tests.lineitem.columns.TC_LI_081_COL_editCrid_Show"/>
+            <class name="com.paramount.test.ff.uitests.tests.lineitem.columns.TC_LI_082_COL_editCrid_Hide"/>
+            <class name="com.paramount.test.ff.uitests.tests.lineitem.columns.TC_LI_084_COL_materialId_Hide"/>
+            <class name="com.paramount.test.ff.uitests.tests.lineitem.columns.TC_LI_085_COL_totalSegments_Show"/>
+            <class name="com.paramount.test.ff.uitests.tests.lineitem.columns.TC_LI_086_COL_totalSegments_Hide"/>
+            <class name="com.paramount.test.ff.uitests.tests.lineitem.columns.TC_LI_087_COL_activityType_Show"/>
+            <class name="com.paramount.test.ff.uitests.tests.lineitem.columns.TC_LI_089_COL_cbsId_Show"/>
+            <class name="com.paramount.test.ff.uitests.tests.lineitem.columns.TC_LI_090_COL_cbsId_Hide"/>
+            <class name="com.paramount.test.ff.uitests.tests.lineitem.columns.TC_LI_091_COL_downstreamSystemName_Show"/>
+            <class name="com.paramount.test.ff.uitests.tests.lineitem.columns.TC_LI_092_COL_downstreamSystemName_Hide"/>
+            <class name="com.paramount.test.ff.uitests.tests.lineitem.columns.TC_LI_093_COL_downstreamSystemId_Show"/>
+        </classes>
+    </test>
+
+    <!-- Search: 46 columns (201-246) -->
+    <test verbose="1" name="LineItemTab_Search" annotations="JDK" preserve-order="true">
+        <classes>
+            <class name="com.paramount.test.ff.uitests.tests.lineitem.search.TC_LI_201_SEARCH_titleSeasonEpisode"/>
+            <class name="com.paramount.test.ff.uitests.tests.lineitem.search.TC_LI_202_SEARCH_season"/>
+            <class name="com.paramount.test.ff.uitests.tests.lineitem.search.TC_LI_203_SEARCH_episode"/>
+            <class name="com.paramount.test.ff.uitests.tests.lineitem.search.TC_LI_204_SEARCH_lineItemId"/>
+            <class name="com.paramount.test.ff.uitests.tests.lineitem.search.TC_LI_205_SEARCH_type"/>
+            <class name="com.paramount.test.ff.uitests.tests.lineitem.search.TC_LI_206_SEARCH_orderType"/>
+            <class name="com.paramount.test.ff.uitests.tests.lineitem.search.TC_LI_207_SEARCH_fileName"/>
+            <class name="com.paramount.test.ff.uitests.tests.lineitem.search.TC_LI_208_SEARCH_submission"/>
+            <class name="com.paramount.test.ff.uitests.tests.lineitem.search.TC_LI_209_SEARCH_orderIdOrder"/>
+            <class name="com.paramount.test.ff.uitests.tests.lineitem.search.TC_LI_210_SEARCH_xytechId"/>
+            <class name="com.paramount.test.ff.uitests.tests.lineitem.search.TC_LI_211_SEARCH_assetId"/>
+            <class name="com.paramount.test.ff.uitests.tests.lineitem.search.TC_LI_212_SEARCH_dsid"/>
+            <class name="com.paramount.test.ff.uitests.tests.lineitem.search.TC_LI_213_SEARCH_orderStartDate"/>
+            <class name="com.paramount.test.ff.uitests.tests.lineitem.search.TC_LI_214_SEARCH_orderEndDate"/>
+            <class name="com.paramount.test.ff.uitests.tests.lineitem.search.TC_LI_215_SEARCH_orderLastUpdated"/>
+            <class name="com.paramount.test.ff.uitests.tests.lineitem.search.TC_LI_216_SEARCH_partner"/>
+            <class name="com.paramount.test.ff.uitests.tests.lineitem.search.TC_LI_217_SEARCH_brand"/>
+            <class name="com.paramount.test.ff.uitests.tests.lineitem.search.TC_LI_218_SEARCH_submittedBy"/>
+            <class name="com.paramount.test.ff.uitests.tests.lineitem.search.TC_LI_219_SEARCH_episodeName"/>
+            <class name="com.paramount.test.ff.uitests.tests.lineitem.search.TC_LI_220_SEARCH_contentType"/>
+            <class name="com.paramount.test.ff.uitests.tests.lineitem.search.TC_LI_221_SEARCH_currentSystem"/>
+            <class name="com.paramount.test.ff.uitests.tests.lineitem.search.TC_LI_222_SEARCH_priority"/>
+            <class name="com.paramount.test.ff.uitests.tests.lineitem.search.TC_LI_223_SEARCH_purchaseOrderId"/>
+            <class name="com.paramount.test.ff.uitests.tests.lineitem.search.TC_LI_224_SEARCH_fastTrack"/>
+            <class name="com.paramount.test.ff.uitests.tests.lineitem.search.TC_LI_225_SEARCH_packageName"/>
+            <class name="com.paramount.test.ff.uitests.tests.lineitem.search.TC_LI_226_SEARCH_packageId"/>
+            <class name="com.paramount.test.ff.uitests.tests.lineitem.search.TC_LI_227_SEARCH_endpoint"/>
+            <class name="com.paramount.test.ff.uitests.tests.lineitem.search.TC_LI_228_SEARCH_language"/>
+            <class name="com.paramount.test.ff.uitests.tests.lineitem.search.TC_LI_229_SEARCH_lastUpdated"/>
+            <class name="com.paramount.test.ff.uitests.tests.lineitem.search.TC_LI_230_SEARCH_startTime"/>
+            <class name="com.paramount.test.ff.uitests.tests.lineitem.search.TC_LI_231_SEARCH_status"/>
+            <class name="com.paramount.test.ff.uitests.tests.lineitem.search.TC_LI_232_SEARCH_optional"/>
+            <class name="com.paramount.test.ff.uitests.tests.lineitem.search.TC_LI_233_SEARCH_assignedTo"/>
+            <class name="com.paramount.test.ff.uitests.tests.lineitem.search.TC_LI_234_SEARCH_errorMessage"/>
+            <class name="com.paramount.test.ff.uitests.tests.lineitem.search.TC_LI_235_SEARCH_uuid"/>
+            <class name="com.paramount.test.ff.uitests.tests.lineitem.search.TC_LI_236_SEARCH_editCrid"/>
+            <class name="com.paramount.test.ff.uitests.tests.lineitem.search.TC_LI_237_SEARCH_materialId"/>
+            <class name="com.paramount.test.ff.uitests.tests.lineitem.search.TC_LI_238_SEARCH_totalSegments"/>
+            <class name="com.paramount.test.ff.uitests.tests.lineitem.search.TC_LI_239_SEARCH_activityType"/>
+            <class name="com.paramount.test.ff.uitests.tests.lineitem.search.TC_LI_240_SEARCH_cbsId"/>
+            <class name="com.paramount.test.ff.uitests.tests.lineitem.search.TC_LI_241_SEARCH_downstreamSystemName"/>
+            <class name="com.paramount.test.ff.uitests.tests.lineitem.search.TC_LI_242_SEARCH_downstreamSystemId"/>
+            <class name="com.paramount.test.ff.uitests.tests.lineitem.search.TC_LI_243_SEARCH_vmid"/>
+            <class name="com.paramount.test.ff.uitests.tests.lineitem.search.TC_LI_244_SEARCH_systemStatus"/>
+            <class name="com.paramount.test.ff.uitests.tests.lineitem.search.TC_LI_245_SEARCH_deliveryOffset"/>
+            <class name="com.paramount.test.ff.uitests.tests.lineitem.search.TC_LI_246_SEARCH_notificationStatus"/>
+        </classes>
+    </test>
+
+    <!-- Sort ASC/DESC: 46 columns (301-392) -->
+    <test verbose="1" name="LineItemTab_Sort" annotations="JDK" preserve-order="true">
+        <classes>
+            <class name="com.paramount.test.ff.uitests.tests.lineitem.sort.TC_LI_301_SORT_titleSeasonEpisode_Asc"/>
+            <class name="com.paramount.test.ff.uitests.tests.lineitem.sort.TC_LI_302_SORT_titleSeasonEpisode_Desc"/>
+            <class name="com.paramount.test.ff.uitests.tests.lineitem.sort.TC_LI_303_SORT_season_Asc"/>
+            <class name="com.paramount.test.ff.uitests.tests.lineitem.sort.TC_LI_304_SORT_season_Desc"/>
+            <class name="com.paramount.test.ff.uitests.tests.lineitem.sort.TC_LI_305_SORT_episode_Asc"/>
+            <class name="com.paramount.test.ff.uitests.tests.lineitem.sort.TC_LI_306_SORT_episode_Desc"/>
+            <class name="com.paramount.test.ff.uitests.tests.lineitem.sort.TC_LI_307_SORT_lineItemId_Asc"/>
+            <class name="com.paramount.test.ff.uitests.tests.lineitem.sort.TC_LI_308_SORT_lineItemId_Desc"/>
+            <class name="com.paramount.test.ff.uitests.tests.lineitem.sort.TC_LI_309_SORT_type_Asc"/>
+            <class name="com.paramount.test.ff.uitests.tests.lineitem.sort.TC_LI_310_SORT_type_Desc"/>
+            <class name="com.paramount.test.ff.uitests.tests.lineitem.sort.TC_LI_311_SORT_orderType_Asc"/>
+            <class name="com.paramount.test.ff.uitests.tests.lineitem.sort.TC_LI_312_SORT_orderType_Desc"/>
+            <class name="com.paramount.test.ff.uitests.tests.lineitem.sort.TC_LI_313_SORT_fileName_Asc"/>
+            <class name="com.paramount.test.ff.uitests.tests.lineitem.sort.TC_LI_314_SORT_fileName_Desc"/>
+            <class name="com.paramount.test.ff.uitests.tests.lineitem.sort.TC_LI_315_SORT_submission_Asc"/>
+            <class name="com.paramount.test.ff.uitests.tests.lineitem.sort.TC_LI_316_SORT_submission_Desc"/>
+            <class name="com.paramount.test.ff.uitests.tests.lineitem.sort.TC_LI_317_SORT_orderIdOrder_Asc"/>
+            <class name="com.paramount.test.ff.uitests.tests.lineitem.sort.TC_LI_318_SORT_orderIdOrder_Desc"/>
+            <class name="com.paramount.test.ff.uitests.tests.lineitem.sort.TC_LI_319_SORT_xytechId_Asc"/>
+            <class name="com.paramount.test.ff.uitests.tests.lineitem.sort.TC_LI_320_SORT_xytechId_Desc"/>
+            <class name="com.paramount.test.ff.uitests.tests.lineitem.sort.TC_LI_321_SORT_assetId_Asc"/>
+            <class name="com.paramount.test.ff.uitests.tests.lineitem.sort.TC_LI_322_SORT_assetId_Desc"/>
+            <class name="com.paramount.test.ff.uitests.tests.lineitem.sort.TC_LI_323_SORT_dsid_Asc"/>
+            <class name="com.paramount.test.ff.uitests.tests.lineitem.sort.TC_LI_324_SORT_dsid_Desc"/>
+            <class name="com.paramount.test.ff.uitests.tests.lineitem.sort.TC_LI_325_SORT_orderStartDate_Asc"/>
+            <class name="com.paramount.test.ff.uitests.tests.lineitem.sort.TC_LI_326_SORT_orderStartDate_Desc"/>
+            <class name="com.paramount.test.ff.uitests.tests.lineitem.sort.TC_LI_327_SORT_orderEndDate_Asc"/>
+            <class name="com.paramount.test.ff.uitests.tests.lineitem.sort.TC_LI_328_SORT_orderEndDate_Desc"/>
+            <class name="com.paramount.test.ff.uitests.tests.lineitem.sort.TC_LI_329_SORT_orderLastUpdated_Asc"/>
+            <class name="com.paramount.test.ff.uitests.tests.lineitem.sort.TC_LI_330_SORT_orderLastUpdated_Desc"/>
+            <class name="com.paramount.test.ff.uitests.tests.lineitem.sort.TC_LI_331_SORT_partner_Asc"/>
+            <class name="com.paramount.test.ff.uitests.tests.lineitem.sort.TC_LI_332_SORT_partner_Desc"/>
+            <class name="com.paramount.test.ff.uitests.tests.lineitem.sort.TC_LI_333_SORT_brand_Asc"/>
+            <class name="com.paramount.test.ff.uitests.tests.lineitem.sort.TC_LI_334_SORT_brand_Desc"/>
+            <class name="com.paramount.test.ff.uitests.tests.lineitem.sort.TC_LI_335_SORT_submittedBy_Asc"/>
+            <class name="com.paramount.test.ff.uitests.tests.lineitem.sort.TC_LI_336_SORT_submittedBy_Desc"/>
+            <class name="com.paramount.test.ff.uitests.tests.lineitem.sort.TC_LI_337_SORT_episodeName_Asc"/>
+            <class name="com.paramount.test.ff.uitests.tests.lineitem.sort.TC_LI_338_SORT_episodeName_Desc"/>
+            <class name="com.paramount.test.ff.uitests.tests.lineitem.sort.TC_LI_339_SORT_contentType_Asc"/>
+            <class name="com.paramount.test.ff.uitests.tests.lineitem.sort.TC_LI_340_SORT_contentType_Desc"/>
+            <class name="com.paramount.test.ff.uitests.tests.lineitem.sort.TC_LI_341_SORT_currentSystem_Asc"/>
+            <class name="com.paramount.test.ff.uitests.tests.lineitem.sort.TC_LI_342_SORT_currentSystem_Desc"/>
+            <class name="com.paramount.test.ff.uitests.tests.lineitem.sort.TC_LI_343_SORT_priority_Asc"/>
+            <class name="com.paramount.test.ff.uitests.tests.lineitem.sort.TC_LI_344_SORT_priority_Desc"/>
+            <class name="com.paramount.test.ff.uitests.tests.lineitem.sort.TC_LI_345_SORT_purchaseOrderId_Asc"/>
+            <class name="com.paramount.test.ff.uitests.tests.lineitem.sort.TC_LI_346_SORT_purchaseOrderId_Desc"/>
+            <class name="com.paramount.test.ff.uitests.tests.lineitem.sort.TC_LI_347_SORT_fastTrack_Asc"/>
+            <class name="com.paramount.test.ff.uitests.tests.lineitem.sort.TC_LI_348_SORT_fastTrack_Desc"/>
+            <class name="com.paramount.test.ff.uitests.tests.lineitem.sort.TC_LI_349_SORT_packageName_Asc"/>
+            <class name="com.paramount.test.ff.uitests.tests.lineitem.sort.TC_LI_350_SORT_packageName_Desc"/>
+            <class name="com.paramount.test.ff.uitests.tests.lineitem.sort.TC_LI_351_SORT_packageId_Asc"/>
+            <class name="com.paramount.test.ff.uitests.tests.lineitem.sort.TC_LI_352_SORT_packageId_Desc"/>
+            <class name="com.paramount.test.ff.uitests.tests.lineitem.sort.TC_LI_353_SORT_endpoint_Asc"/>
+            <class name="com.paramount.test.ff.uitests.tests.lineitem.sort.TC_LI_354_SORT_endpoint_Desc"/>
+            <class name="com.paramount.test.ff.uitests.tests.lineitem.sort.TC_LI_355_SORT_language_Asc"/>
+            <class name="com.paramount.test.ff.uitests.tests.lineitem.sort.TC_LI_356_SORT_language_Desc"/>
+            <class name="com.paramount.test.ff.uitests.tests.lineitem.sort.TC_LI_357_SORT_lastUpdated_Asc"/>
+            <class name="com.paramount.test.ff.uitests.tests.lineitem.sort.TC_LI_358_SORT_lastUpdated_Desc"/>
+            <class name="com.paramount.test.ff.uitests.tests.lineitem.sort.TC_LI_359_SORT_startTime_Asc"/>
+            <class name="com.paramount.test.ff.uitests.tests.lineitem.sort.TC_LI_360_SORT_startTime_Desc"/>
+            <class name="com.paramount.test.ff.uitests.tests.lineitem.sort.TC_LI_361_SORT_status_Asc"/>
+            <class name="com.paramount.test.ff.uitests.tests.lineitem.sort.TC_LI_362_SORT_status_Desc"/>
+        </classes>
+    </test>
+</suite>

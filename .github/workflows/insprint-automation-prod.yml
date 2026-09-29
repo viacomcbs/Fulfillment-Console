@@ -1,0 +1,97 @@
+# Run in-sprint story/defect suites (Synergy).
+#
+# Prerequisites: self-hosted runner [self-hosted, linux, synergy]
+
+name: In-Sprint Automation
+
+on:
+  workflow_dispatch:
+    inputs:
+      jira_key:
+        description: Jira story/defect suite
+        required: true
+        default: BSD-30019
+        type: choice
+        options:
+          - BSD-29870
+          - BSD-29967
+          - BSD-28459
+          - BSD-29441_Orders
+          - BSD-29441_LineItems
+          - BSD-29582
+          - BSD-30019
+      test_environment:
+        description: Target environment
+        required: true
+        default: UAT
+        type: choice
+        options:
+          - PROD
+          - UAT
+          - DEV
+      email:
+        description: Report email recipient
+        required: true
+        default: Akilandeswari.Sundararajan@paramount.com
+
+jobs:
+  run-insprint-suite:
+    name: ${{ github.event.inputs.jira_key }}
+    runs-on: [self-hosted, linux, synergy]
+    timeout-minutes: 240
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up JDK 11
+        uses: actions/setup-java@v4
+        with:
+          distribution: corretto
+          java-version: '11'
+          cache: maven
+
+      - name: Resolve suite XML
+        id: suite
+        run: |
+          case "${{ github.event.inputs.jira_key }}" in
+            BSD-29441_Orders) FILE="BSD-29441_Orders_ProdServerSuite.xml" ;;
+            BSD-29441_LineItems) FILE="BSD-29441_LineItems_ProdServerSuite.xml" ;;
+            BSD-29582) FILE="BSD-29582_TableRefresh_ProdServerSuite.xml" ;;
+            BSD-30019) FILE="BSD-30019" ;;
+            *) FILE="${{ github.event.inputs.jira_key }}_ProdServerSuite.xml" ;;
+          esac
+          echo "path=${FILE}" >> "$GITHUB_OUTPUT"
+
+      - name: Run BSD-30019 (3 sessions + combined email)
+        if: steps.suite.outputs.path == 'BSD-30019'
+        env:
+          TEST_ENV: ${{ github.event.inputs.test_environment }}
+          REPORT_EMAIL: ${{ github.event.inputs.email }}
+        run: |
+          mvn -B test-compile
+          chmod +x scripts/run-bsd-30019.sh
+          ./scripts/run-bsd-30019.sh "${REPORT_EMAIL}" "${TEST_ENV}"
+
+      - name: Run TestNG suite
+        if: steps.suite.outputs.path != 'BSD-30019'
+        env:
+          SUITE: src/test/resources/insprint-automation/${{ steps.suite.outputs.path }}
+          TEST_ENV: ${{ github.event.inputs.test_environment }}
+          REPORT_EMAIL: ${{ github.event.inputs.email }}
+        run: |
+          mvn -B test-compile
+          mvn -B test \
+            "-DsuiteXmlFile=${SUITE}" \
+            "-Dsystem.test.testenvironment=${TEST_ENV}" \
+            "-Dsystem.test.sendreportautoemails=true" \
+            "-Dsystem.test.sendreportemailaddress=${REPORT_EMAIL}"
+
+      - name: Upload Allure results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: allure-${{ github.event.inputs.jira_key }}
+          path: |
+            allure-results/
+            target/surefire-reports/
+            test-output/screenshots/
+          if-no-files-found: warn

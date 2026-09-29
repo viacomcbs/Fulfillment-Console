@@ -3,12 +3,12 @@ package com.paramount.test.ff.uitests.tests.leftfiltersvalidation.perfilter.orde
 import com.paramount.test.ff.common.util.SoftAssert;
 import com.paramount.test.ff.uitests.helpers.leftfilters.ConsoleTab;
 import com.paramount.test.ff.uitests.helpers.leftfilters.OrdersLeftFilter;
-import com.paramount.test.ff.uitests.tests.leftfiltersvalidation.perfilter.orders.LeftFilterOrdersTabBaseTest;
+
 import io.qameta.allure.Description;
 import org.testng.annotations.Test;
 
 /** TC117 — ErrorMessage Basic. */
-public class LF_O_TC117_ErrorMessage_BasicTest extends LeftFilterOrdersTabBaseTest {
+public class LF_O_TC117_ErrorMessage_BasicTest extends LeftFilterErrorMessageOrdersTabBaseTest {
 
     private static final String FILTER = OrdersLeftFilter.ERROR_MESSAGE.getDisplayName();
     private static final int FILTER_INDEX = 17;

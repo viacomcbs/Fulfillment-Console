@@ -1,0 +1,21 @@
+﻿{
+    "jobName":  "weekly-wsr-update",
+    "agentId":  "update-wsr",
+    "agentTitle":  "Update WSR",
+    "prompt":  "Update WSR - prepare copy-paste weekly status report content for Akilandeswari Sundararajan (Fulfillment Console, Admin Console, MSC Fulfillment Performance, Linear Console, AI Chatbot). Use last completed Thu-Wed week. After preparing the WSR copy-paste content, send the complete weekly summary to Slack channel #qa_automation_status_go using Slack MCP (slack_send_message). Also send the same summary to Akilandeswari.Sundararajan@paramount.com and to Slack via email qa_automation_status_-aaaagmcoe366ao4pdnt2t5ikp4@viacomcbs.org.slack.com.",
+    "workspace":  "fulfillment",
+    "schedule":  {
+                     "frequency":  "weekly",
+                     "time":  "09:00",
+                     "timezone":  "India Standard Time",
+                     "daysOfWeek":  [
+                                        "Thursday"
+                                    ],
+                     "startDate":  "2026-09-10"
+                 },
+    "notifications":  {
+                          "slackChannel":  "#qa_automation_status_go",
+                          "reportEmail":  "Akilandeswari.Sundararajan@paramount.com",
+                          "slackEmail":  "qa_automation_status_-aaaagmcoe366ao4pdnt2t5ikp4@viacomcbs.org.slack.com"
+                      }
+}

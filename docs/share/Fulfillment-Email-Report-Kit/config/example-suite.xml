@@ -1,0 +1,25 @@
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<suite name="My App Regression" parallel="false" preserve-order="true">
+
+    <!-- Email -->
+    <parameter name="SendReportAutoEmails" value="true"/>
+    <parameter name="SendReportEmailAddress" value="your.name@paramount.com,teammate@paramount.com"/>
+
+    <!-- Scenario table (ON by default; set false to disable) -->
+    <parameter name="LeftFilterEmailSuiteTitle" value="My App — Smoke Tests"/>
+
+    <parameter name="TestEnvironment" value="UAT"/>
+    <parameter name="ApplicationTitle" value="My Application"/>
+
+    <listeners>
+        <listener class-name="com.yourteam.test.listeners.AllureListeners"/>
+        <listener class-name="com.yourteam.test.listeners.SuiteListeners"/>
+        <listener class-name="com.yourteam.test.listeners.ScenarioEmailSuiteListener"/>
+    </listeners>
+
+    <test name="Smoke" preserve-order="true">
+        <classes>
+            <class name="com.yourteam.test.Login_ValidUserTest"/>
+        </classes>
+    </test>
+</suite>

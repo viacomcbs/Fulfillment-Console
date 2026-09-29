@@ -5,12 +5,12 @@ import com.paramount.test.ff.uitests.helpers.leftfilters.ConsoleTab;
 import com.paramount.test.ff.uitests.helpers.leftfilters.OrdersLeftFilter;
 import com.paramount.test.ff.uitests.helpers.leftfilters.LeftFilterPerFilterTestRunner;
 import com.paramount.test.ff.uitests.helpers.leftfilters.LeftFilterTestCategory;
-import com.paramount.test.ff.uitests.tests.leftfiltersvalidation.perfilter.orders.LeftFilterOrdersTabBaseTest;
+import com.paramount.test.ff.uitests.tests.leftfiltersvalidation.perfilter.orders.systemname.LeftFilterSystemNameOrdersTabBaseTest;
 import io.qameta.allure.Description;
 import org.testng.annotations.Test;
 
 /** TC1114 — SystemName Clear filters. */
-public class LF_O_TC1114_SystemName_ClearFiltersTest extends LeftFilterOrdersTabBaseTest {
+public class LF_O_TC1114_SystemName_ClearFiltersTest extends LeftFilterSystemNameOrdersTabBaseTest {
 
     private static final String FILTER = OrdersLeftFilter.SYSTEM_NAME.getDisplayName();
     private static final int FILTER_INDEX = 14;

@@ -1,0 +1,37 @@
+OLD:
+    private String resolveFirstNonZeroFilterOption(String filterName) throws InterruptedException {
+        List<String> allNonZero = resolveAllNonZeroFilterOptions(filterName);
+        if (allNonZero.isEmpty()) {
+            return null;
+        }
+        return LeftFilterOptionRotationUtil.pickNext(filterName, allNonZero, 1).getFirstOrNull();
+    }
+
+NEW:
+    private String resolveFirstNonZeroFilterOption(String filterName) throws InterruptedException {
+        List<String> allNonZero = resolveAllNonZeroFilterOptions(filterName);
+        if (allNonZero.isEmpty()) {
+            return null;
+        }
+        return LeftFilterOptionRotationUtil.pickNext(filterName, allNonZero, 1).getFirstOrNull();
+    }
+
+    /**
+     * Table sync setup: reuse preserved selection in keep-expanded suites; otherwise clear and pick first non-zero.
+     * FC preserves checkbox selection until Clear or manual unselect — no re-check polling after click.
+     */
+    private String resolveTableSyncOptionLabel(String filterName) throws InterruptedException {
+        if (LeftFilterSessionHelper.shouldKeepFilterExpanded(filterName)) {
+            String preserved = resolveFirstSelectedNonZeroFilterOption(filterName);
+            if (preserved != null) {
+                Logger.logReportMessage("Table sync — reusing preserved " + filterName + " selection: " + preserved);
+                return preserved;
+            }
+        }
+        ensureNoOptionsSelected(filterName);
+        String optionLabel = resolveFirstNonZeroFilterOption(filterName);
+        if (optionLabel != null) {
+            selectFilterOption(filterName, optionLabel);
+        }
+        return optionLabel;
+    }

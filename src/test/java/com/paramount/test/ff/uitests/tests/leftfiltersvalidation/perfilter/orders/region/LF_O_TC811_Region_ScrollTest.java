@@ -5,12 +5,12 @@ import com.paramount.test.ff.uitests.helpers.leftfilters.ConsoleTab;
 import com.paramount.test.ff.uitests.helpers.leftfilters.OrdersLeftFilter;
 import com.paramount.test.ff.uitests.helpers.leftfilters.LeftFilterPerFilterTestRunner;
 import com.paramount.test.ff.uitests.helpers.leftfilters.LeftFilterTestCategory;
-import com.paramount.test.ff.uitests.tests.leftfiltersvalidation.perfilter.orders.LeftFilterOrdersTabBaseTest;
+import com.paramount.test.ff.uitests.tests.leftfiltersvalidation.perfilter.orders.region.LeftFilterRegionOrdersTabBaseTest;
 import io.qameta.allure.Description;
 import org.testng.annotations.Test;
 
 /** TC811 — Region Scroll. */
-public class LF_O_TC811_Region_ScrollTest extends LeftFilterOrdersTabBaseTest {
+public class LF_O_TC811_Region_ScrollTest extends LeftFilterRegionOrdersTabBaseTest {
 
     private static final String FILTER = OrdersLeftFilter.REGION.getDisplayName();
     private static final int FILTER_INDEX = 11;

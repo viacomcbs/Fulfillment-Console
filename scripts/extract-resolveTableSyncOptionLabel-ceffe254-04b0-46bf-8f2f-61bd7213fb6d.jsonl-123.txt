@@ -1,0 +1,20 @@
+FIELD: new_string
+FILE: C:\Users\10747125\.cursor\projects\c-FulfillmentConsole-Fulfillment-Console\agent-transcripts\ceffe254-04b0-46bf-8f2f-61bd7213fb6d\ceffe254-04b0-46bf-8f2f-61bd7213fb6d.jsonl
+LINE: 123
+
+        if (!isFilterExpanded(filterName)) {
+            Verify.softAssert(false, filterName + " filter could not be expanded for TC619");
+            return;
+        }
+
+        String optionLabel = resolveTableSyncOptionLabel(filterName);
+        if (optionLabel == null) {
+            Logger.logMessage(filterName + " has no options with count > 0 — skipping TC619");
+            collapseFilter(filterName);
+            return;
+        }
+
+        int filterOptionCount = getFilterOptionCount(filterName, optionLabel);
+        Verify.softAssert(filterOptionCount > 0,
+                filterName + " option '" + optionLabel + "' has count > 0 (actual=" + filterOptionCount + ")");
+        Logger.logMessage(filterName + " TC619 option='" + optionLabel + "' filterCount=" + filterOptionCount);

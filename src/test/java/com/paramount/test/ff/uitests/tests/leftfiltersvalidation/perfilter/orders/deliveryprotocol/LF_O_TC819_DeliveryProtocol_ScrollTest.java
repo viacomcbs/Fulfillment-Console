@@ -5,12 +5,12 @@ import com.paramount.test.ff.uitests.helpers.leftfilters.ConsoleTab;
 import com.paramount.test.ff.uitests.helpers.leftfilters.OrdersLeftFilter;
 import com.paramount.test.ff.uitests.helpers.leftfilters.LeftFilterPerFilterTestRunner;
 import com.paramount.test.ff.uitests.helpers.leftfilters.LeftFilterTestCategory;
-import com.paramount.test.ff.uitests.tests.leftfiltersvalidation.perfilter.orders.LeftFilterOrdersTabBaseTest;
+import com.paramount.test.ff.uitests.tests.leftfiltersvalidation.perfilter.orders.deliveryprotocol.LeftFilterDeliveryProtocolOrdersTabBaseTest;
 import io.qameta.allure.Description;
 import org.testng.annotations.Test;
 
 /** TC819 — DeliveryProtocol Scroll. */
-public class LF_O_TC819_DeliveryProtocol_ScrollTest extends LeftFilterOrdersTabBaseTest {
+public class LF_O_TC819_DeliveryProtocol_ScrollTest extends LeftFilterDeliveryProtocolOrdersTabBaseTest {
 
     private static final String FILTER = OrdersLeftFilter.DELIVERY_PROTOCOL.getDisplayName();
     private static final int FILTER_INDEX = 19;

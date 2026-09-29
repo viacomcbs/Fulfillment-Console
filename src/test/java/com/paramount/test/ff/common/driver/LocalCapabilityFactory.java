@@ -20,6 +20,7 @@ import com.synergy.core.driver.AssetRequestPollerResults;
 import com.synergy.core.driver.DeviceCapabilities;
 import com.synergy.core.driver.web.WebDriver;
 import com.paramount.test.ff.common.base.BaseTest;
+import com.paramount.test.ff.uitests.helpers.leftfilters.LeftFilterSessionHelper;
 
 public class LocalCapabilityFactory {
     public static final int DEFAULT_ELEMENT_TIMEOUT = 60000; // 60000
@@ -70,6 +71,7 @@ public class LocalCapabilityFactory {
                 + " execution - Desktop Caps are :" + capabilities.getCapabilitiesAsJSON());
         //BaseTest.webDriver.set(new WebDriver(TestUtil.getServerUrl(), capabilities));
         BaseTest.driver.set(new WebDriver(assetRequestPollerResults));
+        LeftFilterSessionHelper.markSynergySessionStartedIfUnset();
         BaseTest.driver.get().options().setCommandTimeout(COMMAND_TIMEOUT);
         BaseTest.driver.get().options().setElementTimeout(DEFAULT_ELEMENT_TIMEOUT);
         BaseTest.driver.get().options().setElementPollInterval(DEFAULT_ELEMENT_POLLTIME);

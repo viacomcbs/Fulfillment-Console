@@ -45,42 +45,78 @@ Workflow file: `.github/workflows/order-status-left-filter-prod.yml`
 
 After push to `main`/`master`, open **Actions** tab in GitHub.
 
-## Run Orders-view left-filter regression (8 suite XMLs)
+## Run Orders-view left-filter regression (Core 8 filters, PROD)
 
-Workflow: **Left Filter Regression — Orders View**  
+Workflow: **Left Filter Regression — Orders Core 8 PROD**  
 File: `.github/workflows/left-filter-regression-orders-prod.yml`
 
-Suites under `src/test/resources/regression/left-filters/orders-view/`:
+Suite: `src/test/resources/regression/left-filters/orders-view/LF_O_Core8_LeftFilters_ProdServerSuite.xml`
 
-| Filter | Suite XML |
-|--------|-----------|
-| Activity Type | `LF_O_ActivityType_All_ProdServerSuite.xml` |
-| Assigned To | `LF_O_AssignedTo_All_ProdServerSuite.xml` |
-| Brand | `LF_O_Brand_All_ProdServerSuite.xml` |
-| Environment | `LF_O_Environment_All_ProdServerSuite.xml` |
-| Flag | `LF_O_Flag_All_ProdServerSuite.xml` |
-| Line Item Status | `LF_O_LineItemStatus_All_ProdServerSuite.xml` |
-| Order Status | `LF_O_OrderStatus_All_ProdServerSuite.xml` |
-| Submitted By | `LF_O_SubmittedBy_All_ProdServerSuite.xml` |
+**Included filters (61 tests, one browser session):**
 
-### Step 1 — run one suite first (recommended)
+| Filter | Tests |
+|--------|------:|
+| Activity Type | 8 |
+| Assigned To | 8 |
+| Brand | 8 |
+| Environment | 8 |
+| Flag | 8 |
+| Line Item Status | 8 |
+| Order Status | 7 |
+| Submitted By | 8 |
 
-1. **Actions** → **Left Filter Regression — Orders View** → **Run workflow**
-2. Branch: **`Akila_FulfillmentConsole`** (or your feature branch)
-3. **run_mode:** `single`
-4. **suite_xml:** pick one filter, e.g. `LF_O_Flag_All_ProdServerSuite.xml`
-5. **test_environment:** `PROD`
-6. **email:** your report address
-7. **Run workflow**
+**Excluded for now:** Error Message (run separately when UAT/PROD data is stable).
 
-You get one job, one email with scenario table, one Allure artifact.
+### Reports
 
-### Step 2 — run all 8 suites in parallel
+- **Email:** HTML scenario table via `SendReportAutoEmails=true` (same as local Synergy runs)
+- **Slack:** Summary posted when `SendChatReport=true` and secrets are set (via Synergy `SlackMessenger`)
 
-Same workflow, set **run_mode:** `all_parallel`.  
-GitHub starts **8 jobs** (one JVM per filter — safe for shared left-filter session).
+### Repository secrets (Actions → Secrets)
 
-Each job needs a self-hosted runner with label `synergy`. If you only have **one** runner, jobs queue and run one after another (still works, just slower).
+| Secret | Purpose |
+|--------|---------|
+| `SLACK_WEBHOOK_URL` | Incoming webhook for Slack channel (ask lead / Ravi for URL) |
+| `SYNERGY_USER_KEY` | Optional override of suite XML UserKey |
+| `FF_USERNAME` / `FF_PASSWORD` | Optional — move credentials out of suite XML later |
+
+**Variables (optional):** set `SLACK_CHANNEL` on the runner env, or pass **slack_channel** when using **Run workflow**.
+
+Maven/Nexus: self-hosted runner must reach `nexus.mtvi.com` or have `~/.m2` pre-populated (same as Jenkins `settings.xml`).
+
+### Manual run (GitHub Actions)
+
+1. **Actions** → **Left Filter Regression — Orders Core 8 PROD** → **Run workflow**
+2. Branch: your feature branch (e.g. `Akila_FulfillmentConsole`)
+3. **email:** report recipient
+4. **slack_channel:** e.g. `#your-team-channel`
+5. **Run workflow**
+
+Scheduled: **weekdays 11:00 UTC** (adjust cron in workflow after lead confirms time).
+
+### Local / Maven (single suite, PROD)
+
+```powershell
+.\scripts\run-orders-left-filter-regression-all.ps1 -Email "you@paramount.com" -Environment PROD
+```
+
+Or:
+
+```powershell
+mvn test "-DsuiteXmlFile=src/test/resources/regression/left-filters/orders-view/LF_O_Core8_LeftFilters_ProdServerSuite.xml"
+```
+
+Full suite including Error Message: `LF_O_All_LeftFilters_ProdServerSuite.xml` (69 tests).
+
+---
+
+## Legacy: per-filter suite XMLs (removed)
+
+Per-filter files such as `LF_O_Flag_All_ProdServerSuite.xml` were consolidated. Regenerate suites with:
+
+```powershell
+python scripts/generate_regression_suite_xml.py
+```
 
 ## Run Order Status left-filter tests (parallel)
 

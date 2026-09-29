@@ -113,19 +113,23 @@ public final class LeftFilterPerFilterTestRunner {
 
     private static void runTableSync(SoftAssert softAssert, LeftFilterPanelUtil panelUtil, String filterName,
                                      LeftFilterPerFilterConfig.FilterSpec spec) throws InterruptedException {
-        String option = resolveSampleOption(panelUtil, filterName, spec);
-        panelUtil.validateTableRecordCountReflectsFilter(softAssert, filterName, option);
+        runTableSyncOnly(softAssert, panelUtil, filterName, spec);
+    }
+
+    /** Standalone table sync when search step did not produce a selected option (range filters, skipped search). */
+    public static void runTableSyncOnly(SoftAssert softAssert, LeftFilterPanelUtil panelUtil, String filterName,
+                                        LeftFilterPerFilterConfig.FilterSpec spec) throws InterruptedException {
         String tableColumn = spec.getTableColumn();
         if (tableColumn != null && !tableColumn.isBlank()) {
-            panelUtil.validateTableRecordsMatchFilter(softAssert, filterName, option, tableColumn);
+            panelUtil.validateOrderLevelColumnTableSyncSmoke(softAssert, filterName, tableColumn);
         } else {
-            Logger.logMessage(filterName + " has no table column — skipping row/cell value checks (count-only sync)");
+            panelUtil.validateCountOnlyTableSyncSmoke(softAssert, filterName);
         }
     }
 
     private static void runActiveFilters(SoftAssert softAssert, LeftFilterPanelUtil panelUtil, String filterName,
                                          LeftFilterPerFilterConfig.FilterSpec spec) throws InterruptedException {
-        panelUtil.validateActiveFiltersTwoOptions(softAssert, filterName);
+        panelUtil.validateActiveFiltersForPreservedSelection(softAssert, filterName);
     }
 
     private static String resolveSampleOption(LeftFilterPanelUtil panelUtil, String filterName,

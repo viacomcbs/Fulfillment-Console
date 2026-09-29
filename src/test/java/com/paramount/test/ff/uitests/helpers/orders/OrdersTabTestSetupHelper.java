@@ -44,7 +44,18 @@ public final class OrdersTabTestSetupHelper extends BaseTest {
     }
 
     public boolean waitForLoginReadyForLeftFilters() throws InterruptedException {
-        ensureFulfillmentConsoleReady();
+        return waitForLoginReadyForLeftFilters(false);
+    }
+
+    /**
+     * @param skipHeavyPostLoadWait when true, skips the extra 30s+15s post-load wait (already done before calendar).
+     */
+    public boolean waitForLoginReadyForLeftFilters(boolean skipHeavyPostLoadWait) throws InterruptedException {
+        if (skipHeavyPostLoadWait) {
+            WaitUtil.waitForJSToLoad(5);
+        } else {
+            ensureFulfillmentConsoleReady();
+        }
         for (int attempt = 1; attempt <= 3; attempt++) {
             if (pollForFulfillmentAppShell(APP_SHELL_POLL_SECONDS) && anchorLeftFilterPanel()) {
                 Logger.logReportMessage("Login ready — filter panel anchored (attempt " + attempt + ")");

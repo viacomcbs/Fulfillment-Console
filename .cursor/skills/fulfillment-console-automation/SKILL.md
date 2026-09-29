@@ -13,6 +13,8 @@ Synergy **Java + TestNG** UI automation for **Fulfillment Console** (MSC Operati
 Pair with manual skill: `.cursor/skills/fulfillment-console-manual-testing/SKILL.md`.
 Session evidence: `docs/manual-testing/SESSION_NOTES.md`.
 
+**Runbooks:** [All 5 LF batches → one deferred email](references/LF_Orders_5Batch_Deferred_Email_Runbook.md) (`-SkipEmail` per batch, merge snapshots, `send-daily-consolidated-email.ps1`).
+
 ## Stack & layout
 
 | Layer | Location |
@@ -21,7 +23,9 @@ Session evidence: `docs/manual-testing/SESSION_NOTES.md`.
 | Helpers | `src/test/java/com/paramount/test/ff/uitests/helpers/` |
 | Left-filter tests | `.../uitests/tests/leftfiltersvalidation/perfilter/` |
 | DSID / BSD-29967 | `.../uitests/tests/tablevalidation/dsid/`, `.../tablevalidation/bsd29967/` |
-| Suite XML | `src/test/resources/regression/left-filters/orders-view/*_All_ProdServerSuite.xml`, other `*_DevServerSuite.xml` |
+| **In-sprint automation (BSD-*)** | `src/test/resources/insprint-automation/` — one XML per story/defect; run via GHA **In-Sprint Automation** or `scripts/run-bsd-30019.ps1` |
+| Left-filter regression | `src/test/resources/regression/left-filters/orders-view/`, `.../line-items-view/` |
+| Suite XML (legacy note) | Do not add new suites outside `insprint-automation/` or `regression/left-filters/` |
 | Manage columns | `.../helpers/managecolumns/ManageColumnOptions.java`, `ManageColumnsUtil.java` |
 | Left filters | `.../helpers/leftfilters/LeftFilterPanelUtil.java`, `LeftFilterPerFilterConfig.java` |
 | Story specs | `docs/automation/BSD-29967_Automation_Spec.md` |
@@ -40,7 +44,7 @@ Session evidence: `docs/manual-testing/SESSION_NOTES.md`.
 
 Login: service account from suite `Username` / `Password`.
 
-**Ops-console (BSD-29967):** `https://contentplatform.viacom.com/ops-console-api-dev-ui/order/{orderId}` — separate tab; may need SSO in same browser session.
+**Ops-console (BSD-29967):** UAT FC → `https://uat.contentplatform.viacom.com/ops-console-api-dev-ui/order/{orderId}` · DEV/PROD FC → `https://contentplatform.viacom.com/ops-console-api-dev-ui/order/{orderId}` (separate tab; may need SSO in same browser session).
 
 ---
 
@@ -102,11 +106,17 @@ Login: service account from suite `Username` / `Password`.
 - **Assigned To only:** `resolveFirstNonZeroPersonFilterOption` (internal) — skips `All` **and** `Unassigned`.
 - **Assigned To only:** `resolveUnassignedFilterOption` (internal) — `Unassigned` with count &gt; 0.
 
-**Active filters (TC10xx):** expand **Active filters** button so `#collapsePanel` chips are visible before asserting chips.
+**Suite execution order (all left filters — Orders + Line Items):**  
+Basic → Option order → Scroll → Search → Table sync → Active filters → Clear → Select all.  
+Apply in every per-class suite XML; reorder helper: `scripts/reorder-left-filter-suite-xml.ps1`.
+
+**Table sync (TC6xx):** filter option count must match table total; **one visible order row** column check is enough (not every row).
+
+**Active filters (TC10xx):** verify the **currently selected option(s)** from prior steps appear as chips in `#collapsePanel` — use `validateActiveFiltersForPreservedSelection()`.
+
+**Clear filters (TC11xx):** smoke only — active filters has chip(s) and **Clear** control is visible/clickable (`validateClearFiltersControlAvailable()`); no post-clear chip assertion.
 
 **Environment TC603 / TC609:** count-only or custom smoke — Environment is **not** on Orders grid; no column value checks.
-
-**Clear filters (TC11xx):** use `WaitUtil.isDisplayFast` for post-clear UI settle (Environment suite had 2‑min wait bug — fixed).
 
 **Initials helper (shared):** `toSubmittedByTableInitials(fullName)` — e.g. `Akilandeswari Sundararajan` → `AS`. Reused for **Submitted By** and **Assigned To** (person path).
 
@@ -116,16 +126,16 @@ Login: service account from suite `Username` / `Password`.
 
 From `LeftFilterTestCategory`:
 
-| Offset | Category | Submitted By (idx 5) | Assigned To (idx 9) |
-|--------|----------|----------------------|---------------------|
-| 1xx | BASIC | TC105 | TC109 |
-| 1x+1 | OPTION_ORDER | TC106 | TC110 |
-| 2xx | SEARCH | TC205 | TC209 |
-| 4xx | SELECT_ALL | TC405 | TC409 |
-| 6xx | TABLE_SYNC | TC605 | TC609 |
-| 8xx | SCROLL | TC805 | TC809 |
-| 10xx | ACTIVE_FILTERS | TC1005 | TC1009 |
-| 11xx | CLEAR_FILTERS | TC1105 | TC1109 |
+| Run order | Category | Submitted By (idx 5) | Assigned To (idx 9) |
+|-----------|----------|----------------------|---------------------|
+| 1 | BASIC | TC105 | TC109 |
+| 2 | OPTION_ORDER | TC106 | TC110 |
+| 3 | SCROLL | TC805 | TC809 |
+| 4 | SEARCH | TC205 | TC209 |
+| 5 | TABLE_SYNC | TC605 | TC609 |
+| 6 | ACTIVE_FILTERS | TC1005 | TC1009 |
+| 7 | CLEAR_FILTERS | TC1105 | TC1109 |
+| 8 | SELECT_ALL | TC405 | TC409 |
 
 Filter index = position in `OrdersLeftFilter` enum (1-based for TC id middle digit).
 
@@ -197,6 +207,42 @@ Filter index = position in `OrdersLeftFilter` enum (1-based for TC id middle dig
 
 - Line-item column on Orders tab (ORDER_LINE_ITEM flat list).
 - Table sync reads **expanded row** line-item values; may use Details panel Line Item ID for cross-check.
+
+---
+
+## In-sprint automation — BSD-30019 (Error message)
+
+**Category:** `src/test/resources/insprint-automation/` (not left-filter regression)  
+**Jira:** BSD-30019 — Error code functionality mismatch between table and left filter  
+**Spec:** `docs/automation/BSD-30019_ErrorMessage_QA_TestCases.md`  
+**Environment:** UAT (default); override with `-Environment PROD` on script  
+**Email title:** `BSD-30019 — Error code functionality mismatch between table and left filter`
+
+| Session | Suite XML | Tests |
+|---------|-----------|-------|
+| 1 — Orders per-filter | `BSD-30019_OrdersPerFilter_ProdServerSuite.xml` | 8 |
+| 2 — Line Items per-filter | `BSD-30019_LineItemsPerFilter_ProdServerSuite.xml` | 8 |
+| 3 — Story validation | `BSD-30019_StoryValidation_ProdServerSuite.xml` | 6 |
+| Email only | `BSD-30019_SendCombinedEmail_ProdServerSuite.xml` | merges 3 sessions → **1 email** |
+
+**Run (local / Synergy):**
+
+```powershell
+.\scripts\run-bsd-30019.ps1 -Email "you@paramount.com"
+```
+
+**GHA:** workflow **In-Sprint Automation** → choose `BSD-30019` → runs `scripts/run-bsd-30019.sh`.
+
+**Code map:**
+
+| Artifact | Purpose |
+|----------|---------|
+| `ErrorMessageBsd30019Util` | Story validation (count sync, code in column, `[No Value]`) |
+| `LeftFilterErrorMessageOrdersTabBaseTest` / `...LineItemsTabBaseTest` | Enables Error messages / Error message grid column |
+| `FF_BSD30019_O_001` … `O_003`, `FF_BSD30019_LI_001` … `LI_003` | Story validation tests |
+| `LF_O_TC*17_*` / `LF_LI_TC*17_*` | Per-filter Error message tests (8 each tab) |
+| `Bsd30019CombinedEmailReportTest` | Merges session `testng-results.xml` files → one email |
+| `scripts/build_bsd30019_suites.py` | Regenerates the 4 in-sprint suite XMLs |
 
 ---
 

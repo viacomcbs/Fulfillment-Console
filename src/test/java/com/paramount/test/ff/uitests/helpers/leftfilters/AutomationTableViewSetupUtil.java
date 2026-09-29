@@ -26,7 +26,48 @@ public final class AutomationTableViewSetupUtil {
         Logger.logMessage("Manage columns setup on " + tab.getTabLabel()
                 + " — ensure " + columnLabel + " is enabled on current table view");
         manageColumns.ensureColumnEnabledForView(softAssert, columnLabel);
-        LeftFilterSessionHelper.markManageColumnReady(tab, columnLabel);
+        if (manageColumns.isOrderColumnVisibleOnGrid(columnLabel)) {
+            LeftFilterSessionHelper.markManageColumnReady(tab, columnLabel);
+        } else {
+            Logger.logMessage(columnLabel + " not visible on grid after Manage columns — will retry on next test");
+        }
+    }
+
+    /**
+     * Once per session: open Manage columns one time and enable all listed columns for the current run
+     * (order-level and order-line-item flat list columns in a single panel pass).
+     */
+    public void ensureBatchColumnsEnabledOnce(SoftAssert softAssert, ConsoleTab tab, String... columnLabels)
+            throws InterruptedException {
+        if (columnLabels == null || columnLabels.length == 0) {
+            return;
+        }
+        java.util.List<String> pending = new java.util.ArrayList<>();
+        for (String columnLabel : columnLabels) {
+            if (columnLabel == null || columnLabel.isBlank()) {
+                continue;
+            }
+            if (LeftFilterSessionHelper.isManageColumnReady(tab, columnLabel)) {
+                Logger.logMessage(columnLabel + " Manage columns setup already done this session — skip");
+            } else {
+                pending.add(columnLabel);
+            }
+        }
+        if (pending.isEmpty()) {
+            return;
+        }
+        Logger.logReportMessage("Manage columns batch setup on " + tab.getTabLabel()
+                + " — enable columns for this run: " + pending);
+        manageColumns.ensureBatchColumnsForView(softAssert, pending.toArray(new String[0]));
+        for (String columnLabel : pending) {
+            LeftFilterSessionHelper.markManageColumnReady(tab, columnLabel);
+        }
+    }
+
+    /** @deprecated use {@link #ensureBatchColumnsEnabledOnce} — kept for 2-filter suite compatibility */
+    public void ensureOrderColumnsEnabledOnce(SoftAssert softAssert, ConsoleTab tab, String... columnLabels)
+            throws InterruptedException {
+        ensureBatchColumnsEnabledOnce(softAssert, tab, columnLabels);
     }
 
     /**
@@ -39,7 +80,9 @@ public final class AutomationTableViewSetupUtil {
             return;
         }
         ensureColumnEnabled(softAssert, tab, ManageColumnOptions.ACTIVITY_TYPE);
-        LeftFilterSessionHelper.markAAutomationViewReady(tab);
+        if (LeftFilterSessionHelper.isManageColumnReady(tab, ManageColumnOptions.ACTIVITY_TYPE)) {
+            LeftFilterSessionHelper.markAAutomationViewReady(tab);
+        }
     }
 
     public boolean ensureAutomationViewSelected(SoftAssert softAssert, ConsoleTab tab) throws InterruptedException {

@@ -5,12 +5,12 @@ import com.paramount.test.ff.uitests.helpers.leftfilters.ConsoleTab;
 import com.paramount.test.ff.uitests.helpers.leftfilters.OrdersLeftFilter;
 import com.paramount.test.ff.uitests.helpers.leftfilters.LeftFilterPerFilterTestRunner;
 import com.paramount.test.ff.uitests.helpers.leftfilters.LeftFilterTestCategory;
-import com.paramount.test.ff.uitests.tests.leftfiltersvalidation.perfilter.orders.LeftFilterOrdersTabBaseTest;
+import com.paramount.test.ff.uitests.tests.leftfiltersvalidation.perfilter.orders.episodenumber.LeftFilterEpisodeNumberOrdersTabBaseTest;
 import io.qameta.allure.Description;
 import org.testng.annotations.Test;
 
 /** TC112 — EpisodeNumber Basic. */
-public class LF_O_TC112_EpisodeNumber_BasicTest extends LeftFilterOrdersTabBaseTest {
+public class LF_O_TC112_EpisodeNumber_BasicTest extends LeftFilterEpisodeNumberOrdersTabBaseTest {
 
     private static final String FILTER = OrdersLeftFilter.EPISODE_NUMBER.getDisplayName();
     private static final int FILTER_INDEX = 12;
