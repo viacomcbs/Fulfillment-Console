@@ -7,7 +7,6 @@ import com.paramount.test.ff.common.util.SoftAssert;
 import com.paramount.test.ff.uitests.helpers.leftfilters.OrdersLeftFilter;
 import com.paramount.test.ff.uitests.helpers.partneroptions.PartnerOptionsDuplicateAnalyzer;
 import com.paramount.test.ff.uitests.helpers.partneroptions.PartnerOptionsJsonStore;
-import com.paramount.test.ff.uitests.tests.duplicatefilteroptionscheck.orders.DuplicateFilterOptionsOrdersTabBaseTest;
 import io.qameta.allure.Description;
 import org.testng.annotations.Optional;
 import org.testng.annotations.Parameters;
@@ -20,7 +19,7 @@ import java.io.File;
  * every partner name from JSON. For each name: expand Partner → type full exact string →
  * assert exactly one visible option with the same label (no duplicates).
  */
-public class LF_O_TC201_Partner_SearchTest extends DuplicateFilterOptionsOrdersTabBaseTest {
+public class LF_O_TC201_Partner_SearchTest extends LeftFilterPartnerOrdersTabBaseTest {
 
     private static final String FILTER = OrdersLeftFilter.PARTNER.getDisplayName();
 
